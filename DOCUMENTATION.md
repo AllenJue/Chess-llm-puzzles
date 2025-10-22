@@ -101,32 +101,3 @@ The evaluation methodology follows established approaches for LLM chess evaluati
 **Current Model**: GPT-3.5-turbo-instruct  
 **Future Plans**: Evaluation of additional models including GPT-4, Claude, and other chess-specialized models
 
-## Related Work and Limitations
-
-This project addresses limitations in previous chess puzzle evaluation approaches. Previous work, such as the [llm-chess-puzzles repository](https://github.com/kagisearch/llm-chess-puzzles/blob/main/llmchess.py), often does not test puzzles in their fullest capacity. Common limitations include:
-
-- **Incomplete puzzle evaluation**: Many existing approaches only test single moves rather than complete puzzle sequences
-- **Limited puzzle coverage**: Previous work often focuses on simple tactical patterns rather than complex multi-move combinations
-- **Inadequate rating systems**: Most existing evaluations lack proper chess rating systems like Glicko-2 for meaningful performance assessment
-- **Simplified board states**: Some approaches don't properly handle complex board positions or partial game states
-
-This project addresses these limitations by:
-- **Full puzzle sequences**: Evaluating complete puzzle solutions, not just single moves
-- **Comprehensive testing**: Using real Lichess puzzle data with proper game contexts
-- **Proper rating system**: Implementing Glicko-2 rating for accurate performance measurement
-- **Real game positions**: Using actual game positions from Lichess with proper PGN context
-
-## Notes
-
-- The project was converted from a Jupyter notebook
-- Google Colab dependencies have been replaced with local file handling
-- Environment variables replace Colab's userdata system
-- All modules are properly documented and tested
-- Glicko-2 implementation includes proper attribution
-
-## Troubleshooting
-
-- Ensure OpenAI API key is set correctly
-- Check that CSV file exists and is readable
-- Verify all dependencies are installed
-- For API rate limits, adjust `API_DELAY` in environment

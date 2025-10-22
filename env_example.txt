@@ -1,0 +1,16 @@
+# OpenAI API Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Data file paths
+CSV_FILE_PATH=lichess_puzzles_with_pgn_1000.csv
+OUTPUT_FILE_PATH=lichess_puzzles_with_pgn_1000.csv
+
+# Model configuration
+MODEL_NAME=gpt-3.5-turbo-instruct
+MAX_TOKENS=500
+TEMPERATURE=0.1
+TOP_P=1
+
+# Evaluation settings
+MAX_PUZZLES=1000
+API_DELAY=0.1

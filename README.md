@@ -148,6 +148,25 @@ The Glicko-2 rating system implementation is based on the work by Heungsub Lee:
 4. **Rate**: Calculate Glicko-2 rating based on performance
 5. **Analyze**: Generate statistics and visualizations
 
+## Data Source and Methodology
+
+This project uses chess puzzles sampled from the [Lichess Open Database](https://database.lichess.org/#puzzles), which contains over 5.4 million chess puzzles rated and tagged by the Lichess community. 
+
+The evaluation methodology follows established approaches for LLM chess evaluation, using similar prompting strategies as described in:
+- [Chess LLM Evaluation](https://nicholas.carlini.com/writing/2023/chess-llm.html) by Nicholas Carlini
+- [More Chess Analysis](https://dynomight.net/more-chess/) by Dynomight
+
+**Current Model**: GPT-3.5-turbo-instruct  
+**Future Plans**: Evaluation of additional models including GPT-4, Claude, and other chess-specialized models
+
+## Results and Analysis
+
+### Performance by Puzzle Theme
+![Accuracy by Puzzle Theme](graphs/accuracy_by_puzzle_theme.png)
+
+### Performance by Puzzle Rating
+![Accuracy by Puzzle Rating](graphs/accuracy_puzzle_bin.png)
+
 ## Related Work and Limitations
 
 This project addresses limitations in previous chess puzzle evaluation approaches. Previous work, such as the [llm-chess-puzzles repository](https://github.com/kagisearch/llm-chess-puzzles/blob/main/llmchess.py), often does not test puzzles in their fullest capacity. Common limitations include:

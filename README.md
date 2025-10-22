@@ -1,6 +1,6 @@
 # Chess Puzzle Evaluator
 
-A Python project for evaluating chess puzzles using OpenAI models and the Glicko-2 rating system.
+A Python project for evaluating chess puzzles using OpenAI models and the Glicko-2 rating system. Using GPT-3.5-Turbo-Instruct, the model performs surprisingly well for complete Lichess puzzles with an accuracy of about 55%. This is likely lower than expected, as the prompt results in inconsistently-formatted outputs, which requires a robust parser to find the expected move.
 
 ## Quick Setup
 

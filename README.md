@@ -148,17 +148,9 @@ The Glicko-2 rating system implementation is based on the work by Heungsub Lee:
 4. **Rate**: Calculate Glicko-2 rating based on performance
 5. **Analyze**: Generate statistics and visualizations
 
-## Notes
+## Related Work and Limitations
 
-- The project was converted from a Jupyter notebook
-- Google Colab dependencies have been replaced with local file handling
-- Environment variables replace Colab's userdata system
-- All modules are properly documented and tested
-- Glicko-2 implementation includes proper attribution
+This project addresses limitations in previous chess puzzle evaluation approaches. Previous work, such as the [llm-chess-puzzles repository](https://github.com/kagisearch/llm-chess-puzzles/blob/main/llmchess.py), often does not test puzzles in their fullest capacity. Common limitations include:
 
-## Troubleshooting
+- **Incomplete puzzle evaluation**: Many existing approaches only test single moves rather than complete puzzle sequences
 
-- Ensure OpenAI API key is set correctly
-- Check that CSV file exists and is readable
-- Verify all dependencies are installed
-- For API rate limits, adjust `API_DELAY` in environment

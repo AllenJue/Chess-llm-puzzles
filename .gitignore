@@ -139,7 +139,5 @@ dmypy.json
 Thumbs.db
 
 # Project specific
-*.csv
-*.pgn
 *.zst
 *.zip

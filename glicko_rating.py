@@ -294,3 +294,4 @@ if __name__ == "__main__":
     # Calculate matchup quality
     quality = glicko2_system.quality_1vs1(player_rating, opponent_rating)
     print(f"Matchup quality: {quality:.3f}")
+

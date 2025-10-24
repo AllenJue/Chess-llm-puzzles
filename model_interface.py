@@ -252,3 +252,4 @@ if __name__ == "__main__":
         print(f"System: {system_prompt}")
         print(f"User: {user_prompt}")
         print("\nNote: Actual API calls require valid API key and will incur costs.")
+

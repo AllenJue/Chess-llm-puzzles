@@ -116,7 +116,7 @@ class ChessModelInterface:
     def get_move_with_extraction(self, system_prompt: str, user_prompt: str,
                                current_turn_number: Optional[int] = None,
                                is_white_to_move: bool = True,
-                               use_gpt4: bool = False) -> Optional[str]:
+                               use_gpt4: bool = False) -> tuple[Optional[str], Optional[str]]:
         """
         Get move from model and extract SAN move from response.
         
@@ -128,7 +128,7 @@ class ChessModelInterface:
             use_gpt4 (bool): Whether to use GPT-4 instead of instruct model
             
         Returns:
-            Optional[str]: Extracted SAN move
+            tuple[Optional[str], Optional[str]]: (raw_response, extracted_san_move)
         """
         if use_gpt4:
             response_text = self.query_model_for_gpt4_move(system_prompt, user_prompt)
@@ -136,13 +136,15 @@ class ChessModelInterface:
             response_text = self.query_model_for_move(system_prompt, user_prompt)
         
         if not response_text:
-            return None
+            return None, None
         
-        return extract_predicted_move(
+        extracted_san = extract_predicted_move(
             response_text=response_text,
             current_turn_number=current_turn_number,
             is_white_to_move=is_white_to_move
         )
+        
+        return response_text, extracted_san
 
     def get_uci_move(self, system_prompt: str, user_prompt: str, current_fen: str,
                     current_turn_number: Optional[int] = None,

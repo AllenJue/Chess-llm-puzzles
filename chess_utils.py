@@ -185,15 +185,16 @@ def san_to_uci(current_fen: str, san_move: str) -> Optional[str]:
     board = chess.Board(current_fen)
     # Remove check/mate symbols from SAN move (like # or +)
     clean_san = san_move.rstrip('#+')
-    print(clean_san)
+    print(f"Converting SAN '{san_move}' -> '{clean_san}' on board FEN: {current_fen}")
     try:
         move = board.parse_san(clean_san)
-        print(move)
+        print(f"Parsed move: {move}")
         uci_move = move.uci()
+        print(f"UCI move: {uci_move}")
         return uci_move
-    except ValueError:
+    except ValueError as e:
         # Invalid SAN, cannot convert
-        print(ValueError)
+        print(f"ValueError converting SAN '{clean_san}': {e}")
         return None
 
 

@@ -1,0 +1,547 @@
+#!/usr/bin/env python3
+"""
+Chess Game Engine - Play against Stockfish using LLM models
+Supports single model and self-consistency approaches
+"""
+
+import chess
+import chess.engine
+import chess.pgn
+import sys
+import os
+import argparse
+import json
+import random
+from datetime import datetime
+from typing import Optional, Tuple, Dict, Any
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv('../.env')  # Load from parent directory
+except ImportError:
+    pass  # dotenv not available, continue without it
+
+# Add parent directory to path for imports
+sys.path.append('..')
+sys.path.append('../MAD')  # Add MAD directory for utils
+
+from model_interface import ChessModelInterface
+from main import ChessSelfConsistency
+from chess_utils import extract_predicted_move, san_to_uci
+
+
+class ChessGameEngine:
+    def __init__(self, model_name: str = 'gpt-3.5-turbo-instruct', 
+                 stockfish_path: str = 'stockfish', 
+                 stockfish_time: float = 1.0,
+                 stockfish_skill: int = 5,
+                 use_self_consistency: bool = False):
+        """
+        Initialize the chess game engine
+        
+        Args:
+            model_name: OpenAI model to use
+            stockfish_path: Path to Stockfish executable
+            stockfish_time: Time limit for Stockfish moves (seconds)
+            stockfish_skill: Stockfish skill level (0-20, where 20 is maximum strength)
+            use_self_consistency: Whether to use self-consistency approach
+        """
+        self.model_name = model_name
+        self.stockfish_path = stockfish_path
+        self.stockfish_time = stockfish_time
+        self.stockfish_skill = stockfish_skill
+        self.use_self_consistency = use_self_consistency
+        
+        # Initialize model interface
+        self.model_interface = ChessModelInterface(
+            model_name=model_name,
+            api_key=os.getenv('OPENAI_API_KEY')
+        )
+        
+        # Initialize self-consistency system if needed
+        if use_self_consistency:
+            self.self_consistency = ChessSelfConsistency(
+                model_name=model_name,
+                temperature=0.1,
+                openai_api_key=os.getenv('OPENAI_API_KEY'),
+                max_rounds=2,
+                sleep_time=0.1
+            )
+        
+        # Game state
+        self.board = chess.Board()
+        self.game_moves = []
+        self.game_history = []
+        self.fallback_moves = []  # Track when random moves were used
+    
+    def get_random_legal_move(self, board: chess.Board) -> str:
+        """
+        Get a random legal move as fallback
+        
+        Args:
+            board: Current chess board position
+            
+        Returns:
+            UCI move string
+        """
+        legal_moves = list(board.legal_moves)
+        if legal_moves:
+            random_move = random.choice(legal_moves)
+            return random_move.uci()
+        else:
+            # This shouldn't happen in normal play, but just in case
+            return None
+        
+    def _use_fallback_move(self, board: chess.Board, reason: str, model_response: str = None) -> str:
+        """
+        Use a random legal move as fallback and record it
+        
+        Args:
+            board: Current chess board position
+            reason: Reason for using fallback
+            model_response: Original model response (if any)
+            
+        Returns:
+            UCI move string
+        """
+        print(f"🎲 Using random legal move as fallback...")
+        fallback_move = self.get_random_legal_move(board)
+        
+        if fallback_move:
+            self.fallback_moves.append({
+                "move_number": len(board.move_stack) + 1,
+                "reason": reason,
+                "model_response": model_response,
+                "fallback_move": fallback_move
+            })
+        
+        return fallback_move
+
+    def get_model_move(self, board: chess.Board) -> Optional[str]:
+        """
+        Get a move from the LLM model
+        
+        Args:
+            board: Current chess board position
+            
+        Returns:
+            UCI move string or None if failed
+        """
+        # Use the same infrastructure as chess_puzzles
+        exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
+        current_game = chess.pgn.Game.from_board(board)
+        user_prompt = current_game.accept(exporter)
+        
+        # System prompt (same as chess_puzzles)
+        system_prompt = (
+            "You are a chess grandmaster.\n"
+            "You will be given a partially completed game.\n"
+            "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
+        )
+        
+        try:
+            if self.use_self_consistency:
+                # Use self-consistency approach
+                print(f"🤖 Self-consistency model thinking...")
+                print(f"<debug> : Self-consistency system prompt building:")
+                print(f"<debug> : user_prompt: {repr(user_prompt)}")
+                predicted_uci, debate_history = self.self_consistency.run_debate(
+                    user_prompt, 
+                    played_plies=len(board.move_stack),
+                    board_fen=board.fen()
+                )
+                
+                if not predicted_uci:
+                    return self._use_fallback_move(board, "Self-consistency failed to generate a move", str(debate_history))
+                
+                # Validate move is legal
+                move = chess.Move.from_uci(predicted_uci)
+                if move not in board.legal_moves:
+                    return self._use_fallback_move(board, f"Self-consistency generated illegal move: {predicted_uci}", str(debate_history))
+                
+                return predicted_uci
+                
+            else:
+                # Use single model with retry logic
+                print(f"🤖 Single model thinking...")
+                print(f"<debug> : Single model system prompt building:")
+                print(f"<debug> : system_prompt: {repr(system_prompt)}")
+                print(f"<debug> : user_prompt: {repr(user_prompt)}")
+                
+                # Try up to 3 times for single model
+                for attempt in range(3):
+                    if attempt > 0:
+                        print(f"🔄 Retry attempt {attempt + 1}/3...")
+                    
+                    raw_response, predicted_san, token_info = self.model_interface.get_move_with_extraction(
+                        system_prompt, user_prompt,
+                        current_turn_number=len(board.move_stack) // 2 + 1,
+                        is_white_to_move=board.turn
+                    )
+                    print(f"<debug> : Model response (attempt {attempt + 1}): {repr(raw_response)}")
+                    print(f"<debug> : Extracted move (attempt {attempt + 1}): {repr(predicted_san)}")
+                    
+                    if not predicted_san:
+                        print(f"❌ Attempt {attempt + 1}: Failed to extract move from response")
+                        if attempt == 2:  # Last attempt
+                            return self._use_fallback_move(board, "Failed to extract move from model response after 3 attempts", raw_response)
+                        continue
+                    
+                    # Convert and validate move
+                    try:
+                        predicted_uci = san_to_uci(board.fen(), predicted_san)
+                        move = chess.Move.from_uci(predicted_uci)
+                        if move not in board.legal_moves:
+                            print(f"❌ Attempt {attempt + 1}: Generated illegal move: {predicted_san} -> {predicted_uci}")
+                            if attempt == 2:  # Last attempt
+                                return self._use_fallback_move(board, f"Model generated illegal move after 3 attempts: {predicted_san}", raw_response)
+                            continue
+                        
+                        print(f"✅ Attempt {attempt + 1}: Valid move generated: {predicted_san} -> {predicted_uci}")
+                        return predicted_uci
+                        
+                    except Exception as e:
+                        print(f"❌ Attempt {attempt + 1}: Error converting move {predicted_san}: {e}")
+                        if attempt == 2:  # Last attempt
+                            return self._use_fallback_move(board, f"Error converting move after 3 attempts: {predicted_san}", raw_response)
+                        continue
+                
+                # This shouldn't be reached, but just in case
+                return self._use_fallback_move(board, "Unexpected error in retry logic", None)
+                    
+        except Exception as e:
+            return self._use_fallback_move(board, f"Exception in model move generation: {e}", None)
+    
+    def get_stockfish_move(self, board: chess.Board) -> Optional[str]:
+        """
+        Get a move from Stockfish
+        
+        Args:
+            board: Current chess board position
+            
+        Returns:
+            UCI move string or None if failed
+        """
+        try:
+            with chess.engine.SimpleEngine.popen_uci(self.stockfish_path) as engine:
+                # Configure Stockfish skill level
+                engine.configure({"Skill Level": self.stockfish_skill})
+                
+                result = engine.play(board, chess.engine.Limit(time=self.stockfish_time))
+                return result.move.uci()
+        except Exception as e:
+            print(f"❌ Error getting Stockfish move: {e}")
+            return None
+    
+    def play_game(self, model_plays_white: bool = True) -> Dict[str, Any]:
+        """
+        Play a full chess game
+        
+        Args:
+            model_plays_white: Whether the model plays as white
+            
+        Returns:
+            Game result dictionary
+        """
+        print(f"🎮 Starting chess game!")
+        print(f"🤖 Model plays: {'White' if model_plays_white else 'Black'}")
+        print(f"🐟 Stockfish plays: {'Black' if model_plays_white else 'White'} (Skill Level: {self.stockfish_skill}/20)")
+        print(f"🧠 Model approach: {'Self-consistency' if self.use_self_consistency else 'Single model'}")
+        print("=" * 60)
+        
+        self.board = chess.Board()
+        self.game_moves = []
+        self.game_history = []
+        self.fallback_moves = []  # Reset fallback moves for new game
+        
+        move_number = 1
+        
+        while not self.board.is_game_over():
+            print(f"\n--- Move {move_number} ---")
+            print(f"Board:\n{self.board}")
+            print(f"FEN: {self.board.fen()}")
+            print(f"Turn: {'White' if self.board.turn else 'Black'}")
+            
+            # Determine whose turn it is
+            is_model_turn = (self.board.turn == chess.WHITE) == model_plays_white
+            
+            if is_model_turn:
+                # Model's turn
+                move_uci = self.get_model_move(self.board)
+                player_name = "Model"
+            else:
+                # Stockfish's turn
+                move_uci = self.get_stockfish_move(self.board)
+                player_name = "Stockfish"
+            
+            if move_uci is None:
+                print(f"❌ {player_name} failed to make a move!")
+                break
+            
+            # Validate and make the move
+            try:
+                move = chess.Move.from_uci(move_uci)
+                if move in self.board.legal_moves:
+                    # Get SAN notation before pushing the move
+                    move_san = self.board.san(move)
+                    
+                    self.board.push(move)
+                    self.game_moves.append(move_uci)
+                    
+                    # Check if this was a fallback move
+                    is_fallback = any(fb["fallback_move"] == move_uci and fb["move_number"] == move_number 
+                                    for fb in self.fallback_moves)
+                    
+                    # Record move history
+                    move_info = {
+                        "move_number": move_number,
+                        "player": player_name,
+                        "move_uci": move_uci,
+                        "move_san": move_san,
+                        "fen_after": self.board.fen(),
+                        "is_model_turn": is_model_turn,
+                        "is_fallback_move": is_fallback
+                    }
+                    self.game_history.append(move_info)
+                    
+                    if is_fallback:
+                        print(f"🎲 {player_name} plays (FALLBACK): {move_san} ({move_uci})")
+                    else:
+                        print(f"✅ {player_name} plays: {move_san} ({move_uci})")
+                    
+                    # Check for game end conditions
+                    if self.board.is_checkmate():
+                        winner = "Model" if is_model_turn else "Stockfish"
+                        print(f"🏆 {winner} wins by checkmate!")
+                        break
+                    elif self.board.is_stalemate():
+                        print(f"🤝 Game ends in stalemate!")
+                        break
+                    elif self.board.is_insufficient_material():
+                        print(f"🤝 Game ends due to insufficient material!")
+                        break
+                    elif self.board.is_seventyfive_moves():
+                        print(f"🤝 Game ends due to 75-move rule!")
+                        break
+                    elif self.board.is_fivefold_repetition():
+                        print(f"🤝 Game ends due to fivefold repetition!")
+                        break
+                    
+                    move_number += 1
+                else:
+                    print(f"❌ {player_name} made illegal move: {move_uci}")
+                    break
+                    
+            except Exception as e:
+                print(f"❌ Error making move {move_uci}: {e}")
+                break
+        
+        # Determine final result
+        if self.board.is_checkmate():
+            winner = "Model" if is_model_turn else "Stockfish"
+            result = f"{winner} wins by checkmate"
+        elif self.board.is_stalemate():
+            result = "Draw by stalemate"
+        elif self.board.is_insufficient_material():
+            result = "Draw by insufficient material"
+        elif self.board.is_seventyfive_moves():
+            result = "Draw by 75-move rule"
+        elif self.board.is_fivefold_repetition():
+            result = "Draw by fivefold repetition"
+        else:
+            result = "Game ended unexpectedly"
+        
+        print(f"\n🎯 Final Result: {result}")
+        print(f"📊 Total moves: {len(self.game_moves)}")
+        
+        # Report fallback moves if any were used
+        if self.fallback_moves:
+            print(f"🎲 Fallback moves used: {len(self.fallback_moves)}")
+            for fallback in self.fallback_moves:
+                print(f"   Move {fallback['move_number']}: {fallback['reason']} -> {fallback['fallback_move']}")
+        else:
+            print(f"✅ No fallback moves needed - all model moves were valid")
+        
+        return {
+            "result": result,
+            "total_moves": len(self.game_moves),
+            "model_plays_white": model_plays_white,
+            "model_approach": "self_consistency" if self.use_self_consistency else "single_model",
+            "model_name": self.model_name,
+            "moves": self.game_moves,
+            "game_history": self.game_history,
+            "fallback_moves": self.fallback_moves,
+            "fallback_count": len(self.fallback_moves),
+            "final_fen": self.board.fen(),
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    def save_game(self, game_result: Dict[str, Any], filename: Optional[str] = None) -> str:
+        """
+        Save the game result to a JSON file with comprehensive metadata
+        
+        Args:
+            game_result: Game result dictionary
+            filename: Optional filename, will generate if not provided
+            
+        Returns:
+            Path to saved file
+        """
+        # Create data/games directory if it doesn't exist
+        games_dir = os.path.join(os.path.dirname(__file__), '..', 'data', 'games')
+        os.makedirs(games_dir, exist_ok=True)
+        
+        if filename is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            approach = "self_consistency" if self.use_self_consistency else "single_model"
+            color = "white" if game_result["model_plays_white"] else "black"
+            filename = f"chess_game_{approach}_{color}_{timestamp}.json"
+        
+        filepath = os.path.join(games_dir, filename)
+        
+        # Add comprehensive metadata
+        enhanced_result = game_result.copy()
+        enhanced_result.update({
+            "metadata": {
+                "model_name": self.model_name,
+                "model_approach": "self_consistency" if self.use_self_consistency else "single_model",
+                "stockfish_time": self.stockfish_time,
+                "stockfish_skill": self.stockfish_skill,
+                "total_fallback_moves": len(self.fallback_moves),
+                "fallback_details": self.fallback_moves,
+                "game_engine_version": "1.0",
+                "saved_at": datetime.now().isoformat()
+            }
+        })
+        
+        with open(filepath, 'w') as f:
+            json.dump(enhanced_result, f, indent=2)
+        
+        print(f"💾 Game saved to: {filepath}")
+        return filepath
+    
+    def save_pgn(self, game_result: Dict[str, Any], filename: Optional[str] = None) -> str:
+        """
+        Save the game as a PGN file
+        
+        Args:
+            game_result: Game result dictionary
+            filename: Optional filename, will generate if not provided
+            
+        Returns:
+            Path to saved PGN file
+        """
+        # Create data/games directory if it doesn't exist
+        games_dir = os.path.join(os.path.dirname(__file__), '..', 'data', 'games')
+        os.makedirs(games_dir, exist_ok=True)
+        
+        if filename is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            approach = "self_consistency" if self.use_self_consistency else "single_model"
+            color = "white" if game_result["model_plays_white"] else "black"
+            filename = f"chess_game_{approach}_{color}_{timestamp}.pgn"
+        
+        filepath = os.path.join(games_dir, filename)
+        
+        # Create PGN game
+        game = chess.pgn.Game()
+        game.headers["Event"] = "LLM vs Stockfish"
+        game.headers["Site"] = "Chess Game Engine"
+        game.headers["Date"] = datetime.now().strftime("%Y.%m.%d")
+        game.headers["White"] = "Model" if game_result["model_plays_white"] else "Stockfish"
+        game.headers["Black"] = "Stockfish" if game_result["model_plays_white"] else "Model"
+        game.headers["Result"] = self._pgn_result(game_result["result"])
+        game.headers["Model"] = self.model_name
+        game.headers["Approach"] = "self_consistency" if self.use_self_consistency else "single_model"
+        game.headers["FallbackMoves"] = str(len(self.fallback_moves))
+        game.headers["TotalMoves"] = str(game_result["total_moves"])
+        game.headers["StockfishSkill"] = str(self.stockfish_skill)
+        
+        # Add moves
+        node = game
+        temp_board = chess.Board()
+        
+        for move_uci in game_result["moves"]:
+            move = chess.Move.from_uci(move_uci)
+            node = node.add_variation(move)
+            temp_board.push(move)
+        
+        # Save PGN
+        with open(filepath, 'w') as f:
+            print(game, file=f)
+        
+        print(f"📄 PGN saved to: {filepath}")
+        return filepath
+    
+    def _pgn_result(self, result: str) -> str:
+        """Convert result string to PGN result format"""
+        if "Model wins" in result:
+            return "1-0"
+        elif "Stockfish wins" in result:
+            return "0-1"
+        else:
+            return "1/2-1/2"
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Play chess against Stockfish using LLM models")
+    parser.add_argument("--model", default="gpt-3.5-turbo-instruct", 
+                       help="OpenAI model to use")
+    parser.add_argument("--stockfish", default="stockfish", 
+                       help="Path to Stockfish executable")
+    parser.add_argument("--time", type=float, default=1.0, 
+                       help="Time limit for Stockfish moves (seconds)")
+    parser.add_argument("--skill", type=int, default=5, 
+                       help="Stockfish skill level (0-20, where 20 is maximum strength)")
+    parser.add_argument("--self-consistency", action="store_true", 
+                       help="Use self-consistency approach instead of single model")
+    parser.add_argument("--model-color", choices=["white", "black"], default="white",
+                       help="Color for the model to play")
+    parser.add_argument("--save-json", action="store_true",
+                       help="Save game result as JSON")
+    parser.add_argument("--save-pgn", action="store_true", 
+                       help="Save game as PGN file")
+    parser.add_argument("--no-save", action="store_true",
+                       help="Don't save any files")
+    
+    args = parser.parse_args()
+    
+    # Check for OpenAI API key
+    if not os.getenv('OPENAI_API_KEY'):
+        print("❌ Error: OPENAI_API_KEY environment variable not set")
+        print("💡 Please set your API key in one of these ways:")
+        print("   1. Export it: export OPENAI_API_KEY='your-key-here'")
+        print("   2. Add it to ../.env file: OPENAI_API_KEY=your-key-here")
+        print("   3. Set it in your shell profile")
+        sys.exit(1)
+    
+    # Initialize game engine
+    engine = ChessGameEngine(
+        model_name=args.model,
+        stockfish_path=args.stockfish,
+        stockfish_time=args.time,
+        stockfish_skill=args.skill,
+        use_self_consistency=args.self_consistency
+    )
+    
+    # Play the game
+    model_plays_white = (args.model_color == "white")
+    game_result = engine.play_game(model_plays_white=model_plays_white)
+    
+    # Save results (default behavior unless --no-save is specified)
+    if not args.no_save:
+        if args.save_json or not args.save_pgn:  # Save JSON by default unless only PGN is requested
+            engine.save_game(game_result)
+        
+        if args.save_pgn:
+            engine.save_pgn(game_result)
+    
+    print(f"\n🎉 Game completed!")
+    print(f"📊 Result: {game_result['result']}")
+    print(f"📈 Total moves: {game_result['total_moves']}")
+
+
+if __name__ == "__main__":
+    main()

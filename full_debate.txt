@@ -1,0 +1,416 @@
+Loaded environment from /Users/allenjue/Downloads/UT/Grad/CS395T/AI-Agents/chess_research/chess_puzzles/.env
+CSV file loaded successfully! Shape: (1000, 17)
+Loaded 1000 puzzles from ./data/lichess_puzzles_with_pgn_1000.csv
+
+Evaluating puzzles with new multi-agent debate system (moderator + judge)...
+
+=== Evaluating puzzle 0 ===
+
+--- Model Turn ---
+Board:
+. . . . . . k .
+p . . . . . p p
+n . . . q p . .
+. p . . . . . .
+. b . N . Q N .
+. . . . . . . P
+P B p . . P P .
+. . . . . K . .
+Expected UCI: e6e1
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeY5cHfJdMK2261aRbeckGttqLNY', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#')], created=1761421745, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=233, prompt_tokens=299, total_tokens=532, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#'
+----- Affirmative side -----
+1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5
+8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4
+Qe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8
+21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4
+Rxf1+ 28. Kxf1 Qe1#
+
+<debate_v2> : Affirmative move: Qe1#
+Model response: Completion(id='cmpl-CUeY8PdFzR4uQcYwv4LWI1WayZg54', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#')], created=1761421748, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=233, prompt_tokens=299, total_tokens=532, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#'
+----- Negative side -----
+1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5
+8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4
+Qe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8
+21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4
+Rxf1+ 28. Kxf1 Qe1#
+
+<debate_v2> : Negative move: Qe1#
+<debate_v2> : Early consensus! Both models agree on move: Qe1#
+Converting SAN 'Qe1#' -> 'Qe1' on board FEN: 6k1/p5pp/n3qp2/1p6/1b1N1QN1/7P/PBp2PP1/5K2 b - - 0 28
+Parsed move: e6e1
+UCI move: e6e1
+<debate_v2> : Final move (SAN): Qe1#
+<debate_v2> : Final move (UCI): e6e1
+Debate V2 predicted UCI: e6e1
+Debate history V2 saved to debate_history_v2/puzzle_0_debate_v2.json
+✅ Correct move!
+Model solved everything: True
+
+=== Evaluating puzzle 1 ===
+
+--- Model Turn ---
+Board:
+r . . q . r k .
+p . p . . p p p
+. . p n . . . .
+. . . p . . . .
+. . . . . P . .
+. P . P P . R .
+P B P . . . P P
+R N . b . . K .
+Expected UCI: g3g7
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYBsJBl4qarAUEiyPFi7jaNDQVh', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8\n20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6\nNa3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7\nh5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7\n38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. e6 Kg7 42. Rf5 Kg6 43. g4 Kg7 44.\ne7 Kg6 45. e8=Q+ Kg7 46. Qf7+ Kh6 47. Rh5# Kg8 48. Rg5+ Kh8 49. Qg7# Kg8\n50. Qg8#')], created=1761421751, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=420, prompt_tokens=186, total_tokens=606, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8\n20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6\nNa3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7\nh5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7\n38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. e6 Kg7 42. Rf5 Kg6 43. g4 Kg7 44.\ne7 Kg6 45. e8=Q+ Kg7 46. Qf7+ Kh6 47. Rh5# Kg8 48. Rg5+ Kh8 49. Qg7# Kg8\n50. Qg8#'
+----- Affirmative side -----
+1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.
+Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3
+Bxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8
+20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6
+Na3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7
+h5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7
+38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. e6 Kg7 42. Rf5 Kg6 43. g4 Kg7 44.
+e7 Kg6 45. e8=Q+ Kg7 46. Qf7+ Kh6 47. Rh5# Kg8 48. Rg5+ Kh8 49. Qg7# Kg8
+50. Qg8#
+
+<debate_v2> : Affirmative move: Rxg7+
+Model response: Completion(id='cmpl-CUeYEzXg2QnH0XKAlB3fhAIcrhc5C', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8\n20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6\nNa3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7\nh5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7\n38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. c4 Kg7 42. c5 Kg8 43. c6 Kg7 44.\nc7 Kg8 45. c8=Q+ Kg7 46. Qd7+ Kg8 47. Qf7+ Kh8 48. Rh6# Kg8 49. Rg6+ Kh8\n50. Qg7# Kg8 51. Rh6# * c4')], created=1761421754, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=430, prompt_tokens=186, total_tokens=616, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8\n20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6\nNa3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7\nh5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7\n38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. c4 Kg7 42. c5 Kg8 43. c6 Kg7 44.\nc7 Kg8 45. c8=Q+ Kg7 46. Qd7+ Kg8 47. Qf7+ Kh8 48. Rh6# Kg8 49. Rg6+ Kh8\n50. Qg7# Kg8 51. Rh6# * c4'
+----- Negative side -----
+1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.
+Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3
+Bxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8
+20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Nb5 25. Rxc6
+Na3 26. Nxa3 Rxa3 27. Rxd1 Rxa2 28. Rc7 Kg8 29. e4 dxe4 30. dxe4 Ra8 31. Rdd7
+h5 32. Rg7+ Kf8 33. Rh7 Kg8 34. Rxh5 Ra1+ 35. Kf2 Ra8 36. e5 Rf8 37. g3 Rf7
+38. Rxf7 Kxf7 39. Rh6 Kg7 40. Rf6 Kg8 41. c4 Kg7 42. c5 Kg8 43. c6 Kg7 44.
+c7 Kg8 45. c8=Q+ Kg7 46. Qd7+ Kg8 47. Qf7+ Kh8 48. Rh6# Kg8 49. Rg6+ Kh8
+50. Qg7# Kg8 51. Rh6# * c4
+
+<debate_v2> : Negative move: Rxg7+
+<debate_v2> : Early consensus! Both models agree on move: Rxg7+
+Converting SAN 'Rxg7+' -> 'Rxg7' on board FEN: r2q1rk1/p1p2ppp/2pn4/3p4/5P2/1P1PP1R1/PBP3PP/RN1b2K1 w - - 0 15
+Parsed move: g3g7
+UCI move: g3g7
+<debate_v2> : Final move (SAN): Rxg7+
+<debate_v2> : Final move (UCI): g3g7
+Debate V2 predicted UCI: g3g7
+Debate history V2 saved to debate_history_v2/puzzle_1_debate_v2.json
+✅ Correct move!
+Auto-played opponent move: g8h8
+
+--- Model Turn ---
+Board:
+r . . q . r . k
+p . p . . p R p
+. . p n . . . .
+. . . p . . . .
+. . . . . P . .
+. P . P P . . .
+P B P . . . P P
+R N . b . . K .
+Expected UCI: g7f7
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYIITZcG5JzqxwRjtkecI7CgzYZ', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21.\nRg7+ Kh8 22. Rg5+ Rf6 23. Bxf6+ Qxf6 24. d4 Ne4 25. Re5 Bxc2 26. Na3 Bd3 27.\nRd1 Be2 28. Re1 Bg4 29. h3 Bd7 30. g4 Qh4 31. Rh5 Qxe1+ 32. Kg2 Qf2+ 33. Kh1\nNg3#')], created=1761421758, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=154, prompt_tokens=195, total_tokens=349, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21.\nRg7+ Kh8 22. Rg5+ Rf6 23. Bxf6+ Qxf6 24. d4 Ne4 25. Re5 Bxc2 26. Na3 Bd3 27.\nRd1 Be2 28. Re1 Bg4 29. h3 Bd7 30. g4 Qh4 31. Rh5 Qxe1+ 32. Kg2 Qf2+ 33. Kh1\nNg3#'
+----- Affirmative side -----
+16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21.
+Rg7+ Kh8 22. Rg5+ Rf6 23. Bxf6+ Qxf6 24. d4 Ne4 25. Re5 Bxc2 26. Na3 Bd3 27.
+Rd1 Be2 28. Re1 Bg4 29. h3 Bd7 30. g4 Qh4 31. Rh5 Qxe1+ 32. Kg2 Qf2+ 33. Kh1
+Ng3#
+
+<debate_v2> : Affirmative move: Rxf7+
+Model response: Completion(id='cmpl-CUeYK6SwOGa7eAUk87CKfKcHdeB0w', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rd7+ Kg8 23. Rxd8 Raxd8 24. Na3 Bh5 25. h3 Rfe8 26. g4 Bf7 27. Re1 Nb5 28. Nxb5 cxb5 29. e4 dxe4 30. dxe4 Rd2 31. e5 Rxc2 32. Ba3 Rxa2 33. Bd6 Bxb3 34. f5 Bd5 35. e6 Rg2+ 36. Kf1 Rh2 37. Bxh2 b4 38. Bd6 b3 39. Ba3 Ra8 40. Bb2 Ra2 41. e7 Bc6 42. e8=Q+ Bxe8 43. Rxe8+ Kf7 44. Re2 Ra4 45. Re3 Rb4 46. Ke2 Rb5 47. Kd2 Rd5+ 48. Kc3 Rb5 49. Kc4 Rb7 50. Rxb3 Rc7+ 51. Kd5 Rd7+ 52. Kc6 Rd2 53. Rb7+ Kg8 54. Rg7+ Kf8 55. Rxh7 Rxb2 56. g5 Rc2+ 57. Kd5 Rd2+ 58. Ke6 Re2+ 59. Kf6 Kg8 60. g6 Ra2 61. Re7 Ra6+ 62. Re6 Ra8 63. h4 Rf8+ 64. Kg5 Kg7 65. h5 Kg8 66. h6 Kh8 67. g7+ Kg8 68. gxf8=Q+ Kxf8 69. Kg6 Kg8 70. Re8#')], created=1761421760, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=457, prompt_tokens=195, total_tokens=652, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rd7+ Kg8 23. Rxd8 Raxd8 24. Na3 Bh5 25. h3 Rfe8 26. g4 Bf7 27. Re1 Nb5 28. Nxb5 cxb5 29. e4 dxe4 30. dxe4 Rd2 31. e5 Rxc2 32. Ba3 Rxa2 33. Bd6 Bxb3 34. f5 Bd5 35. e6 Rg2+ 36. Kf1 Rh2 37. Bxh2 b4 38. Bd6 b3 39. Ba3 Ra8 40. Bb2 Ra2 41. e7 Bc6 42. e8=Q+ Bxe8 43. Rxe8+ Kf7 44. Re2 Ra4 45. Re3 Rb4 46. Ke2 Rb5 47. Kd2 Rd5+ 48. Kc3 Rb5 49. Kc4 Rb7 50. Rxb3 Rc7+ 51. Kd5 Rd7+ 52. Kc6 Rd2 53. Rb7+ Kg8 54. Rg7+ Kf8 55. Rxh7 Rxb2 56. g5 Rc2+ 57. Kd5 Rd2+ 58. Ke6 Re2+ 59. Kf6 Kg8 60. g6 Ra2 61. Re7 Ra6+ 62. Re6 Ra8 63. h4 Rf8+ 64. Kg5 Kg7 65. h5 Kg8 66. h6 Kh8 67. g7+ Kg8 68. gxf8=Q+ Kxf8 69. Kg6 Kg8 70. Re8#'
+----- Negative side -----
+16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20. Rxa7+ Kg8 21. Rg7+ Kh8 22. Rd7+ Kg8 23. Rxd8 Raxd8 24. Na3 Bh5 25. h3 Rfe8 26. g4 Bf7 27. Re1 Nb5 28. Nxb5 cxb5 29. e4 dxe4 30. dxe4 Rd2 31. e5 Rxc2 32. Ba3 Rxa2 33. Bd6 Bxb3 34. f5 Bd5 35. e6 Rg2+ 36. Kf1 Rh2 37. Bxh2 b4 38. Bd6 b3 39. Ba3 Ra8 40. Bb2 Ra2 41. e7 Bc6 42. e8=Q+ Bxe8 43. Rxe8+ Kf7 44. Re2 Ra4 45. Re3 Rb4 46. Ke2 Rb5 47. Kd2 Rd5+ 48. Kc3 Rb5 49. Kc4 Rb7 50. Rxb3 Rc7+ 51. Kd5 Rd7+ 52. Kc6 Rd2 53. Rb7+ Kg8 54. Rg7+ Kf8 55. Rxh7 Rxb2 56. g5 Rc2+ 57. Kd5 Rd2+ 58. Ke6 Re2+ 59. Kf6 Kg8 60. g6 Ra2 61. Re7 Ra6+ 62. Re6 Ra8 63. h4 Rf8+ 64. Kg5 Kg7 65. h5 Kg8 66. h6 Kh8 67. g7+ Kg8 68. gxf8=Q+ Kxf8 69. Kg6 Kg8 70. Re8#
+
+<debate_v2> : Negative move: Rxf7+
+<debate_v2> : Early consensus! Both models agree on move: Rxf7+
+Converting SAN 'Rxf7+' -> 'Rxf7' on board FEN: r2q1r1k/p1p2pRp/2pn4/3p4/5P2/1P1PP3/PBP3PP/RN1b2K1 w - - 1 16
+Parsed move: g7f7
+UCI move: g7f7
+<debate_v2> : Final move (SAN): Rxf7+
+<debate_v2> : Final move (UCI): g7f7
+Debate V2 predicted UCI: g7f7
+Debate history V2 saved to debate_history_v2/puzzle_1_debate_v2.json
+✅ Correct move!
+Auto-played opponent move: h8g8
+
+--- Model Turn ---
+Board:
+r . . q . r k .
+p . p . . R . p
+. . p n . . . .
+. . . p . . . .
+. . . . . P . .
+. P . P P . . .
+P B P . . . P P
+R N . b . . K .
+Expected UCI: f7g7
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYNvYXtJRE7PncGOLDPu3ZSrsEW', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.\nRxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2\n26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8\n32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc6+ Bxc6 38.\nNxc6 Rd1+ 39. Kf2 Kxf7 40. Kg3 Rd3 41. Ne5+ Ke6 42. Nxd3 Kd5 43. Kxh3 Ke4\n44. g5 Kxd3 45. g6 Kxe3 46. g7 Kxf4 47. g8=Q Ke3 48. Qc4 Kd2 49. Kg3 Ke3\n50. Qf4+ Kd3 51. Kf3 Kc3 52. Qe4 Kb2 53. Qd3 Kxa2 54. Qc3 Ka3 55. Ke3 Ka2\n56. Kd3 Ka3 57. Kc2 Ka2 58. Qb2#')], created=1761421763, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=486, prompt_tokens=204, total_tokens=690, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.\nRxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2\n26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8\n32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc6+ Bxc6 38.\nNxc6 Rd1+ 39. Kf2 Kxf7 40. Kg3 Rd3 41. Ne5+ Ke6 42. Nxd3 Kd5 43. Kxh3 Ke4\n44. g5 Kxd3 45. g6 Kxe3 46. g7 Kxf4 47. g8=Q Ke3 48. Qc4 Kd2 49. Kg3 Ke3\n50. Qf4+ Kd3 51. Kf3 Kc3 52. Qe4 Kb2 53. Qd3 Kxa2 54. Qc3 Ka3 55. Ke3 Ka2\n56. Kd3 Ka3 57. Kc2 Ka2 58. Qb2#'
+----- Affirmative side -----
+1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.
+Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3
+Bxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.
+Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2
+26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8
+32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc6+ Bxc6 38.
+Nxc6 Rd1+ 39. Kf2 Kxf7 40. Kg3 Rd3 41. Ne5+ Ke6 42. Nxd3 Kd5 43. Kxh3 Ke4
+44. g5 Kxd3 45. g6 Kxe3 46. g7 Kxf4 47. g8=Q Ke3 48. Qc4 Kd2 49. Kg3 Ke3
+50. Qf4+ Kd3 51. Kf3 Kc3 52. Qe4 Kb2 53. Qd3 Kxa2 54. Qc3 Ka3 55. Ke3 Ka2
+56. Kd3 Ka3 57. Kc2 Ka2 58. Qb2#
+
+<debate_v2> : Affirmative move: Rg7+
+Model response: Completion(id='cmpl-CUeYRpx6jBDEqLe5WBiaPohDyJxR2', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.\nRxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2\n26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8\n32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc4 Rd1+ 38. Kf2\nRd2+ 39. Kg3 Bd5 40. Rd4 Rg2+ 41. Kxh3 Rxa2 42. Rxd5 Kxd5 43. g5 Ke4 44. g6\nKxe3 45. g7 Ra8 46. Rf8 Ra7 47. g8=Q Rh7+ 48. Qxh7 Kd4 49. Qd3+ Kc5 50. Rc8+\nKb4 51. Qc4+ Ka3 52. Ra8+ Kb2 53. Nd3+ Kb1 54. Qc1#')], created=1761421767, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=459, prompt_tokens=204, total_tokens=663, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.\nNxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3\nBxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.\nRxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2\n26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8\n32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc4 Rd1+ 38. Kf2\nRd2+ 39. Kg3 Bd5 40. Rd4 Rg2+ 41. Kxh3 Rxa2 42. Rxd5 Kxd5 43. g5 Ke4 44. g6\nKxe3 45. g7 Ra8 46. Rf8 Ra7 47. g8=Q Rh7+ 48. Qxh7 Kd4 49. Qd3+ Kc5 50. Rc8+\nKb4 51. Qc4+ Ka3 52. Ra8+ Kb2 53. Nd3+ Kb1 54. Qc1#'
+----- Negative side -----
+1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.
+Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3
+Bxd1 15. Rxg7+ Kh8 16. Rxf7+ Kg8 17. Rg7+ Kh8 18. Rxc7+ Kg8 19. Rg7+ Kh8 20.
+Rxa7+ Kg8 21. Rg7+ Kh8 22. Rg6+ Rf6 23. Bxf6+ Qxf6 24. Rxf6 Kg7 25. Rxd6 Bxc2
+26. Rxc6 Bxd3 27. Nc3 Re8 28. Nxd5 Be4 29. Rc7+ Kg6 30. Ne7+ Kf6 31. Nc6 Rg8
+32. g3 h5 33. Ne5 h4 34. Rf7+ Ke6 35. g4 h3 36. Rc1 Rd8 37. Rc4 Rd1+ 38. Kf2
+Rd2+ 39. Kg3 Bd5 40. Rd4 Rg2+ 41. Kxh3 Rxa2 42. Rxd5 Kxd5 43. g5 Ke4 44. g6
+Kxe3 45. g7 Ra8 46. Rf8 Ra7 47. g8=Q Rh7+ 48. Qxh7 Kd4 49. Qd3+ Kc5 50. Rc8+
+Kb4 51. Qc4+ Ka3 52. Ra8+ Kb2 53. Nd3+ Kb1 54. Qc1#
+
+<debate_v2> : Negative move: Rg7+
+<debate_v2> : Early consensus! Both models agree on move: Rg7+
+Converting SAN 'Rg7+' -> 'Rg7' on board FEN: r2q1rk1/p1p2R1p/2pn4/3p4/5P2/1P1PP3/PBP3PP/RN1b2K1 w - - 1 17
+Parsed move: f7g7
+UCI move: f7g7
+<debate_v2> : Final move (SAN): Rg7+
+<debate_v2> : Final move (UCI): f7g7
+Debate V2 predicted UCI: f7g7
+Debate history V2 saved to debate_history_v2/puzzle_1_debate_v2.json
+✅ Correct move!
+Model solved everything: True
+
+=== Evaluating puzzle 2 ===
+
+--- Model Turn ---
+Board:
+r . . . . . r .
+. B b . k . . p
+p . . q p p . B
+. p . . . . . .
+. . p P . . . .
+. . P . . . . .
+P P . . Q R P P
+. . . . R . K .
+Expected UCI: d6h2
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYVVBPqZ7xRImqJoH3IRL5hLwEe', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2\nc4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6\n15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.\nBe4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#')], created=1761421771, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=192, prompt_tokens=248, total_tokens=440, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2\nc4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6\n15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.\nBe4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#'
+----- Affirmative side -----
+1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2
+c4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6
+15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.
+Be4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#
+
+<debate_v2> : Affirmative move: Qxh2+
+Model response: Completion(id='cmpl-CUeYXaKt39bxxS5kq5Iatzira1kdt', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2\nc4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6\n15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.\nBe4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#')], created=1761421773, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=192, prompt_tokens=248, total_tokens=440, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2\nc4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6\n15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.\nBe4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#'
+----- Negative side -----
+1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2
+c4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6
+15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.
+Be4 Qd6 22. Bxb7 Qxh2+ 23. Kf1 Qh1#
+
+<debate_v2> : Negative move: Qxh2+
+<debate_v2> : Early consensus! Both models agree on move: Qxh2+
+Converting SAN 'Qxh2+' -> 'Qxh2' on board FEN: r5r1/1Bb1k2p/p2qpp1B/1p6/2pP4/2P5/PP2QRPP/4R1K1 b - - 0 22
+Parsed move: d6h2
+UCI move: d6h2
+<debate_v2> : Final move (SAN): Qxh2+
+<debate_v2> : Final move (UCI): d6h2
+Debate V2 predicted UCI: d6h2
+Debate history V2 saved to debate_history_v2/puzzle_2_debate_v2.json
+✅ Correct move!
+Auto-played opponent move: g1f1
+
+--- Model Turn ---
+Board:
+r . . . . . r .
+. B b . k . . p
+p . . . p p . B
+. p . . . . . .
+. . p P . . . .
+. . P . . . . .
+P P . . Q R P q
+. . . . R K . .
+Expected UCI: h2h1
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYZWyeltMCwCGZa3A5SDvR7ClmS', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='')], created=1761421775, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=None, prompt_tokens=259, total_tokens=259, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: ''
+----- Affirmative side -----
+No response from model
+
+<debate_v2> : Affirmative move: None
+Model response: Completion(id='cmpl-CUeYaxKv1sOkwFG8nVOJJ7kIkFmfQ', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='')], created=1761421776, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=None, prompt_tokens=259, total_tokens=259, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: ''
+----- Negative side -----
+No response from model
+
+<debate_v2> : Negative move: None
+<debate_v2> : Both models failed to provide moves
+Debate V2 predicted UCI: None
+Debate history V2 saved to debate_history_v2/puzzle_2_debate_v2.json
+❌ Mismatch: expected h2h1 but got None
+Model solved everything: False
+
+=== Evaluating puzzle 3 ===
+
+--- Model Turn ---
+Board:
+. . . . . r k .
+p p . . . p p p
+. . b r p n . .
+. . . . q . . .
+. . . . P . . .
+. B . . . . . P
+P P . N Q . P .
+. . . R . R . K
+Expected UCI: d2c4
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYa79XCG5R5XDxjJjbzrdMx2n9f', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Nxe4')], created=1761421776, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=28, prompt_tokens=225, total_tokens=253, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Nxe4'
+----- Affirmative side -----
+20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Nxe4
+
+<debate_v2> : Affirmative move: Nc4
+Model response: Completion(id='cmpl-CUeYblkZ9bBaVso5H8DQVLSsPwMAA', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Bxe4')], created=1761421777, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=28, prompt_tokens=225, total_tokens=253, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Bxe4'
+----- Negative side -----
+20. Nc4 Rxd1 21. Nxe5 Rxf1+ 22. Qxf1 Bxe4
+
+<debate_v2> : Negative move: Nc4
+<debate_v2> : Early consensus! Both models agree on move: Nc4
+Converting SAN 'Nc4' -> 'Nc4' on board FEN: 5rk1/pp3ppp/2brpn2/4q3/4P3/1B5P/PP1NQ1P1/3R1R1K w - - 0 20
+Parsed move: d2c4
+UCI move: d2c4
+<debate_v2> : Final move (SAN): Nc4
+<debate_v2> : Final move (UCI): d2c4
+Debate V2 predicted UCI: d2c4
+Debate history V2 saved to debate_history_v2/puzzle_3_debate_v2.json
+✅ Correct move!
+Auto-played opponent move: e5e4
+
+--- Model Turn ---
+Board:
+. . . . . r k .
+p p . . . p p p
+. . b r p n . .
+. . . . . . . .
+. . N . q . . .
+. B . . . . . P
+P P . . Q . P .
+. . . R . R . K
+Expected UCI: e2e4
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYcbqhYvVB8Zk3KEeUIsf8CfTly', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='\n1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3\nBe7 9. O-O O-O 10. Qe2 Bd7 11. Rad1 Qc7 12. Nb5 Qa5 13. Bxd6 Bxd6 14. Nxd6 Rab8\n15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rfd8 18. f4 Rxd6 19. fxe5 Qxe5 20. Nc4 Qxe4 21. Qxe4 Nxe4')], created=1761421778, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=172, prompt_tokens=234, total_tokens=406, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3\nBe7 9. O-O O-O 10. Qe2 Bd7 11. Rad1 Qc7 12. Nb5 Qa5 13. Bxd6 Bxd6 14. Nxd6 Rab8\n15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rfd8 18. f4 Rxd6 19. fxe5 Qxe5 20. Nc4 Qxe4 21. Qxe4 Nxe4'
+----- Affirmative side -----
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3
+Be7 9. O-O O-O 10. Qe2 Bd7 11. Rad1 Qc7 12. Nb5 Qa5 13. Bxd6 Bxd6 14. Nxd6 Rab8
+15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rfd8 18. f4 Rxd6 19. fxe5 Qxe5 20. Nc4 Qxe4 21. Qxe4 Nxe4
+
+<debate_v2> : Affirmative move: Qxe4
+Model response: Completion(id='cmpl-CUeYennavEUrhbohN8ic94MGZrkfA', choices=[CompletionChoice(finish_reason='length', index=0, logprobs=None, text='\n21. Qxe4 Nxe4 22. Nxd6 Ng3+ 23. Kg1 Nxf1 24. Rxf1 Rd8 25. Nxf7 Rd2 26. Rf2 Rxf2\n27. Kxf2 Kxf7 28. g3 Kf6 29. Ke3 Ke5 30. Bc2 h6 31. h4 Bd5 32. a3 b6 33. Bd3 a5\n34. Bc2 Bc4 35. Bd1 Kd5 36. Bc2 e5 37. Bd1 Bb5 38. Bc2 Bc6 39. Bd1 Kc4 40. Bc2\nBd5 41. Bd1 Kc5 42. Bc2 b5 43. Bd1 b4 44. axb4+ Kxb4 45. Kd3 Bb3 46. Bf3 Bc4+\n47. Kc2 Bb3+ 48. Kd3 Bc4+ 49. Kc2 Bb3+ 50. Kd3 Bc4+ 51. Kc2 Bb3+ 52. Kd3 Bc4+ 53. Kc2 Bb3+ 54. Kd3 Bc4+ 55. Kc2 Bb3+ 56. Kd3 Bc4+ 57. Kc2 Bb3+ 58. Kd3 Bc4+ 59. Kc2 Bb3+ 60. Kd3 Bc4+ 61. Kc2 Bb3+ 62. Kd3 Bc4+ 63. Kc2 Bb3+ 64. Kd3 Bc4+ 65. Kc2 Bb3+ 66. Kd3 Bc4+ 67. Kc2 Bb3+ 68. Kd3 Bc4+ 69. Kc2 Bb3+ 70. Kd3 Bc4+ 71. Kc2 Bb3+ 72. Kd3 Bc4+ 73. Kc2 Bb3+ 74. Kd3 Bc4+ 75. Kc')], created=1761421780, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=500, prompt_tokens=234, total_tokens=734, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: '21. Qxe4 Nxe4 22. Nxd6 Ng3+ 23. Kg1 Nxf1 24. Rxf1 Rd8 25. Nxf7 Rd2 26. Rf2 Rxf2\n27. Kxf2 Kxf7 28. g3 Kf6 29. Ke3 Ke5 30. Bc2 h6 31. h4 Bd5 32. a3 b6 33. Bd3 a5\n34. Bc2 Bc4 35. Bd1 Kd5 36. Bc2 e5 37. Bd1 Bb5 38. Bc2 Bc6 39. Bd1 Kc4 40. Bc2\nBd5 41. Bd1 Kc5 42. Bc2 b5 43. Bd1 b4 44. axb4+ Kxb4 45. Kd3 Bb3 46. Bf3 Bc4+\n47. Kc2 Bb3+ 48. Kd3 Bc4+ 49. Kc2 Bb3+ 50. Kd3 Bc4+ 51. Kc2 Bb3+ 52. Kd3 Bc4+ 53. Kc2 Bb3+ 54. Kd3 Bc4+ 55. Kc2 Bb3+ 56. Kd3 Bc4+ 57. Kc2 Bb3+ 58. Kd3 Bc4+ 59. Kc2 Bb3+ 60. Kd3 Bc4+ 61. Kc2 Bb3+ 62. Kd3 Bc4+ 63. Kc2 Bb3+ 64. Kd3 Bc4+ 65. Kc2 Bb3+ 66. Kd3 Bc4+ 67. Kc2 Bb3+ 68. Kd3 Bc4+ 69. Kc2 Bb3+ 70. Kd3 Bc4+ 71. Kc2 Bb3+ 72. Kd3 Bc4+ 73. Kc2 Bb3+ 74. Kd3 Bc4+ 75. Kc'
+----- Negative side -----
+21. Qxe4 Nxe4 22. Nxd6 Ng3+ 23. Kg1 Nxf1 24. Rxf1 Rd8 25. Nxf7 Rd2 26. Rf2 Rxf2
+27. Kxf2 Kxf7 28. g3 Kf6 29. Ke3 Ke5 30. Bc2 h6 31. h4 Bd5 32. a3 b6 33. Bd3 a5
+34. Bc2 Bc4 35. Bd1 Kd5 36. Bc2 e5 37. Bd1 Bb5 38. Bc2 Bc6 39. Bd1 Kc4 40. Bc2
+Bd5 41. Bd1 Kc5 42. Bc2 b5 43. Bd1 b4 44. axb4+ Kxb4 45. Kd3 Bb3 46. Bf3 Bc4+
+47. Kc2 Bb3+ 48. Kd3 Bc4+ 49. Kc2 Bb3+ 50. Kd3 Bc4+ 51. Kc2 Bb3+ 52. Kd3 Bc4+ 53. Kc2 Bb3+ 54. Kd3 Bc4+ 55. Kc2 Bb3+ 56. Kd3 Bc4+ 57. Kc2 Bb3+ 58. Kd3 Bc4+ 59. Kc2 Bb3+ 60. Kd3 Bc4+ 61. Kc2 Bb3+ 62. Kd3 Bc4+ 63. Kc2 Bb3+ 64. Kd3 Bc4+ 65. Kc2 Bb3+ 66. Kd3 Bc4+ 67. Kc2 Bb3+ 68. Kd3 Bc4+ 69. Kc2 Bb3+ 70. Kd3 Bc4+ 71. Kc2 Bb3+ 72. Kd3 Bc4+ 73. Kc2 Bb3+ 74. Kd3 Bc4+ 75. Kc
+
+<debate_v2> : Negative move: Qxe4
+<debate_v2> : Early consensus! Both models agree on move: Qxe4
+Converting SAN 'Qxe4' -> 'Qxe4' on board FEN: 5rk1/pp3ppp/2brpn2/8/2N1q3/1B5P/PP2Q1P1/3R1R1K w - - 0 21
+Parsed move: e2e4
+UCI move: e2e4
+<debate_v2> : Final move (SAN): Qxe4
+<debate_v2> : Final move (UCI): e2e4
+Debate V2 predicted UCI: e2e4
+Debate history V2 saved to debate_history_v2/puzzle_3_debate_v2.json
+✅ Correct move!
+Model solved everything: True
+
+=== Evaluating puzzle 4 ===
+
+--- Model Turn ---
+Board:
+. . . . . . . .
+. . . . . p . .
+. P . . p . p .
+. . . . . . K .
+. . . . . P . .
+. . . . . . k p
+. . . . . . . .
+. . . B . . . .
+Expected UCI: h3h2
+
+<debate_v2> : Starting chess debate with moderator and judge
+===== Debate Round-1 =====
+Model response: Completion(id='cmpl-CUeYiMiwUsOWeXc68Wjmzr7ewA2l6', choices=[CompletionChoice(finish_reason='length', index=0, logprobs=None, text=' Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1\n47. Qxh1+ Kxh1 48. Kf6 Kg2 49. Kxf7 Kg3 50. Kxe6 Kxf4 51. Kf6 g5 52. Kg6 g4 53.\nKh5 g3 54. Kh4 g2 55. Kh3 g1=Q 56. Kh4 Qg4# 0-1\n1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2\nb5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15.\nRad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1\nBxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27.\nQxc5 Qxc2 28. Qd4 Qd2 29. Qxd2 cxd2 30. Be2 Kg7 31. Bd1 Kf6 32. Kf1 Kg5 33. Ke2\nKh4 34. Kxd2 Kh3 35. Ke3 Kxh2 36. Kf4 Kg2 37. a4 h5 38. Kg5 Kxf2 39. b4 Kg3 40.\nb5 axb5 41. axb5 h4 42. f4 h3 43. b6 * Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1\n47. Qx')], created=1761421784, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=500, prompt_tokens=419, total_tokens=919, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: 'Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1\n47. Qxh1+ Kxh1 48. Kf6 Kg2 49. Kxf7 Kg3 50. Kxe6 Kxf4 51. Kf6 g5 52. Kg6 g4 53.\nKh5 g3 54. Kh4 g2 55. Kh3 g1=Q 56. Kh4 Qg4# 0-1\n1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2\nb5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15.\nRad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1\nBxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27.\nQxc5 Qxc2 28. Qd4 Qd2 29. Qxd2 cxd2 30. Be2 Kg7 31. Bd1 Kf6 32. Kf1 Kg5 33. Ke2\nKh4 34. Kxd2 Kh3 35. Ke3 Kxh2 36. Kf4 Kg2 37. a4 h5 38. Kg5 Kxf2 39. b4 Kg3 40.\nb5 axb5 41. axb5 h4 42. f4 h3 43. b6 * Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1\n47. Qx'
+----- Affirmative side -----
+Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1
+47. Qxh1+ Kxh1 48. Kf6 Kg2 49. Kxf7 Kg3 50. Kxe6 Kxf4 51. Kf6 g5 52. Kg6 g4 53.
+Kh5 g3 54. Kh4 g2 55. Kh3 g1=Q 56. Kh4 Qg4# 0-1
+1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2
+b5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15.
+Rad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1
+Bxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27.
+Qxc5 Qxc2 28. Qd4 Qd2 29. Qxd2 cxd2 30. Be2 Kg7 31. Bd1 Kf6 32. Kf1 Kg5 33. Ke2
+Kh4 34. Kxd2 Kh3 35. Ke3 Kxh2 36. Kf4 Kg2 37. a4 h5 38. Kg5 Kxf2 39. b4 Kg3 40.
+b5 axb5 41. axb5 h4 42. f4 h3 43. b6 * Kg2 44. b7 h2 45. b8=Q h1=Q 46. Qb7+ Kg1
+47. Qx
+
+<debate_v2> : Affirmative move: Qg4#
+Model response: Completion(id='cmpl-CUeYlWZE5ZkX59MQRrJNnTBaYPCi5', choices=[CompletionChoice(finish_reason='stop', index=0, logprobs=None, text='')], created=1761421787, model='gpt-3.5-turbo-instruct:20230824-v2', object='text_completion', system_fingerprint=None, usage=CompletionUsage(completion_tokens=None, prompt_tokens=419, total_tokens=419, completion_tokens_details=None, prompt_tokens_details=None))
+Model output: ''
+----- Negative side -----
+No response from model
+
+<debate_v2> : Negative move: None
+<debate_v2> : Only affirmative model provided move: Qg4#
+Converting SAN 'Qg4#' -> 'Qg4' on board FEN: 8/5p2/1P2p1p1/6K1/5P2/6kp/8/3B4 b - - 0 43
+ValueError converting SAN 'Qg4': illegal san: 'Qg4' in 8/5p2/1P2p1p1/6K1/5P2/6kp/8/3B4 b - - 0 43
+<debate_v2> : Final move (SAN): Qg4#
+<debate_v2> : Final move (UCI): None
+Debate V2 predicted UCI: None
+Debate history V2 saved to debate_history_v2/puzzle_4_debate_v2.json
+❌ Mismatch: expected h3h2 but got None
+Model solved everything: False
+
+Evaluation Summary:
+  Puzzles solved: 3/1000 (0.3%)
+Puzzle 0: ✓ Expected: e6e1, Correct moves: 1
+Puzzle 1: ✓ Expected: g3g7, Correct moves: 3
+Puzzle 2: ERROR - Mismatch: expected h2h1 but got None
+Puzzle 3: ✓ Expected: d2c4, Correct moves: 2
+Puzzle 4: ERROR - Mismatch: expected h3h2 but got None

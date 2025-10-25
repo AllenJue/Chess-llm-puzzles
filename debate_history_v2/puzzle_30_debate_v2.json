@@ -1,0 +1,21 @@
+{
+  "round1": {
+    "affirmative_move": "Nf8+",
+    "negative_move": "Ne5+",
+    "affirmative_response": "29. Nf8+ Kh8 30. Qh7+ Nxh7 31. Ng6#",
+    "negative_response": "1. d4 f5 2. c4 e6 3. Nf3 b6 4. Bg5 Be7 5. Bxe7 Qxe7 6. Nc3 Bb7 7. d5 exd5 8.\nNxd5 Qd8 9. Qd4 Nf6 10. Qe5+ Kf7 11. Qxf5 Bxd5 12. Ng5+ Kg8 13. cxd5 h6 14. Nf3\nQe7 15. e3 Kf7 16. Ne5+ Kg8 17. Ng6 Qb4+ 18. Kd1 Qxb2 19. Rb1 Qxa2 20. Be2 Na6\n21. Qc2 Qxd5+ 22. Kc1 Qxg2 23. Nxh8 Qxh1+ 24. Kb2 Qb7 25. Ng6 Nc5 26. Bc4+ Kh7\n27. Ne7+ Kh8 28. Ng6+ Kh7 29. Ne5+ Kh8 30. Nf7+ Kg8 31. Nd6+ Kh8 32. Nxb7 Nxb7",
+    "moderator_response": {
+      "Whether there is a preference": "Yes",
+      "Supported Side": "Aggressive",
+      "Reason": "The aggressive side has successfully executed a checkmate in 31 moves, while the positional side has not made any significant progress in their position. Additionally, the aggressive side has been able to maintain a strong attacking position throughout the game.",
+      "debate_answer": "31. Nd6+ Kh8 32. Nf7#"
+    }
+  },
+  "final_result": {
+    "final_move_san": "Nf7#",
+    "final_move_uci": null,
+    "success": true,
+    "reason": "The aggressive side has successfully executed a checkmate in 31 moves, while the positional side has not made any significant progress in their position. Additionally, the aggressive side has been able to maintain a strong attacking position throughout the game.",
+    "supported_side": "Aggressive"
+  }
+}

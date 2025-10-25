@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "Nxe4",
+    "negative_move": "Nxe4",
+    "affirmative_response": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Bc5 5. O-O O-O 6. a3 a5 7. Qe2 h6 8. d3\nd6 9. h3 Be6 10. Nd5 Bxd5 11. exd5 Nd4 12. Nxd4 Bxd4 13. c3 Ba7 14. Be3 c6 15.\nBxa7 Rxa7 16. dxc6 bxc6 17. Qe3 Re7 18. Qf3 d5 19. Bb3 e4 20. dxe4 dxe4 21. Qd1\nQb6 22. Rb1 e3 23. fxe3 Qxe3+ 24. Kh1 Rd7 25. Qf3 Qg5 26. Qxc6 Rd2 27. Rfd1 Nh5\n28. Rxd2 Qxd2 29. Qf3 Nf4 30. Bc4 Ne6 31. Rf1 Ng5 32. Qf2 Qd7 33. b3 Ne4 34.\nQf3 Ng5 35. Qf5 Qxf5 36. Rxf5 Ne4 37. Rxa5 Nxc3 38. b4 Ne4 39. b5 Rb8 40. Ra7\nNd6 41. Ba2 Rxb5 42. a4 Rb2 43. Bd5 Rd2 44. Bf3 Ra2 45. a5 Nb5 46. Ra8+ Kh7 47.\na6 Kg6 48. Bd5 Ra1+ 49. Kh2 f6 50. Bb7 h5 51. Rc8 h4 52. Rc5 Nd6 53. Rd5 Nf5\n54. Rb5 Ng3 55. Be4+ Nxe4 56. Rb4 Ng3",
+    "negative_response": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Bc5 5. O-O O-O 6. a3 a5 7. Qe2 h6 8. d3\nd6 9. h3 Be6 10. Nd5 Bxd5 11. exd5 Nd4 12. Nxd4 Bxd4 13. c3 Ba7 14. Be3 c6 15.\nBxa7 Rxa7 16. dxc6 bxc6 17. Qe3 Re7 18. Qf3 d5 19. Bb3 e4 20. dxe4 dxe4 21. Qd1\nQb6 22. Rb1 e3 23. fxe3 Qxe3+ 24. Kh1 Rd7 25. Qf3 Qg5 26. Qxc6 Rd2 27. Rfd1 Nh5\n28. Rxd2 Qxd2 29. Qf3 Nf4 30. Bc4 Ne6 31. Rf1 Ng5 32. Qf2 Qd7 33. b3 Ne4 34.\nQf3 Ng5 35. Qf5 Qxf5 36. Rxf5 Ne4 37. Rxa5 Nxc3 38. b4 Ne4 39. b5 Rb8 40. Ra7\nNd6 41. Ba2 Rxb5 42. a4 Rb2 43. Bd5 Rd2 44. Bf3 Ra2 45. a5 Nb5 46. Ra8+ Kh7 47.\na6 Kg6 48. Bd5 Ra1+ 49. Kh2 f6 50. Bb7 h5 51. Rc8 h4 52. Rc5 Nd6 53. Rd5 Nf5\n54. Rb5 Ng3 55. Be4+ Nxe4 56. Rb4 Ng3",
+    "affirmative_tokens": {
+      "prompt_tokens": 511,
+      "completion_tokens": 451,
+      "total_tokens": 962,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 511,
+      "completion_tokens": 451,
+      "total_tokens": 962,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "Nxe4",
+    "final_move_uci": "g3e4",
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 511,
+      "completion_tokens": 451,
+      "total_tokens": 962,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 511,
+      "completion_tokens": 451,
+      "total_tokens": 962,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 1022,
+    "total_completion_tokens": 902,
+    "total_tokens": 1924
+  }
+}

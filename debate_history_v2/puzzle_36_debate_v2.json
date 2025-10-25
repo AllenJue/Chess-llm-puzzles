@@ -1,0 +1,21 @@
+{
+  "round1": {
+    "affirmative_move": "g3",
+    "negative_move": "g5",
+    "affirmative_response": "1. d4 Nf6 2. e3 d5 3. Bd3 Bg4 4. Nf3 e6 5. Nbd2 Bd6 6. h3 Bh5 7. O-O O-O 8. Qe1\nNbd7 9. c3 c5 10. e4 dxe4 11. Nxe4 Nxe4 12. Bxe4 Qc7 13. Be3 cxd4 14. Bxd4 Nc5\n15. Bxc5 Bxc5 16. Ne5 Bd6 17. Ng4 f5 18. Bc2 fxg4 19. Qxe6+ Kh8 20. hxg4 Bf7\n21. Qe2 Rae8 22. Qd2 Bf4 23. Qd4 Bh2+ 24. Kh1 Be5 25. Qb4 Re6 26. g3 Rh6+ 27. Kg2 Bd5+ 28. f3 Bd6",
+    "negative_response": "1. d4 Nf6 2. e3 d5 3. Bd3 Bg4 4. Nf3 e6 5. Nbd2 Bd6 6. h3 Bh5 7. O-O O-O 8. Qe1\nNbd7 9. c3 c5 10. e4 dxe4 11. Nxe4 Nxe4 12. Bxe4 Qc7 13. Be3 cxd4 14. Bxd4 Nc5\n15. Bxc5 Bxc5 16. Ne5 Bd6 17. Ng4 f5 18. Bc2 fxg4 19. Qxe6+ Kh8 20. hxg4 Bf7\n21. Qe2 Rae8 22. Qd2 Bf4 23. Qd4 Bh2+ 24. Kh1 Be5 25. Qb4 Re6 26. g5 Bd6",
+    "moderator_response": {
+      "Whether there is a preference": "Yes",
+      "Supported Side": "Aggressive",
+      "Reason": "The aggressive side has a stronger position with a more active bishop and a potential attack on the king side. The positional side has a slightly weaker pawn structure and a less active bishop. Additionally, the aggressive side has a more developed rook on the open e-file. Overall, the aggressive side has more potential for a successful attack.",
+      "debate_answer": "28... Bd6"
+    }
+  },
+  "final_result": {
+    "final_move_san": "Bd6",
+    "final_move_uci": null,
+    "success": true,
+    "reason": "The aggressive side has a stronger position with a more active bishop and a potential attack on the king side. The positional side has a slightly weaker pawn structure and a less active bishop. Additionally, the aggressive side has a more developed rook on the open e-file. Overall, the aggressive side has more potential for a successful attack.",
+    "supported_side": "Aggressive"
+  }
+}

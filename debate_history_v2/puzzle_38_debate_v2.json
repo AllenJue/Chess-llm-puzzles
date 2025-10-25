@@ -1,0 +1,53 @@
+{
+  "round1": {
+    "affirmative_move": null,
+    "negative_move": null,
+    "affirmative_response": "No response from model",
+    "negative_response": "No response from model",
+    "affirmative_tokens": {
+      "prompt_tokens": 460,
+      "completion_tokens": 1,
+      "total_tokens": 461,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 460,
+      "completion_tokens": 1,
+      "total_tokens": 461,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Both models failed",
+    "early_consensus": false,
+    "failure": true
+  },
+  "final_result": {
+    "final_move_san": null,
+    "final_move_uci": null,
+    "success": false,
+    "reason": "Both models failed to provide moves",
+    "supported_side": "None"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 460,
+      "completion_tokens": 1,
+      "total_tokens": 461,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 460,
+      "completion_tokens": 1,
+      "total_tokens": 461,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 920,
+    "total_completion_tokens": 2,
+    "total_tokens": 922
+  }
+}

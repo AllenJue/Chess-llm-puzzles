@@ -33,6 +33,9 @@ import chess
 import chess.pgn
 import io
 
+# Import new debate system
+from chess_debate_v2 import ChessDebateV2, save_debate_history_v2
+
 
 class ChessDebatePlayer(Agent):
     def __init__(self, model_name: str, name: str, temperature: float, openai_api_key: str, sleep_time: float = 0) -> None:
@@ -469,7 +472,7 @@ def load_environment():
 
 
 def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = None, 
-                    debate: ChessDebate = None, max_puzzles: int = 5) -> pd.DataFrame:
+                    debate: ChessDebate = None, debate_v2: ChessDebateV2 = None, max_puzzles: int = 5) -> pd.DataFrame:
     """
     Evaluate puzzles using either model interface or debate system.
     Faithful to the provided evaluation logic:
@@ -481,7 +484,8 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     Args:
         df: DataFrame with puzzle data (must have 'PGN_partial' and 'Moves' columns)
         model_interface: ChessModelInterface instance (for single model)
-        debate: ChessDebate instance (for debate mode)
+        debate: ChessDebate instance (for old debate mode)
+        debate_v2: ChessDebateV2 instance (for new debate mode with moderator/judge)
         max_puzzles: Maximum number of puzzles to evaluate
         
     Returns:
@@ -493,11 +497,65 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     df_eval["error"] = ""
     df_eval["aggressive_move"] = ""
     df_eval["positional_move"] = ""
-    df_eval["neutral_move"] = ""
     df_eval["final_consensus_move"] = ""
     df_eval["debate_history"] = ""
     df_eval["single_model_response"] = ""
     df_eval["single_model_move"] = ""
+    # New V2 debate columns
+    df_eval["moderator_decision"] = ""
+    df_eval["judge_decision"] = ""
+    df_eval["debate_v2_history"] = ""
+    
+    # Comprehensive token and cost tracking
+    df_eval["aggressive_prompt_tokens"] = 0
+    df_eval["aggressive_completion_tokens"] = 0
+    df_eval["aggressive_total_tokens"] = 0
+    df_eval["aggressive_model"] = ""
+    df_eval["aggressive_finish_reason"] = ""
+    df_eval["aggressive_response"] = ""
+    
+    df_eval["positional_prompt_tokens"] = 0
+    df_eval["positional_completion_tokens"] = 0
+    df_eval["positional_total_tokens"] = 0
+    df_eval["positional_model"] = ""
+    df_eval["positional_finish_reason"] = ""
+    df_eval["positional_response"] = ""
+    
+    df_eval["moderator_prompt_tokens"] = 0
+    df_eval["moderator_completion_tokens"] = 0
+    df_eval["moderator_total_tokens"] = 0
+    df_eval["moderator_model"] = ""
+    df_eval["moderator_finish_reason"] = ""
+    df_eval["moderator_response"] = ""
+    
+    df_eval["judge_prompt_tokens"] = 0
+    df_eval["judge_completion_tokens"] = 0
+    df_eval["judge_total_tokens"] = 0
+    df_eval["judge_model"] = ""
+    df_eval["judge_finish_reason"] = ""
+    df_eval["judge_response"] = ""
+    
+    df_eval["total_prompt_tokens"] = 0
+    df_eval["total_completion_tokens"] = 0
+    df_eval["total_tokens"] = 0
+    df_eval["estimated_cost_usd"] = 0.0
+    
+    # Debate process information
+    df_eval["debate_rounds"] = 0
+    df_eval["early_consensus"] = False
+    df_eval["single_model_fallback"] = False
+    df_eval["both_models_failed"] = False
+    df_eval["debate_success"] = False
+    df_eval["final_reason"] = ""
+    df_eval["supported_side"] = ""
+    
+    # Input information
+    df_eval["board_fen"] = ""
+    df_eval["played_plies"] = 0
+    df_eval["current_turn"] = 0
+    df_eval["is_white_to_move"] = True
+    df_eval["user_prompt"] = ""
+    df_eval["system_prompt"] = ""
 
     total_moves = 0
     total_correct_moves = 0
@@ -556,19 +614,106 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                     print("Expected UCI:", expected_uci)
 
                     if debate:
-                        # Use debate system
+                        # Use old debate system
                         predicted_uci, debate_history = debate.run_debate(user_prompt, expected_uci, played_plies, current_board.fen())
                         print(f"Debate predicted UCI: {predicted_uci}")
                         
                         # Save debate data to DataFrame
                         df_eval.loc[idx, "aggressive_move"] = debate_history["round1"]["aggressive_move"]
                         df_eval.loc[idx, "positional_move"] = debate_history["round1"]["positional_move"]
-                        df_eval.loc[idx, "neutral_move"] = debate_history["round1"]["neutral_move"]
                         df_eval.loc[idx, "final_consensus_move"] = debate_history["final_moves"]["consensus_move"]
                         df_eval.loc[idx, "debate_history"] = str(debate_history)
                         
                         # Save detailed debate history to JSON file
                         save_debate_history(debate_history, idx)
+                    elif debate_v2:
+                        # Use new debate system with moderator and judge
+                        predicted_uci, debate_history = debate_v2.run_debate(user_prompt, expected_uci, played_plies, current_board.fen())
+                        print(f"Debate V2 predicted UCI: {predicted_uci}")
+                        
+                        # Save comprehensive debate V2 data to DataFrame
+                        df_eval.loc[idx, "aggressive_move"] = debate_history["round1"]["affirmative_move"]
+                        df_eval.loc[idx, "positional_move"] = debate_history["round1"]["negative_move"]
+                        df_eval.loc[idx, "moderator_decision"] = str(debate_history["round1"]["moderator_response"])
+                        df_eval.loc[idx, "judge_decision"] = debate_history["final_result"]["reason"]
+                        df_eval.loc[idx, "final_consensus_move"] = debate_history["final_result"]["final_move_uci"]
+                        df_eval.loc[idx, "debate_v2_history"] = str(debate_history)
+                        
+                        # Token information
+                        if "total_tokens" in debate_history:
+                            token_info = debate_history["total_tokens"]
+                            
+                            # Aggressive tokens
+                            if token_info.get("affirmative"):
+                                aff_tokens = token_info["affirmative"]
+                                df_eval.loc[idx, "aggressive_prompt_tokens"] = aff_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "aggressive_completion_tokens"] = aff_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "aggressive_total_tokens"] = aff_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "aggressive_model"] = aff_tokens.get("model", "")
+                                df_eval.loc[idx, "aggressive_finish_reason"] = aff_tokens.get("finish_reason", "")
+                            
+                            # Positional tokens
+                            if token_info.get("negative"):
+                                neg_tokens = token_info["negative"]
+                                df_eval.loc[idx, "positional_prompt_tokens"] = neg_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "positional_completion_tokens"] = neg_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "positional_total_tokens"] = neg_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "positional_model"] = neg_tokens.get("model", "")
+                                df_eval.loc[idx, "positional_finish_reason"] = neg_tokens.get("finish_reason", "")
+                            
+                            # Moderator tokens
+                            if token_info.get("moderator"):
+                                mod_tokens = token_info["moderator"]
+                                df_eval.loc[idx, "moderator_prompt_tokens"] = mod_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "moderator_completion_tokens"] = mod_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "moderator_total_tokens"] = mod_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "moderator_model"] = mod_tokens.get("model", "")
+                                df_eval.loc[idx, "moderator_finish_reason"] = mod_tokens.get("finish_reason", "")
+                            
+                            # Judge tokens
+                            if token_info.get("judge"):
+                                judge_tokens = token_info["judge"]
+                                df_eval.loc[idx, "judge_prompt_tokens"] = judge_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "judge_completion_tokens"] = judge_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "judge_total_tokens"] = judge_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "judge_model"] = judge_tokens.get("model", "")
+                                df_eval.loc[idx, "judge_finish_reason"] = judge_tokens.get("finish_reason", "")
+                            
+                            # Total tokens
+                            df_eval.loc[idx, "total_prompt_tokens"] = token_info.get("total_prompt_tokens", 0)
+                            df_eval.loc[idx, "total_completion_tokens"] = token_info.get("total_completion_tokens", 0)
+                            df_eval.loc[idx, "total_tokens"] = token_info.get("total_tokens", 0)
+                        
+                        # Response information
+                        df_eval.loc[idx, "aggressive_response"] = debate_history["round1"]["affirmative_response"]
+                        df_eval.loc[idx, "positional_response"] = debate_history["round1"]["negative_response"]
+                        df_eval.loc[idx, "moderator_response"] = str(debate_history["round1"]["moderator_response"])
+                        
+                        # Debate process information
+                        df_eval.loc[idx, "early_consensus"] = debate_history["round1"].get("early_consensus", False)
+                        df_eval.loc[idx, "single_model_fallback"] = debate_history["round1"].get("single_model", False)
+                        df_eval.loc[idx, "both_models_failed"] = debate_history["round1"].get("failure", False)
+                        df_eval.loc[idx, "debate_success"] = debate_history["final_result"]["success"]
+                        df_eval.loc[idx, "final_reason"] = debate_history["final_result"]["reason"]
+                        df_eval.loc[idx, "supported_side"] = debate_history["final_result"]["supported_side"]
+                        
+                        # Input information
+                        df_eval.loc[idx, "board_fen"] = current_board.fen()
+                        df_eval.loc[idx, "played_plies"] = played_plies
+                        df_eval.loc[idx, "current_turn"] = played_plies // 2 + 1
+                        df_eval.loc[idx, "is_white_to_move"] = current_board.turn
+                        df_eval.loc[idx, "user_prompt"] = user_prompt
+                        df_eval.loc[idx, "system_prompt"] = system_prompt
+                        
+                        # Estimate cost (rough calculation - adjust rates as needed)
+                        total_tokens = df_eval.loc[idx, "total_tokens"]
+                        # GPT-3.5-turbo-instruct: $0.0015 per 1K tokens input, $0.002 per 1K tokens output
+                        # This is a rough estimate - actual costs may vary
+                        estimated_cost = (df_eval.loc[idx, "total_prompt_tokens"] * 0.0015 / 1000) + (df_eval.loc[idx, "total_completion_tokens"] * 0.002 / 1000)
+                        df_eval.loc[idx, "estimated_cost_usd"] = estimated_cost
+                        
+                        # Save detailed debate history to JSON file
+                        save_debate_history_v2(debate_history, idx)
                     else:
                         # Use single model
                         raw_response, predicted_san = model_interface.get_move_with_extraction(
@@ -625,6 +770,9 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
             if debate:
                 # Clear memory between puzzles
                 debate.clear_memory()
+            elif debate_v2:
+                # Clear memory between puzzles
+                debate_v2.clear_memory()
                 
         except Exception as e:
             print(f"Error processing puzzle {idx}: {e}")
@@ -641,6 +789,8 @@ def main():
                        help="Path to CSV file with puzzle data")
     parser.add_argument("--max-puzzles", type=int, default=10,
                        help="Maximum number of puzzles to evaluate")
+    parser.add_argument("--start-puzzle", type=int, default=0,
+                       help="Starting puzzle index (0-based)")
     parser.add_argument("--model", choices=["gpt-3.5-turbo-instruct", "gpt-4-turbo"],
                        default="gpt-3.5-turbo-instruct", help="Model to use")
     parser.add_argument("--evaluate", action="store_true",
@@ -653,6 +803,8 @@ def main():
                        help="Calculate Glicko-2 rating")
     parser.add_argument("--debate", action="store_true",
                        help="Use multi-agent debate system instead of single model")
+    parser.add_argument("--debate-v2", action="store_true",
+                       help="Use new multi-agent debate system with moderator and judge")
     parser.add_argument("--output", default=None,
                        help="Output file for results")
     
@@ -699,8 +851,19 @@ def main():
                 max_rounds=2,
                 sleep_time=0.1
             )
-            # Evaluate puzzles with debate
+            # Evaluate puzzles with old debate system
             df_results = evaluate_puzzles(df, debate=debate, max_puzzles=args.max_puzzles)
+        elif args.debate_v2:
+            print(f"\nEvaluating puzzles with new multi-agent debate system (moderator + judge)...")
+            debate_v2 = ChessDebateV2(
+                model_name=args.model,
+                temperature=0.1,
+                openai_api_key=api_key,
+                max_rounds=3,
+                sleep_time=0.1
+            )
+            # Evaluate puzzles with new debate system
+            df_results = evaluate_puzzles(df, debate_v2=debate_v2, max_puzzles=args.max_puzzles)
         else:
             print(f"\nEvaluating puzzles with {args.model}...")
             model_interface = ChessModelInterface(api_key=api_key, model_name=args.model)

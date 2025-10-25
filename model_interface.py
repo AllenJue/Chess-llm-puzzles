@@ -70,6 +70,52 @@ class ChessModelInterface:
             print(f"Error calling OpenAI API: {e}")
             return None
 
+    def query_model_for_move_with_tokens(self, system_prompt: str, user_prompt: str,
+                                       max_tokens: int = 500, temperature: float = 0.1,
+                                       top_p: float = 1) -> tuple[Optional[str], Optional[dict]]:
+        """
+        Call OpenAI model with system and user prompts and return predicted move SAN with token info.
+        
+        Args:
+            system_prompt (str): System prompt
+            user_prompt (str): User prompt
+            max_tokens (int): Maximum tokens to generate
+            temperature (float): Sampling temperature
+            top_p (float): Top-p sampling parameter
+            
+        Returns:
+            tuple[Optional[str], Optional[dict]]: (predicted_move_san, token_info)
+        """
+        try:
+            combined_prompt = system_prompt + "\n" + user_prompt
+
+            response = self.client.completions.create(
+                model=self.model_name,
+                prompt=combined_prompt,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=top_p,
+            )
+            
+            print(f"Model response: {response}")
+            predicted_move_san = response.choices[0].text.strip()
+            print("Model output:", repr(predicted_move_san))
+
+            # Extract token information
+            token_info = {
+                "prompt_tokens": response.usage.prompt_tokens if response.usage else 0,
+                "completion_tokens": response.usage.completion_tokens if response.usage else 0,
+                "total_tokens": response.usage.total_tokens if response.usage else 0,
+                "model": self.model_name,
+                "finish_reason": response.choices[0].finish_reason if response.choices else None
+            }
+
+            return predicted_move_san, token_info
+
+        except Exception as e:
+            print(f"Error calling OpenAI API: {e}")
+            return None, None
+
     def query_model_for_gpt4_move(self, system_prompt: str, user_prompt: str,
                                  max_tokens: int = 500, temperature: float = 0.1,
                                  top_p: float = 1) -> Optional[str]:
@@ -113,10 +159,57 @@ class ChessModelInterface:
             print(f"Error calling OpenAI API with GPT-4: {e}")
             return None
 
+    def query_model_for_gpt4_move_with_tokens(self, system_prompt: str, user_prompt: str,
+                                            max_tokens: int = 500, temperature: float = 0.1,
+                                            top_p: float = 1) -> tuple[Optional[str], Optional[dict]]:
+        """
+        Call OpenAI GPT-4 model with system and user prompts and return predicted move SAN with token info.
+        
+        Args:
+            system_prompt (str): System prompt
+            user_prompt (str): User prompt
+            max_tokens (int): Maximum tokens to generate
+            temperature (float): Sampling temperature
+            top_p (float): Top-p sampling parameter
+            
+        Returns:
+            tuple[Optional[str], Optional[dict]]: (predicted_move_san, token_info)
+        """
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=top_p,
+            )
+            
+            print(f"GPT-4 Model response: {response}")
+            predicted_move_san = response.choices[0].message.content.strip()
+            print("GPT-4 Model output:", repr(predicted_move_san))
+
+            # Extract token information
+            token_info = {
+                "prompt_tokens": response.usage.prompt_tokens if response.usage else 0,
+                "completion_tokens": response.usage.completion_tokens if response.usage else 0,
+                "total_tokens": response.usage.total_tokens if response.usage else 0,
+                "model": "gpt-4-turbo",
+                "finish_reason": response.choices[0].finish_reason if response.choices else None
+            }
+
+            return predicted_move_san, token_info
+
+        except Exception as e:
+            print(f"Error calling OpenAI API with GPT-4: {e}")
+            return None, None
+
     def get_move_with_extraction(self, system_prompt: str, user_prompt: str,
                                current_turn_number: Optional[int] = None,
                                is_white_to_move: bool = True,
-                               use_gpt4: bool = False) -> tuple[Optional[str], Optional[str]]:
+                               use_gpt4: bool = False) -> tuple[Optional[str], Optional[str], Optional[dict]]:
         """
         Get move from model and extract SAN move from response.
         
@@ -128,15 +221,15 @@ class ChessModelInterface:
             use_gpt4 (bool): Whether to use GPT-4 instead of instruct model
             
         Returns:
-            tuple[Optional[str], Optional[str]]: (raw_response, extracted_san_move)
+            tuple[Optional[str], Optional[str], Optional[dict]]: (raw_response, extracted_san_move, token_info)
         """
         if use_gpt4:
-            response_text = self.query_model_for_gpt4_move(system_prompt, user_prompt)
+            response_text, token_info = self.query_model_for_gpt4_move_with_tokens(system_prompt, user_prompt)
         else:
-            response_text = self.query_model_for_move(system_prompt, user_prompt)
+            response_text, token_info = self.query_model_for_move_with_tokens(system_prompt, user_prompt)
         
         if not response_text:
-            return None, None
+            return None, None, token_info
         
         extracted_san = extract_predicted_move(
             response_text=response_text,
@@ -144,7 +237,7 @@ class ChessModelInterface:
             is_white_to_move=is_white_to_move
         )
         
-        return response_text, extracted_san
+        return response_text, extracted_san, token_info
 
     def get_uci_move(self, system_prompt: str, user_prompt: str, current_fen: str,
                     current_turn_number: Optional[int] = None,

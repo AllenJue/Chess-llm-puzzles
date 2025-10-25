@@ -1,0 +1,555 @@
+"""
+Chess Debate System V2 with Moderator and Judge
+
+This module provides a new debate system specifically designed for chess moves
+using the MAD (Multi-Agent Debate) framework with moderator and judge roles.
+"""
+
+import os
+import json
+import sys
+import chess
+import chess.pgn
+import io
+from typing import Optional, Tuple, Dict, Any
+
+# Add the Multi-Agents-Debate path
+sys.path.append('Multi-Agents-Debate/code')
+from utils.agent import Agent
+from model_interface import ChessModelInterface
+from chess_utils import extract_predicted_move, san_to_uci
+
+
+class ChessDebatePlayer(Agent):
+    """Chess-specific debate player that extends the base Agent class"""
+    
+    def __init__(self, model_name: str, name: str, temperature: float, 
+                 openai_api_key: str, sleep_time: float = 0) -> None:
+        """Create a chess debate player"""
+        super(ChessDebatePlayer, self).__init__(model_name, name, temperature, sleep_time)
+        self.openai_api_key = openai_api_key
+        self.model_interface = ChessModelInterface(api_key=openai_api_key, model_name=model_name)
+
+    def ask(self, temperature: float = None):
+        """Query for answer using our model interface instead of the old API"""
+        # Build combined prompt from memory
+        combined_prompt = ""
+        for msg in self.memory_lst:
+            if msg["role"] == "system":
+                combined_prompt += msg["content"] + "\n"
+            elif msg["role"] == "user":
+                combined_prompt += msg["content"] + "\n"
+            elif msg["role"] == "assistant":
+                combined_prompt += msg["content"] + "\n"
+        
+        print(f"\n<debug> : ChessDebatePlayer '{self.name}' ask() method:")
+        print(f"<debug> : combined_prompt: {repr(combined_prompt[:200])}...")
+        
+        # Use our model interface instead of the old API
+        response = self.model_interface.query_model_for_move(
+            system_prompt="",  # Already included in combined_prompt
+            user_prompt=combined_prompt,
+            max_tokens=500,
+            temperature=temperature if temperature else self.temperature,
+            top_p=1
+        )
+        
+        print(f"<debug> : response: {repr(response)}")
+        return response
+
+
+class ChessDebateV2:
+    """Chess Debate System V2 with Moderator and Judge"""
+    
+    def __init__(self, 
+                 model_name: str = 'gpt-3.5-turbo-instruct',
+                 temperature: float = 0.1,
+                 openai_api_key: str = None,
+                 max_rounds: int = 3,
+                 sleep_time: float = 0.1):
+        """Create a chess debate with moderator and judge"""
+        self.model_name = model_name
+        self.temperature = temperature
+        self.openai_api_key = openai_api_key
+        self.max_rounds = max_rounds
+        self.sleep_time = sleep_time
+        
+        # Load chess debate configuration
+        current_script_path = os.path.abspath(__file__)
+        config_path = os.path.join(os.path.dirname(current_script_path), 
+                                  'Multi-Agents-Debate/code/utils/config4chess.json')
+        with open(config_path, 'r') as f:
+            self.config = json.load(f)
+        
+        # Initialize players
+        self.affirmative = ChessDebatePlayer(
+            model_name=model_name,
+            name="Affirmative side",
+            temperature=temperature,
+            openai_api_key=openai_api_key,
+            sleep_time=sleep_time
+        )
+        
+        self.negative = ChessDebatePlayer(
+            model_name=model_name,
+            name="Negative side",
+            temperature=temperature,
+            openai_api_key=openai_api_key,
+            sleep_time=sleep_time
+        )
+        
+        self.moderator = ChessDebatePlayer(
+            model_name=model_name,
+            name="Moderator",
+            temperature=temperature,
+            openai_api_key=openai_api_key,
+            sleep_time=sleep_time
+        )
+        
+        # Debate results
+        self.debate_history = []
+        self.final_move = None
+        self.config['success'] = False
+
+    def init_prompt(self, debate_topic: str):
+        """Initialize prompts with the debate topic"""
+        self.config['debate_topic'] = debate_topic
+        
+        # Replace placeholders in prompts
+        def prompt_replace(key):
+            self.config[key] = self.config[key].replace("##debate_topic##", self.config["debate_topic"])
+        
+        prompt_replace("player_meta_prompt")
+        prompt_replace("moderator_meta_prompt")
+        prompt_replace("affirmative_prompt")
+        prompt_replace("judge_prompt_last2")
+
+    def round_dct(self, num: int):
+        """Convert round number to word"""
+        dct = {
+            1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth', 
+            6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth'
+        }
+        return dct[num]
+
+    def clear_memory(self):
+        """Clear memory between puzzles to prevent token buildup"""
+        self.affirmative.memory_lst = []
+        self.negative.memory_lst = []
+        self.moderator.memory_lst = []
+
+
+    def run_debate(self, user_prompt: str, expected_uci: str = None, 
+                   played_plies: int = None, board_fen: str = None) -> Tuple[Optional[str], Dict[str, Any]]:
+        """Run a chess debate on a position using the new moderator/judge system"""
+        print(f"\n<debate_v2> : Starting chess debate with moderator and judge")
+        
+        # Create debate topic
+        debate_topic = f"What is the best move in this chess position?\n\nPosition: {user_prompt}"
+        self.init_prompt(debate_topic)
+        
+        # Override prompts to be chess-specific
+        self.config['affirmative_prompt'] = user_prompt
+        
+        # Initialize agents with meta prompts
+        self.affirmative.set_meta_prompt(self.config['player_meta_prompt'])
+        self.negative.set_meta_prompt(self.config['player_meta_prompt'])
+        self.moderator.set_meta_prompt(self.config['moderator_meta_prompt'])
+        
+        # Round 1: Initial positions
+        print(f"===== Debate Round-1 =====")
+        
+        # Aggressive side presents initial move using proper extraction
+        aff_response, aff_move_san, aff_token_info = self.affirmative.model_interface.get_move_with_extraction(
+            self.config['player_meta_prompt'], user_prompt,
+            current_turn_number=played_plies // 2 + 1 if played_plies else None,
+            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+        )
+        
+        # Handle empty response
+        if not aff_response:
+            aff_response = "No response from model"
+            aff_move_san = None
+            
+        self.affirmative.add_memory(aff_response)
+        self.aff_ans = aff_response
+        self.config['base_answer'] = aff_response
+        print(f"<debate_v2> : Aggressive move: {aff_move_san}")
+        
+        # Positional side responds using proper extraction
+        neg_response, neg_move_san, neg_token_info = self.negative.model_interface.get_move_with_extraction(
+            self.config['player_meta_prompt'], user_prompt,
+            current_turn_number=played_plies // 2 + 1 if played_plies else None,
+            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+        )
+        
+        # Handle empty response
+        if not neg_response:
+            neg_response = "No response from model"
+            neg_move_san = None
+            
+        self.negative.add_memory(neg_response)
+        self.neg_ans = neg_response
+        print(f"<debate_v2> : Positional move: {neg_move_san}")
+        
+        # Check if both models failed to provide moves
+        if not aff_move_san and not neg_move_san:
+            print(f"<debate_v2> : Both models failed to provide moves")
+            self.config['debate_answer'] = None
+            self.config['success'] = False
+            self.config['Reason'] = "Both models failed to provide moves"
+            self.config['Supported Side'] = "None"
+            
+            # Return failure result
+            debate_history = {
+                "round1": {
+                    "affirmative_move": None,
+                    "negative_move": None,
+                    "affirmative_response": aff_response,
+                    "negative_response": neg_response,
+                    "affirmative_tokens": aff_token_info,
+                    "negative_tokens": neg_token_info,
+                    "moderator_response": "Both models failed",
+                    "early_consensus": False,
+                    "failure": True
+                },
+                "final_result": {
+                    "final_move_san": None,
+                    "final_move_uci": None,
+                    "success": False,
+                    "reason": "Both models failed to provide moves",
+                    "supported_side": "None"
+                },
+                "total_tokens": {
+                    "affirmative": aff_token_info,
+                    "negative": neg_token_info,
+                    "moderator": None,
+                    "judge": None,
+                    "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
+                    "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
+                    "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                }
+            }
+            
+            return None, debate_history
+        
+        # Check if only one model provided a move - use that move
+        if aff_move_san and not neg_move_san:
+            print(f"<debate_v2> : Only aggressive model provided move: {aff_move_san}")
+            self.config['debate_answer'] = aff_move_san
+            self.config['success'] = True
+            self.config['Reason'] = "Only aggressive model provided a move"
+            self.config['Supported Side'] = "Aggressive"
+            
+            # Convert to UCI
+            if board_fen:
+                self.final_move = san_to_uci(board_fen, aff_move_san)
+            else:
+                self.final_move = None
+            
+            print(f"<debate_v2> : Final move (SAN): {aff_move_san}")
+            print(f"<debate_v2> : Final move (UCI): {self.final_move}")
+            
+            # Return single model result
+            debate_history = {
+                "round1": {
+                    "affirmative_move": aff_move_san,
+                    "negative_move": None,
+                    "affirmative_response": aff_response,
+                    "negative_response": neg_response,
+                    "affirmative_tokens": aff_token_info,
+                    "negative_tokens": neg_token_info,
+                    "moderator_response": "Only aggressive model responded",
+                    "early_consensus": False,
+                    "single_model": True
+                },
+                "final_result": {
+                    "final_move_san": aff_move_san,
+                    "final_move_uci": self.final_move,
+                    "success": True,
+                    "reason": "Only aggressive model provided a move",
+                    "supported_side": "Aggressive"
+                },
+                "total_tokens": {
+                    "affirmative": aff_token_info,
+                    "negative": neg_token_info,
+                    "moderator": None,
+                    "judge": None,
+                    "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
+                    "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
+                    "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                }
+            }
+            
+            return self.final_move, debate_history
+            
+        elif neg_move_san and not aff_move_san:
+            print(f"<debate_v2> : Only positional model provided move: {neg_move_san}")
+            self.config['debate_answer'] = neg_move_san
+            self.config['success'] = True
+            self.config['Reason'] = "Only positional model provided a move"
+            self.config['Supported Side'] = "Positional"
+            
+            # Convert to UCI
+            if board_fen:
+                self.final_move = san_to_uci(board_fen, neg_move_san)
+            else:
+                self.final_move = None
+            
+            print(f"<debate_v2> : Final move (SAN): {neg_move_san}")
+            print(f"<debate_v2> : Final move (UCI): {self.final_move}")
+            
+            # Return single model result
+            debate_history = {
+                "round1": {
+                    "affirmative_move": None,
+                    "negative_move": neg_move_san,
+                    "affirmative_response": aff_response,
+                    "negative_response": neg_response,
+                    "affirmative_tokens": aff_token_info,
+                    "negative_tokens": neg_token_info,
+                    "moderator_response": "Only positional model responded",
+                    "early_consensus": False,
+                    "single_model": True
+                },
+                "final_result": {
+                    "final_move_san": neg_move_san,
+                    "final_move_uci": self.final_move,
+                    "success": True,
+                    "reason": "Only positional model provided a move",
+                    "supported_side": "Positional"
+                },
+                "total_tokens": {
+                    "affirmative": aff_token_info,
+                    "negative": neg_token_info,
+                    "moderator": None,
+                    "judge": None,
+                    "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
+                    "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
+                    "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                }
+            }
+            
+            return self.final_move, debate_history
+        
+        # Check if both models agree on the same move - early consensus
+        if aff_move_san and neg_move_san and aff_move_san == neg_move_san:
+            print(f"<debate_v2> : Early consensus! Both models agree on move: {aff_move_san}")
+            self.config['debate_answer'] = aff_move_san
+            self.config['success'] = True
+            self.config['Reason'] = "Both debaters agreed on the same move"
+            self.config['Supported Side'] = "Both"
+            
+            # Convert to UCI
+            if board_fen:
+                self.final_move = san_to_uci(board_fen, aff_move_san)
+            else:
+                self.final_move = None
+            
+            print(f"<debate_v2> : Final move (SAN): {aff_move_san}")
+            print(f"<debate_v2> : Final move (UCI): {self.final_move}")
+            
+            # Return early consensus result
+            debate_history = {
+                "round1": {
+                    "affirmative_move": aff_move_san,
+                    "negative_move": neg_move_san,
+                    "affirmative_response": aff_response,
+                    "negative_response": neg_response,
+                    "affirmative_tokens": aff_token_info,
+                    "negative_tokens": neg_token_info,
+                    "moderator_response": "Early consensus - no moderator needed",
+                    "early_consensus": True
+                },
+                "final_result": {
+                    "final_move_san": aff_move_san,
+                    "final_move_uci": self.final_move,
+                    "success": True,
+                    "reason": "Early consensus - both models agreed",
+                    "supported_side": "Both"
+                },
+                "total_tokens": {
+                    "affirmative": aff_token_info,
+                    "negative": neg_token_info,
+                    "moderator": None,
+                    "judge": None,
+                    "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
+                    "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
+                    "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                }
+            }
+            
+            return self.final_move, debate_history
+        
+        # Moderator evaluates first round
+        self.moderator.add_event(self.config['moderator_prompt'].replace('##aff_ans##', self.aff_ans)
+                                .replace('##neg_ans##', self.neg_ans).replace('##round##', 'first'))
+        self.mod_ans = self.moderator.ask()
+        self.moderator.add_memory(self.mod_ans)
+        
+        try:
+            self.mod_ans = eval(self.mod_ans)
+        except:
+            self.mod_ans = {"Whether there is a preference": "No", "debate_answer": ""}
+        
+        # Continue debate rounds if no consensus
+        for round_num in range(self.max_rounds - 1):
+            if self.mod_ans.get("debate_answer", "") != "":
+                break
+                
+            print(f"===== Debate Round-{round_num + 2} =====")
+            
+            # Affirmative responds to negative using proper extraction
+            aff_response, aff_move_san = self.affirmative.model_interface.get_move_with_extraction(
+                self.config['player_meta_prompt'], user_prompt,
+                current_turn_number=played_plies // 2 + 1 if played_plies else None,
+                is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            )
+            self.affirmative.add_memory(aff_response)
+            self.aff_ans = aff_response
+            
+            # Negative responds to affirmative using proper extraction
+            neg_response, neg_move_san = self.negative.model_interface.get_move_with_extraction(
+                self.config['player_meta_prompt'], user_prompt,
+                current_turn_number=played_plies // 2 + 1 if played_plies else None,
+                is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            )
+            self.negative.add_memory(neg_response)
+            self.neg_ans = neg_response
+            
+            # Moderator evaluates
+            self.moderator.add_event(self.config['moderator_prompt']
+                                   .replace('##aff_ans##', self.aff_ans)
+                                   .replace('##neg_ans##', self.neg_ans)
+                                   .replace('##round##', self.round_dct(round_num + 2)))
+            self.mod_ans = self.moderator.ask()
+            self.moderator.add_memory(self.mod_ans)
+            
+            try:
+                self.mod_ans = eval(self.mod_ans)
+            except:
+                self.mod_ans = {"Whether there is a preference": "No", "debate_answer": ""}
+        
+        # Check if moderator reached consensus
+        if self.mod_ans.get("debate_answer", "") != "":
+            self.config.update(self.mod_ans)
+            self.config['success'] = True
+            # Extract move from moderator's final answer
+            final_move_san = extract_predicted_move(self.mod_ans.get("debate_answer", ""))
+        else:
+            # Use judge as final arbiter
+            print(f"===== Judge Round =====")
+            judge_player = ChessDebatePlayer(
+                model_name=self.model_name,
+                name='Judge',
+                temperature=self.temperature,
+                openai_api_key=self.openai_api_key,
+                sleep_time=self.sleep_time
+            )
+            
+            # Get final answers from both sides
+            aff_final = self.affirmative.memory_lst[-1]['content'] if self.affirmative.memory_lst else self.aff_ans
+            neg_final = self.negative.memory_lst[-1]['content'] if self.negative.memory_lst else self.neg_ans
+            
+            judge_player.set_meta_prompt(self.config['moderator_meta_prompt'])
+            
+            # Extract answer candidates - use simple prompt
+            simple_judge_prompt = f"Affirmative side: {aff_final}\n\nNegative side: {neg_final}\n\nWhat are the move candidates? List them simply."
+            judge_player.add_event(simple_judge_prompt)
+            judge_response1 = judge_player.ask()
+            judge_player.add_memory(judge_response1)
+            
+            # Final decision - use simple prompt
+            final_judge_prompt = f"Based on the debate, what is the best move? Give just the move in standard algebraic notation."
+            judge_player.add_event(final_judge_prompt)
+            judge_response2 = judge_player.ask()
+            judge_player.add_memory(judge_response2)
+            
+            # Extract move from judge response (should be simple move now)
+            final_move_san = extract_predicted_move(judge_response2)
+            if final_move_san:
+                self.config['debate_answer'] = final_move_san
+                self.config['success'] = True
+                self.config['Reason'] = "Judge selected move"
+            else:
+                # Fallback: use the most recent affirmative move
+                final_move_san = aff_move_san
+                self.config['debate_answer'] = aff_move_san
+                self.config['Reason'] = "Judge evaluation failed, using affirmative move"
+        
+        # Convert to UCI
+        if final_move_san and board_fen:
+            self.final_move = san_to_uci(board_fen, final_move_san)
+        else:
+            self.final_move = None
+        
+        print(f"<debate_v2> : Final move (SAN): {final_move_san}")
+        print(f"<debate_v2> : Final move (UCI): {self.final_move}")
+        
+        # Collect debate history
+        debate_history = {
+            "round1": {
+                "affirmative_move": aff_move_san,
+                "negative_move": neg_move_san,
+                "affirmative_response": self.aff_ans,
+                "negative_response": self.neg_ans,
+                "moderator_response": self.mod_ans
+            },
+            "final_result": {
+                "final_move_san": final_move_san,
+                "final_move_uci": self.final_move,
+                "success": self.config.get('success', False),
+                "reason": self.config.get('Reason', ''),
+                "supported_side": self.config.get('Supported Side', '')
+            }
+        }
+        
+        return self.final_move, debate_history
+
+
+def save_debate_history_v2(debate_history, puzzle_idx, output_dir="debate_history_v2"):
+    """Save debate history to a JSON file"""
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    filename = f"puzzle_{puzzle_idx}_debate_v2.json"
+    filepath = os.path.join(output_dir, filename)
+    
+    with open(filepath, 'w') as f:
+        json.dump(debate_history, f, indent=2)
+    
+    print(f"Debate history V2 saved to {filepath}")
+
+
+if __name__ == "__main__":
+    # Example usage
+    import os
+    from dotenv import load_dotenv
+    
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    
+    if not api_key:
+        print("Error: OPENAI_API_KEY not found in environment")
+        sys.exit(1)
+    
+    # Test the debate system
+    debate = ChessDebateV2(
+        model_name='gpt-3.5-turbo-instruct',
+        temperature=0.1,
+        openai_api_key=api_key,
+        max_rounds=3,
+        sleep_time=0.1
+    )
+    
+    # Example chess position
+    test_pgn = "1. e4 e5 2. Nf3 Nc6 3. Bb5"
+    test_board_fen = "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+    
+    final_move, history = debate.run_debate(
+        user_prompt=test_pgn,
+        board_fen=test_board_fen
+    )
+    
+    print(f"\nFinal result: {final_move}")
+    print(f"Debate history: {json.dumps(history, indent=2)}")

@@ -2,25 +2,15 @@
   "round1": {
     "aggressive_move": "Nxd1",
     "positional_move": "Nxd1",
-    "neutral_move": "Nxd1",
+    "neutral_move": "Qg3#",
     "aggressive_response": "24... Nxd1",
     "positional_response": "24... Nxd1",
-    "neutral_response": "24... Nxd1 25. Rxd1 Qe6"
-  },
-  "round2": {
-    "aggressive_explanation": "Nxd1 is a strong move that helps to control the center and eliminates a potentially dangerous knight on c3. It also opens up the possibility for a future attack on the opponent's king. Additionally, it allows for the knight to be developed to a more active square, potentially supporting other pieces or attacking weak points in the opponent's position.\n\nCompared to other potential moves, Nxd1 stands out as the most strategically sound option. Other moves, such as Nxe5 or Nxf6, do not have the same impact on the center and do not offer the same potential for future attacks. Nxd1 also avoids potential tactical traps, such as Nxe5, which could lead to a loss of material.\n\nOverall, Nxd1 is a strong move that combines both positional and tactical elements, making it the superior choice compared to other GMs' suggestions.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nNxd1",
-    "positional_explanation": "My move, Nxd1, is a tactical move that captures the opponent's queen and gains material advantage. It also opens up the possibility for a discovered check with the knight on d1. \n\nThe aggressive GM's suggestion, also Nxd1, has a similar intention of capturing the queen, but it also leaves the knight vulnerable to being captured by the opponent's bishop on c4. This could potentially lead to a loss of material for the aggressive GM. \n\nThe neutral GM's suggestion, Nxd1, is a safe and solid move, but it lacks the tactical element of capturing the queen and gaining material advantage. \n\nIn comparison, my move, Nxd1, combines both tactical and positional elements. It gains material advantage and also opens up the possibility for a discovered check. Therefore, I believe my move is superior to the other GMs' suggestions.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nNxd1",
-    "neutral_explanation": "My move, Nxd1, is a strong move that captures the opponent's queen and gains material advantage. It also opens up the d-file for my rook to potentially attack the opponent's king. This move also maintains control of the center and supports future moves such as c4 or e4.\n\nThe aggressive GM's suggestion of Nxd1 may seem like a good move as it immediately captures the opponent's queen. However, it also leaves my knight vulnerable to attack and weakens my control of the center. This move may lead to a quick material advantage, but it also leaves me with a weaker position in the long run.\n\nThe positional GM's suggestion of Nxd1 is a solid move that captures the opponent's queen and maintains control of the center. However, it lacks the aggressive element that is necessary to gain an advantage in the game. It also does not open up any potential attacking opportunities.\n\nIn comparison, my move, Nxd1, balances both material gain and positional play. It captures the opponent's queen while also maintaining control of the center and setting up potential attacks. Therefore, I believe my move is superior to the other GMs' suggestions.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nNxd1"
-  },
-  "round3": {
-    "aggressive_final": "Nxd1",
-    "positional_final": "Nxd1",
-    "neutral_final": "Nxd1"
+    "neutral_response": "24... Nxd1 25. Rxd1 Qe6 26. Qd5 Qxd5 27. Rxd5 Rac8 28. Rd2 Rc4 29. g3 Rec8 30. f4 Rxc2 31. Rxc2 Rxc2 32. a3 a5 33. h4 Rb2 34. Kf1 b4 35. axb4 axb4 36. Ke1 b3 37. Kd1 Rg2 38. Kc1 Rxg3 39. Kb2 Rf3 40. h5 Rxf4 41. Kxb3 Rf5 42. Kc4 Rxh5 43. Kd5 f6 44. Ke6 fxe5 45. Bxe5 Rxe5+ 46. Kxe5 Kf7 47. Kf5 g6+ 48. Kg4 Kf6 49. Kh4 Kf5 50. Kg3 Kg5 51. Kh3 Kf4 52. Kh4 g5+ 53. Kh3 h5 54. Kg2 Kg4 55. Kh2 Kf3 56. Kh3 g4+ 57. Kh2 Kf2 58. Kh1 h4 59. Kh2 g3+ 60. Kh1 g2+ 61. Kh2 g1=Q+ 62. Kh3 Qg3# 0-1"
   },
   "final_moves": {
     "aggressive_uci": "c3d1",
     "positional_uci": "c3d1",
-    "neutral_uci": "c3d1",
+    "neutral_uci": null,
     "consensus_move": "c3d1"
   }
 }

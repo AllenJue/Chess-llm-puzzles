@@ -72,14 +72,14 @@ class ChessDebatePlayer(Agent):
         return response
 
 
-class ChessDebate:
+class ChessSelfConsistency:
     def __init__(self, 
                  model_name: str = 'gpt-3.5-turbo-instruct',
                  temperature: float = 0.1,
                  openai_api_key: str = None,
                  max_rounds: int = 2,
                  sleep_time: float = 0.1):
-        """Create a chess debate"""
+        """Create a chess self-consistency system"""
         self.model_name = model_name
         self.temperature = temperature
         self.openai_api_key = openai_api_key
@@ -194,14 +194,13 @@ NEVER explain your choice.
         # Re-setup personas after clearing
         self.setup_personas()
 
-    # This is more self consistency rn. 
     def run_debate(self, user_prompt: str, expected_uci: str = None, played_plies: int = None, board_fen: str = None) -> tuple:
-        """Run a chess debate on a position using multi-agent debate structure"""
-        print(f"\n<debate> : Starting chess debate")
+        """Run a chess self-consistency evaluation using 3 independent queries"""
+        print(f"\n<self-consistency> : Starting self-consistency evaluation")
         
         # Build system prompt
         system_prompt = (
-            "You are an chess grandmaster.\n"
+            "You are a chess grandmaster.\n"
             "You will be given a partially completed game.\n"
             "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
             "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
@@ -222,157 +221,71 @@ NEVER explain your choice.
         )
 
         
-        print(f"\n<debug> : Debate system prompt building:")
-        # print(f"<debug> : system_prompt: {repr(system_prompt)}")
+        print(f"\n<debug> : Self-consistency system prompt building:")
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
         if expected_uci:
             print(f"Expected UCI: {expected_uci}")
         
-        # Round 1: Initial analysis (following multi-agent debate structure)
-        print(f"\n<debate> : Round 1 - Initial analysis")
+        # Query 1-3: Independent analysis (3 independent queries)
+        print(f"\n<self-consistency> : Running 3 independent queries")
         
-        # Aggressive GM analysis - use query_model_for_move for Round 1
-        print(f"\n<debug> : Aggressive GM Round 1 - using query_model_for_move:")
-        # print(f"<debug> : system_prompt: {repr(system_prompt)}")
+        # Aggressive GM analysis
+        print(f"\n<debug> : Aggressive GM - using query_model_for_move:")
         print(f"<debug> : agg_system_prompt: {repr(agg_system_prompt)}")
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
-        agg_response, aggressive_san = self.aggressive_gm.model_interface.get_move_with_extraction(
+        agg_response, aggressive_san, agg_token_info = self.aggressive_gm.model_interface.get_move_with_extraction(
             agg_system_prompt, user_prompt, 
             current_turn_number=played_plies // 2 + 1 if played_plies else None,
             is_white_to_move=(played_plies % 2 == 0) if played_plies else True
         )
-        print(f"<debug> : Aggressive GM Round 1 response: {repr(agg_response)}")
-        print(f"<debug> : Aggressive GM Round 1 move: {aggressive_san}")
+        print(f"<debug> : Aggressive GM response: {repr(agg_response)}")
+        print(f"<debug> : Aggressive GM move: {aggressive_san}")
 
         self.aggressive_gm.add_memory(agg_response)
         
-        # Positional GM analysis - use query_model_for_move for Round 1
-        print(f"\n<debug> : Positional GM Round 1 - using query_model_for_move:")
-        # print(f"<debug> : system_prompt: {repr(system_prompt)}")
+        # Positional GM analysis
+        print(f"\n<debug> : Positional GM - using query_model_for_move:")
         print(f"<debug> : pos_system_prompt: {repr(pos_system_prompt)}")
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
-        pos_response, positional_san = self.positional_gm.model_interface.get_move_with_extraction(
+        pos_response, positional_san, pos_token_info = self.positional_gm.model_interface.get_move_with_extraction(
             pos_system_prompt, user_prompt, 
             current_turn_number=played_plies // 2 + 1 if played_plies else None,
             is_white_to_move=(played_plies % 2 == 0) if played_plies else True
         )
 
-        print(f"<debug> : Positional GM Round 1 response: {repr(pos_response)}")
-        print(f"<debug> : Positional GM Round 1 move: {positional_san}")
+        print(f"<debug> : Positional GM response: {repr(pos_response)}")
+        print(f"<debug> : Positional GM move: {positional_san}")
         
         self.positional_gm.add_memory(f"Positional GM move: {positional_san}")
         
-        # Neutral GM analysis - use default system prompt for Round 1
-        print(f"\n<debug> : Neutral GM Round 1 - using query_model_for_move:")
+        # Neutral GM analysis
+        print(f"\n<debug> : Neutral GM - using query_model_for_move:")
         print(f"<debug> : system_prompt: {repr(system_prompt)}")
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
-        neutral_response, neutral_san = self.neutral_gm.model_interface.get_move_with_extraction(
+        neutral_response, neutral_san, neutral_token_info = self.neutral_gm.model_interface.get_move_with_extraction(
             system_prompt, user_prompt, 
             current_turn_number=played_plies // 2 + 1 if played_plies else None,
             is_white_to_move=(played_plies % 2 == 0) if played_plies else True
         )
 
-        print(f"<debug> : Neutral GM Round 1 response: {repr(neutral_response)}")
-        print(f"<debug> : Neutral GM Round 1 move: {neutral_san}")
+        print(f"<debug> : Neutral GM response: {repr(neutral_response)}")
+        print(f"<debug> : Neutral GM move: {neutral_san}")
         
         self.neutral_gm.add_memory(f"Neutral GM move: {neutral_san}")
         
-        # Round 2: Explanation and Debate
-        print(f"\n<debate> : Round 2 - Explanation and Debate")
-        
-        # Aggressive GM explains and debates
-        self.aggressive_gm.add_event(f"""
-The positional GM suggests: {positional_san}
-The neutral GM suggests: {neutral_san}
-Your initial suggestion was: {aggressive_san}
-
-Now succinctly explain your reasoning and debate which move is better.
-Consider tactical vs positional factors, and defend your choice.
-Why is your move superior to the other GMs' suggestions?
-""")
-        agg_explanation = self.aggressive_gm.ask()
-        self.aggressive_gm.add_memory(agg_explanation)
-        
-        # Positional GM explains and debates
-        self.positional_gm.add_event(f"""
-The aggressive GM suggests: {aggressive_san}
-The neutral GM suggests: {neutral_san}
-Your initial suggestion was: {positional_san}
-
-Now succinctly explain your reasoning and debate which move is better.
-Consider tactical vs positional factors, and defend your choice.
-Why is your move superior to the other GMs' suggestions?
-""")
-        pos_explanation = self.positional_gm.ask()
-        self.positional_gm.add_memory(pos_explanation)
-        
-        # Neutral GM explains and debates
-        self.neutral_gm.add_event(f"""
-The aggressive GM suggests: {aggressive_san}
-The positional GM suggests: {positional_san}
-Your initial suggestion was: {neutral_san}
-
-Now succinctly explain your reasoning and debate which move is better.
-Consider tactical vs positional factors, and defend your choice.
-Why is your move superior to the other GMs' suggestions?
-""")
-        neutral_explanation = self.neutral_gm.ask()
-        self.neutral_gm.add_memory(neutral_explanation)
-        
-        # Round 3: Final Consensus
-        print(f"\n<debate> : Round 3 - Final Consensus")
-        
-        # Aggressive GM final recommendation
-        self.aggressive_gm.add_event(f"""
-Based on the debate, provide your FINAL recommendation.
-Give ONLY the move in standard algebraic notation (e.g., "Qe1#" or "Nf3").
-Do not explain further - just the move.
-""")
-        final_agg = self.aggressive_gm.ask()
-        self.aggressive_gm.add_memory(final_agg)
-        
-        # Positional GM final recommendation
-        self.positional_gm.add_event(f"""
-Based on the debate, provide your FINAL recommendation.
-Give ONLY the move in standard algebraic notation (e.g., "Qe1#" or "Nf3").
-Do not explain further - just the move.
-""")
-        final_pos = self.positional_gm.ask()
-        self.positional_gm.add_memory(final_pos)
-        
-        # Neutral GM final recommendation
-        self.neutral_gm.add_event(f"""
-Based on the debate, provide your FINAL recommendation.
-Give ONLY the move in standard algebraic notation (e.g., "Qe1#" or "Nf3").
-Do not explain further - just the move.
-""")
-        final_neutral = self.neutral_gm.ask()
-        self.neutral_gm.add_memory(final_neutral)
-        
-        # Extract moves from all three GMs
-        agg_move_san = extract_predicted_move(final_agg)
-        pos_move_san = extract_predicted_move(final_pos)
-        neutral_move_san = extract_predicted_move(final_neutral)
-        
-        # Print all moves for debugging
-        print(f"\n<debate> : All final moves:")
-        print(f"<debate> : Aggressive GM: {agg_move_san}")
-        print(f"<debate> : Positional GM: {pos_move_san}")
-        print(f"<debate> : Neutral GM: {neutral_move_san}")
-        
         # Convert all moves to UCI
-        agg_move_uci = san_to_uci(board_fen, agg_move_san) if agg_move_san else None
-        pos_move_uci = san_to_uci(board_fen, pos_move_san) if pos_move_san else None
-        neutral_move_uci = san_to_uci(board_fen, neutral_move_san) if neutral_move_san else None
+        agg_move_uci = san_to_uci(board_fen, aggressive_san) if aggressive_san else None
+        pos_move_uci = san_to_uci(board_fen, positional_san) if positional_san else None
+        neutral_move_uci = san_to_uci(board_fen, neutral_san) if neutral_san else None
         
-        print(f"\n<debate> : All UCI moves:")
-        print(f"<debate> : Aggressive GM: {agg_move_uci}")
-        print(f"<debate> : Positional GM: {pos_move_uci}")
-        print(f"<debate> : Neutral GM: {neutral_move_uci}")
+        print(f"\n<self-consistency> : All UCI moves:")
+        print(f"<self-consistency> : Aggressive GM: {agg_move_uci}")
+        print(f"<self-consistency> : Positional GM: {pos_move_uci}")
+        print(f"<self-consistency> : Neutral GM: {neutral_move_uci}")
         
         # Voting system: most frequent, then neutral, aggressive, positional
         all_moves = [agg_move_uci, pos_move_uci, neutral_move_uci]
@@ -380,15 +293,15 @@ Do not explain further - just the move.
         
         if not valid_moves:
             self.final_move = None
-            print(f"<debate> : No valid moves extracted")
-            return self.final_move
+            print(f"<self-consistency> : No valid moves extracted")
+            return self.final_move, {}
         
         # Count frequency of moves
         from collections import Counter
         move_counts = Counter(valid_moves)
         most_frequent_moves = move_counts.most_common()
         
-        print(f"\n<debate> : Move frequency: {dict(move_counts)}")
+        print(f"\n<self-consistency> : Move frequency: {dict(move_counts)}")
         
         # Priority order: most frequent, then neutral, aggressive, positional
         priority_order = [neutral_move_uci, agg_move_uci, pos_move_uci]
@@ -396,45 +309,42 @@ Do not explain further - just the move.
         # First try most frequent move
         if most_frequent_moves:
             most_frequent_move = most_frequent_moves[0][0]
-            if move_counts[most_frequent_move] > 1:  # If there's a tie, use priority order
-                print(f"<debate> : Most frequent move: {most_frequent_move} (count: {move_counts[most_frequent_move]})")
+            if move_counts[most_frequent_move] > 1:  # If there's a majority
+                print(f"<self-consistency> : Most frequent move: {most_frequent_move} (count: {move_counts[most_frequent_move]})")
                 self.final_move = most_frequent_move
             else:
                 # No consensus, use priority order
                 for move in priority_order:
                     if move in valid_moves:
                         self.final_move = move
-                        print(f"<debate> : Using priority move: {move}")
+                        print(f"<self-consistency> : Using priority move: {move}")
                         break
         else:
             # Fallback to priority order
             for move in priority_order:
                 if move in valid_moves:
                     self.final_move = move
-                    print(f"<debate> : Using fallback priority move: {move}")
+                    print(f"<self-consistency> : Using fallback priority move: {move}")
                     break
         
-        print(f"<debate> : Final consensus move: {self.final_move}")
+        print(f"<self-consistency> : Final consensus move: {self.final_move}")
         
-        # Collect debate history
-        debate_history = {
-            "round1": {
+        # Collect self-consistency history
+        self_consistency_history = {
+            "query1": {
                 "aggressive_move": aggressive_san,
+                "aggressive_uci": agg_move_uci,
+                "aggressive_response": agg_response
+            },
+            "query2": {
                 "positional_move": positional_san,
+                "positional_uci": pos_move_uci,
+                "positional_response": pos_response
+            },
+            "query3": {
                 "neutral_move": neutral_san,
-                "aggressive_response": agg_response,
-                "positional_response": pos_response,
+                "neutral_uci": neutral_move_uci,
                 "neutral_response": neutral_response
-            },
-            "round2": {
-                "aggressive_explanation": agg_explanation,
-                "positional_explanation": pos_explanation,
-                "neutral_explanation": neutral_explanation
-            },
-            "round3": {
-                "aggressive_final": final_agg,
-                "positional_final": final_pos,
-                "neutral_final": final_neutral
             },
             "final_moves": {
                 "aggressive_uci": agg_move_uci,
@@ -444,7 +354,7 @@ Do not explain further - just the move.
             }
         }
         
-        return self.final_move, debate_history
+        return self.final_move, self_consistency_history
 
 
 def save_debate_history(debate_history, puzzle_idx, output_dir="debate_history"):
@@ -472,9 +382,10 @@ def load_environment():
 
 
 def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = None, 
-                    debate: ChessDebate = None, debate_v2: ChessDebateV2 = None, max_puzzles: int = 5) -> pd.DataFrame:
+                    debate: ChessSelfConsistency = None, debate_v2: ChessDebateV2 = None, 
+                    max_puzzles: int = 5, start_puzzle: int = 0) -> pd.DataFrame:
     """
-    Evaluate puzzles using either model interface or debate system.
+    Evaluate puzzles using either model interface, self-consistency system, or debate system.
     Faithful to the provided evaluation logic:
     - Automatically skips the first move after PGN_partial (the puzzle start move)
     - Tests every other move (model's turns)
@@ -484,8 +395,8 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     Args:
         df: DataFrame with puzzle data (must have 'PGN_partial' and 'Moves' columns)
         model_interface: ChessModelInterface instance (for single model)
-        debate: ChessDebate instance (for old debate mode)
-        debate_v2: ChessDebateV2 instance (for new debate mode with moderator/judge)
+        debate: ChessSelfConsistency instance (for self-consistency mode)
+        debate_v2: ChessDebateV2 instance (for debate mode with moderator/judge)
         max_puzzles: Maximum number of puzzles to evaluate
         
     Returns:
@@ -561,7 +472,9 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     total_correct_moves = 0
     puzzles_solved = 0
 
-    for idx, row in df_eval.head(max_puzzles).iterrows():
+    # Select the range of puzzles to evaluate
+    puzzle_range = df_eval.iloc[start_puzzle:start_puzzle + max_puzzles]
+    for idx, row in puzzle_range.iterrows():
         print(f"\n=== Evaluating puzzle {idx} ===")
 
         try:
@@ -801,10 +714,10 @@ def main():
                        help="Show puzzle statistics")
     parser.add_argument("--rating", action="store_true",
                        help="Calculate Glicko-2 rating")
+    parser.add_argument("--self-consistency", action="store_true",
+                       help="Use self-consistency system (3 independent queries with majority vote)")
     parser.add_argument("--debate", action="store_true",
-                       help="Use multi-agent debate system instead of single model")
-    parser.add_argument("--debate-v2", action="store_true",
-                       help="Use new multi-agent debate system with moderator and judge")
+                       help="Use multi-agent debate system with moderator and judge")
     parser.add_argument("--output", default=None,
                        help="Output file for results")
     
@@ -842,18 +755,18 @@ def main():
     
     # Run evaluation
     if args.evaluate:
-        if args.debate:
-            print(f"\nEvaluating puzzles with multi-agent debate system...")
-            debate = ChessDebate(
+        if args.self_consistency:
+            print(f"\nEvaluating puzzles with self-consistency system...")
+            self_consistency = ChessSelfConsistency(
                 model_name=args.model,
                 temperature=0.1,
                 openai_api_key=api_key,
                 max_rounds=2,
                 sleep_time=0.1
             )
-            # Evaluate puzzles with old debate system
-            df_results = evaluate_puzzles(df, debate=debate, max_puzzles=args.max_puzzles)
-        elif args.debate_v2:
+            # Evaluate puzzles with self-consistency system
+            df_results = evaluate_puzzles(df, debate=self_consistency, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
+        elif args.debate:
             print(f"\nEvaluating puzzles with new multi-agent debate system (moderator + judge)...")
             debate_v2 = ChessDebateV2(
                 model_name=args.model,
@@ -863,12 +776,12 @@ def main():
                 sleep_time=0.1
             )
             # Evaluate puzzles with new debate system
-            df_results = evaluate_puzzles(df, debate_v2=debate_v2, max_puzzles=args.max_puzzles)
+            df_results = evaluate_puzzles(df, debate_v2=debate_v2, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
         else:
             print(f"\nEvaluating puzzles with {args.model}...")
             model_interface = ChessModelInterface(api_key=api_key, model_name=args.model)
             # Evaluate puzzles with single model
-            df_results = evaluate_puzzles(df, model_interface=model_interface, max_puzzles=args.max_puzzles)
+            df_results = evaluate_puzzles(df, model_interface=model_interface, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
         
         # Save results
         if args.output:

@@ -7,16 +7,6 @@
     "positional_response": "37... Qxb2#",
     "neutral_response": "37... Qxb2#"
   },
-  "round2": {
-    "aggressive_explanation": "My move, Qxb2#, is superior to the other GMs' suggestions because it not only captures the opponent's queen, but also delivers a checkmate. This move is a decisive and final blow, ending the game in my favor. The positional GM's suggestion of Qxb2# also has the same benefits, but it is more concise and does not give away any potential plans or ideas to the opponent. The neutral GM's suggestion of Qxb2# is also a good move, but it does not have the same impact as my move, as it does not deliver a checkmate. Overall, Qxb2# is the best move as it combines both tactical and positional factors, and it is the most efficient and decisive way to end the game.",
-    "positional_explanation": "My move, Qxb2#, is superior to the other GMs' suggestions because it is a decisive move that immediately threatens checkmate. It also gains material by capturing the opponent's pawn on b2. \n\nThe aggressive GM's suggestion of Qxb2# is a strong tactical move, but it does not consider the opponent's potential defenses. The opponent could potentially block the checkmate with their own queen or bishop, prolonging the game. \n\nThe neutral GM's suggestion of Qxb2# is a safe move that also gains material, but it does not have the same attacking potential as my move. It also does not consider the opponent's potential defenses. \n\nIn summary, my move, Qxb2#, is a strong tactical move that also gains material and puts the opponent in a difficult position. It is the superior choice as it balances both tactical and positional factors and has the potential to end the game quickly.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nQxb2#",
-    "neutral_explanation": "My move, Qxb2#, is superior because it is a decisive move that leads to checkmate. By sacrificing the queen, I am able to deliver a checkmate on the opponent's king. This move also takes advantage of the opponent's weakened king side and capitalizes on the aggressive position of my pieces.\n\nThe aggressive GM's suggestion of Qxb2# is also a strong move, but it lacks the positional aspect. While it does lead to checkmate, it does not take into account the overall position of the pieces on the board.\n\nThe positional GM's suggestion of Qxb2# is also a good move, as it maintains control of the center and puts pressure on the opponent's king side. However, it does not have the same decisive impact as my move.\n\nOverall, my move is the best choice as it combines both tactical and positional factors, leading to a checkmate and utilizing the aggressive position of my pieces. It is a bold and decisive move that will secure victory."
-  },
-  "round3": {
-    "aggressive_final": "Qxb2#",
-    "positional_final": "Qxb2#",
-    "neutral_final": "Qxb2#"
-  },
   "final_moves": {
     "aggressive_uci": "c2b2",
     "positional_uci": "c2b2",

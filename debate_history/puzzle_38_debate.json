@@ -7,16 +7,6 @@
     "positional_response": "48. Rd5 Re1#",
     "neutral_response": "48. Rd5 Re1#"
   },
-  "round2": {
-    "aggressive_explanation": "I believe that Rd5 is the best move in this position. It not only attacks the black pawn on d6, but also puts pressure on the black king by controlling the d-file. This move also prepares for a potential rook lift to the kingside, where the black king is vulnerable. Additionally, it creates a potential passed pawn on the d-file if the black pawn on d6 is captured. \n\nOn the other hand, the move suggested by the neutral GM, Rd5, also attacks the pawn on d6 but does not have the added benefit of controlling the d-file. This move may also block the rook's potential lift to the kingside. \n\nOverall, I believe that the positional advantages of controlling the d-file and preparing for a potential passed pawn make Rd5 a stronger move than Rd5. While both moves have similar tactical benefits, Rd5 has the added positional advantage.",
-    "positional_explanation": "My move, Rd5, is a strong positional move that aims to control the d-file and potentially put pressure on the opponent's d-pawn. It also allows for the rook to potentially support a future attack on the d-file.\n\nThe aggressive GM's suggestion of Rd5 may be a more immediate threat, but it also leaves the rook vulnerable to being captured by the opponent's pieces. It also does not have a clear follow-up plan, making it a risky move.\n\nThe neutral GM's suggestion of Rd5 is a safe move, but it does not have as much potential for creating threats or controlling the board. It also does not have a clear purpose or follow-up plan.\n\nIn comparison, my move, Rd5, has a clear positional purpose and potential for future attacks. It also does not leave the rook vulnerable to being captured. Overall, I believe my move is superior to the other GMs' suggestions as it balances both positional and tactical factors.",
-    "neutral_explanation": "My move, Rd5, is a strong move that combines both tactical and positional elements. By placing the rook on d5, I am attacking the opponent's pawn on d6, which could potentially lead to a pawn capture or a weakened pawn structure for my opponent. At the same time, the rook on d5 also controls the open d-file, giving me potential attacking opportunities in the future.\n\nThe aggressive GM's suggestion of Rd5 also has its merits, as it puts immediate pressure on the opponent's position. However, it may also leave my rook vulnerable to attack and could potentially be pushed back by the opponent's pawns.\n\nThe positional GM's suggestion of Rd5 is a solid move that maintains control of the d-file and puts pressure on the opponent's pawn on d6. However, it lacks the immediate attacking potential of my move.\n\nOverall, I believe my move, Rd5, strikes a good balance between aggression and positional control. It puts pressure on the opponent's position while also maintaining a strong position for my rook."
-  },
-  "round3": {
-    "aggressive_final": "Rd5",
-    "positional_final": "Rd5",
-    "neutral_final": "My final recommendation is: Rd5"
-  },
   "final_moves": {
     "aggressive_uci": "b5d5",
     "positional_uci": "b5d5",

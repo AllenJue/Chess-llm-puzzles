@@ -1,26 +1,16 @@
 {
   "round1": {
-    "aggressive_move": "Rae8",
-    "positional_move": "Rae8",
-    "neutral_move": "Qxh2+",
-    "aggressive_response": "Rae8\n\n23. Bf4",
-    "positional_response": "22... Rae8",
-    "neutral_response": "22... Qxh2+!"
-  },
-  "round2": {
-    "aggressive_explanation": "My move, Rae8, is a strong positional move that aims to improve the coordination of my rooks and potentially put pressure on the e-file. It also allows my queen to potentially move to the e-file and support the rook. Additionally, it does not commit any pieces to a specific square and maintains flexibility in my position.\n\nThe neutral GM's suggestion, Qxh2+, is a tactical move that aims to win a pawn on h2. While this may seem tempting, it also exposes my queen to potential attacks and weakens my king's position. It also does not contribute to the overall development of my pieces.\n\nThe positional GM's suggestion, Bf4, is a solid move that aims to control the center and develop a piece. However, it does not have the same potential for creating threats and improving coordination as my move, Rae8.\n\nOverall, I believe my move, Rae8, is the best choice as it combines both positional and tactical elements. It improves the coordination of my pieces and maintains flexibility in my position, while also potentially creating threats on the e-file.",
-    "positional_explanation": "My move, Rae8, is a strong positional move that aims to improve the placement of my rook on the e-file. By placing the rook on e8, I am connecting my rooks and potentially opening up the e-file for my queen or other pieces to attack. This move also puts pressure on the e3 pawn, which could potentially become a target in the future.\n\nThe aggressive GM's suggestion, Qxh2+, is a tactical move that aims to win material by attacking the h2 pawn with the queen. While this move may seem tempting, it also has its drawbacks. By moving the queen to h2, it becomes vulnerable to potential attacks and could potentially be trapped on the kingside. Additionally, this move does not contribute to the development of my pieces or improve my position in any way.\n\nThe neutral GM's suggestion, Rae8, is a safe and solid move that does not take any risks. However, it also does not actively improve my position or put pressure on my opponent. It is a move that maintains the current state of the game, but does not necessarily give me an advantage.\n\nIn comparison, my move, Rae8, is a strong positional move that sets me up for potential future attacks and improves the coordination of my pieces. It also does not have any immediate drawbacks or risks. Therefore, I believe my move is superior to the other GMs' suggestions.",
-    "neutral_explanation": "My move, Rae8, is a strong positional move that aims to control the open e-file and put pressure on the e2 pawn. It also allows for potential future attacks on the king side with the rook and queen. Qxh2+ is a tactical move that immediately puts the king in check, but it does not have any long-term strategic benefits. It also leaves the queen vulnerable to being attacked by the knight on g3. While it may seem like a strong move at first glance, it does not contribute to the overall development and control of the game. Rae8, on the other hand, is a more solid and well-rounded move that sets up for potential future attacks while also maintaining a strong position on the board."
-  },
-  "round3": {
-    "aggressive_final": "Rae8",
-    "positional_final": "Rae8",
-    "neutral_final": "My final recommendation is: Rae8"
+    "aggressive_move": "Rg3",
+    "positional_move": "Qh1#",
+    "neutral_move": "Qh1#",
+    "aggressive_response": "Rg3",
+    "positional_response": "23... Qh1#",
+    "neutral_response": "23... Qh1#"
   },
   "final_moves": {
-    "aggressive_uci": "a8e8",
-    "positional_uci": "a8e8",
-    "neutral_uci": "a8e8",
-    "consensus_move": "a8e8"
+    "aggressive_uci": "g8g3",
+    "positional_uci": "h2h1",
+    "neutral_uci": "h2h1",
+    "consensus_move": "h2h1"
   }
 }

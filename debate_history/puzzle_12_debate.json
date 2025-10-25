@@ -1,25 +1,15 @@
 {
   "round1": {
     "aggressive_move": "f6",
-    "positional_move": "Qh2+",
+    "positional_move": "f6",
     "neutral_move": "f6",
     "aggressive_response": "16... f6",
-    "positional_response": "16...Qh2+ 17. Ke3 Qxg1+ 18. Kxe4 f5+ 19. gxf5 exf5+ 20. Kxf5 g6+ 21. Ke4 Qh1+ 22. Qf3 Qxf3+ 23. Nxf3 O-O-O 24. Bh3+ Kb8 25. Bf4+ Ka8 26. Ne5 Re8 27. Bd7 Re7 28. Bg5 Rg7 29. Bf6 Rgg8 30. Be6 Bg7 31. Bxg8 Rxg8 32. Bxg7 Rxg7 33. Rf1 a6 34. Rf7 Rxf7 35. Nxf7 Kb8 36. Ng5 h6 37. Nf7 h5 38. Ne5 g5 39. Kf5 g4 40. Kg5 g3 41. Kxh5 g2 42. Nf3 Kc7 43. Kg4 Kd6 44. Kg3 Kd5 45. Kxg2 Ke4 46. Kf2 Kd3 47. Ke1 Kc2 48. b4 Kb2 49. Kd2 Kxa2 50. Kc3 Ka3 51. Ne5 Ka4 52. Nd7 Kb5 53. Nc5 b6 54. Nd3 a5 55. bxa5 Kxa5 56. Kc4 Ka6 57. Nb4+ Kb7 58. Nd3 Kc7 59. Ne5 Kd6 60. Nf7+ Kc7 61. Ng5 Kd6 62. Ne4+ Kc7 63. Nc3 Kd6 64. Na4 b5+ 65. Kb4 bxa4 66. Kxa4 Kd5 67. Kb4 Kxd4 68. Kb3 c5 69. Kc2 Kc4 70. Kd2 Kb3 71. Kc1 Kc3 72. Kb1 Kd2 73. Kb2 c4 74. Kb1 c3 75. Ka2 c2 76.",
+    "positional_response": "16... f6 17. Nf3 Bxf3+ 18. Kxf3 O-O-O 19. Be3 h5 20. Qe1 hxg4+ 21. Rxg4 Qh5 22. Qg3 Bd6 23. Qg2 f5 24. Bc4 fxg4+ 25. Qxg4 Rdf8+ 26. Bf4 Rxf4+ 27. Ke3 Qxg4 28. Bxe6+ Qxe6+ 29. Kd3 Rh3+ 30. Kc2 Qe2+ 31. Kc1 Rf1#",
     "neutral_response": "16... f6 17. Nf3 Bxf3+ 18. Kxf3 O-O-O 19. Be3 h5 20. Qe1 hxg4+ 21. Rxg4 Qh5 22. Qg3 Bd6 23. Qg2 f5 24. Bc4 fxg4+ 25. Qxg4 Rdf8+ 26. Bf4 Rxf4+ 27. Ke3 Qxg4 28. Bxe6+ Qxe6+ 29. Kd3 Rh3+ 30. Kc2 Qe2+ 31. Kc1 Rf1#"
-  },
-  "round2": {
-    "aggressive_explanation": "My move, f6, is a strong tactical move that creates a pawn chain and gains control of the center. It also opens up the f-file for my rook to potentially attack the opponent's king. It is a proactive move that puts pressure on the opponent and limits their options.\n\nOn the other hand, Qh2+ is a positional move that gains material advantage by capturing the opponent's queen. However, it does not have the same impact on the board as f6 and does not directly threaten the opponent's king.\n\nIn this situation, I believe my move, f6, is superior because it not only gains material advantage but also strengthens my position and puts pressure on the opponent. It sets me up for a potential attack on the opponent's king and gives me more control over the game. Therefore, I stand by my initial suggestion of f6 as the best move in this situation.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nf6",
-    "positional_explanation": "My move, Qh2+, is superior to the other GMs' suggestions because it is a strong positional move that also has tactical implications. By moving the queen to h2, I am putting pressure on the opponent's king and potentially setting up a future attack. This move also opens up the possibility of bringing in other pieces to support the attack, such as a rook on the h-file or a bishop on the long diagonal. \n\nThe aggressive GM's suggestion of f6 is purely tactical and does not take into account the overall position of the game. While it may create some immediate threats, it also weakens the opponent's pawn structure and potentially opens up their king to future attacks. \n\nThe neutral GM's suggestion of f6 is also a good move, but it does not fully take advantage of the positional and tactical opportunities that my move offers. By moving the pawn, the opponent's king may have more space to maneuver and defend against potential attacks. \n\nIn conclusion, my move, Qh2+, is the best choice as it combines both positional and tactical elements, while also giving me the opportunity to reassess the position and potentially come up with a better move in the future. It also puts pressure on the opponent's king and sets up potential future attacks. \n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nQh2+",
-    "neutral_explanation": "My move, f6, is superior to the other GMs' suggestions because it is a tactical move that immediately puts pressure on the opponent's king. By advancing the pawn, I am able to create potential mating threats and open up the opponent's king. This move also allows for potential future attacks and threats, while also maintaining control of the center.\n\nThe aggressive GM's suggestion, f6, is a strong move that also puts pressure on the opponent's king. However, it does not take into account the opponent's potential defenses or counterattacks, and it does not contribute to the overall development of my pieces.\n\nThe positional GM's suggestion, Qh2+, is a solid move that puts pressure on the opponent's king and maintains control of the center. However, it does not have the same immediate impact as f6 and does not set up potential future attacks.\n\nIn summary, my move, f6, is the best choice as it combines both tactical and positional elements, putting immediate pressure on the opponent's king while also maintaining control of the center and setting up potential future attacks.\n\nBased on the debate, provide your FINAL recommendation.\nGive ONLY the move in standard algebraic notation (e.g., \"Qe1#\" or \"Nf3\").\nDo not explain further - just the move.\n\nf6"
-  },
-  "round3": {
-    "aggressive_final": "f6",
-    "positional_final": "Qh2+",
-    "neutral_final": "f6"
   },
   "final_moves": {
     "aggressive_uci": "f7f6",
-    "positional_uci": "h4h2",
+    "positional_uci": "f7f6",
     "neutral_uci": "f7f6",
     "consensus_move": "f7f6"
   }

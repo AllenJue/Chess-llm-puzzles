@@ -7,18 +7,8 @@
     "positional_response": "26... Kb8",
     "neutral_response": "26...Kb8"
   },
-  "round2": {
-    "aggressive_explanation": "My move, Kb8, is a more positional move compared to the other GMs' suggestions. By moving the king to b8, I am protecting it from any potential checks from the opponent's rook on the h-file. This also allows my rook on h1 to stay active and potentially attack the opponent's king or other pieces.\n\nOn the other hand, the move Rh1+ is more tactical. It puts the opponent's king in check, forcing them to make a move to defend it. However, this move does not have a clear follow-up and may not lead to any significant advantage.\n\nIn terms of defending against potential threats, Kb8 is a safer move as it protects the king and maintains a solid position. Rh1+ may lead to a more aggressive attack, but it also leaves my king vulnerable to potential attacks.\n\nOverall, I believe Kb8 is a better move as it balances both positional and tactical considerations. It protects my king while also keeping my pieces active and ready for potential attacks.",
-    "positional_explanation": "My move, Kb8, is a positional move that aims to improve the safety of the king. By moving the king to the corner, it is less vulnerable to potential checks or attacks from the opponent's pieces. This move also opens up the possibility for the rook on a8 to potentially join the game and contribute to the attack.\n\nThe aggressive GM's suggestion, Rh1+, is a tactical move that aims to immediately attack the opponent's king. While this move may seem tempting, it also exposes the rook on h1 to potential attacks and weakens the defense of the king's position. Additionally, it does not contribute to the development of other pieces.\n\nThe neutral GM's suggestion, Kb8, is a safe and solid move that maintains the current position. However, it does not actively improve the position or contribute to the attack.\n\nOverall, I believe that my move, Kb8, is superior to the other GMs' suggestions. It not only improves the safety of the king, but also opens up potential attacking opportunities for the rook on a8. It is a balanced move that takes into account both positional and tactical factors.",
-    "neutral_explanation": "My move, Kb8, is a defensive move that also prepares for a potential attack on the king side. It also allows the rook on a8 to potentially join the game via a8-h8 diagonal. This move also avoids any potential checks from the opponent's rook on the h-file.\n\nThe aggressive GM's suggestion, Rh1+, is a tactical move that immediately puts pressure on the opponent's king. However, it also leaves the rook vulnerable to potential attacks and does not improve the position of any other pieces.\n\nThe positional GM's suggestion, Kb8, is a solid move that maintains the current position and does not create any immediate threats. However, it also does not actively improve the position of any pieces.\n\nIn my opinion, Kb8 is the superior move as it combines both defensive and positional elements. It prepares for potential attacks while also improving the position of the rook on a8. It also avoids any potential threats from the opponent's rook on the h-file. Overall, it is a well-rounded move that maintains a solid position while also preparing for potential future attacks."
-  },
-  "round3": {
-    "aggressive_final": "Kb8",
-    "positional_final": "Kb8",
-    "neutral_final": "Kb8"
-  },
   "final_moves": {
-    "aggressive_uci": "c8b8",
+    "aggressive_uci": null,
     "positional_uci": "c8b8",
     "neutral_uci": "c8b8",
     "consensus_move": "c8b8"

@@ -1,24 +1,14 @@
 {
   "round1": {
-    "aggressive_move": "Nd4",
+    "aggressive_move": "Nd6",
     "positional_move": "Ng3",
     "neutral_move": "Nd6",
-    "aggressive_response": "54...Nd4",
+    "aggressive_response": "54... Nd6 55. Rxd6",
     "positional_response": "54... Ng3",
     "neutral_response": "54...Nd6 55. Rxd6"
   },
-  "round2": {
-    "aggressive_explanation": "My move, Nd4, is a strong positional move that aims to control the center and put pressure on the opponent's pieces. It also opens up the possibility for my knight to jump to c2 or e2, further strengthening my position.\n\nThe neutral GM's suggestion, Nd6, is also a good move that centralizes the knight and puts pressure on the opponent's pieces. However, it does not have the same flexibility as Nd4, as it cannot easily jump to other squares.\n\nThe positional GM's suggestion, Ng3, is a more tactical move that aims to attack the opponent's king. While this may seem tempting, it also weakens my own king's position and does not contribute to the overall control of the center.\n\nIn conclusion, Nd4 is the superior move as it combines both positional and tactical elements, while also maintaining a strong control of the center. It also allows for more flexibility in my future moves.",
-    "positional_explanation": "My move, Ng3, is a strong positional move that aims to control the center of the board and put pressure on the opponent's pieces. By placing the knight on g3, it also opens up potential for a future attack on the king's side.\n\nThe aggressive GM's suggestion, Nd4, may seem like a tempting move as it attacks the opponent's queen. However, it also blocks the bishop on c1 and limits its potential for development. Additionally, it may be too early in the game to launch such an aggressive attack.\n\nThe neutral GM's suggestion, Nd6, is a solid move that aims to control the center and develop a piece. However, it does not have the same potential for future attacks as Ng3.\n\nOverall, I believe Ng3 is the superior move as it combines both positional and tactical elements. It controls the center, puts pressure on the opponent's pieces, and sets up potential for a future attack. It also allows for the development of the bishop on c1, which can then be used to support the knight on g3.",
-    "neutral_explanation": "My move, Nd6, is a strong tactical move that puts pressure on the opponent's pieces. It also opens up the possibility for a discovered check with my knight and bishop. This move also controls the center of the board and can potentially lead to a strong attack.\n\nThe aggressive GM's suggestion, Nd4, is also a strong tactical move, but it does not control the center as effectively as Nd6. It also does not have the potential for a discovered check. However, it does attack the opponent's queen and can potentially lead to a quick win if the opponent makes a mistake.\n\nThe positional GM's suggestion, Ng3, is a more strategic move that aims to control the center and develop the knight to a strong position. However, it does not have the immediate threat or pressure that Nd6 or Nd4 have.\n\nIn my opinion, Nd6 is the superior move as it combines both tactical and positional elements. It controls the center, puts pressure on the opponent's pieces, and has the potential for a discovered check. It also sets up for a strong attack in the future. Nd4 and Ng3 are also strong moves, but they do not have the same level of threat and control as Nd6."
-  },
-  "round3": {
-    "aggressive_final": "Nd4",
-    "positional_final": "Ng3",
-    "neutral_final": "Nd6"
-  },
   "final_moves": {
-    "aggressive_uci": "f5d4",
+    "aggressive_uci": "f5d6",
     "positional_uci": "f5g3",
     "neutral_uci": "f5d6",
     "consensus_move": "f5d6"

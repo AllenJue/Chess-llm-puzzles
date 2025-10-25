@@ -13,8 +13,8 @@ import chess.pgn
 import io
 from typing import Optional, Tuple, Dict, Any
 
-# Add the Multi-Agents-Debate path
-sys.path.append('Multi-Agents-Debate/code')
+# Add the MAD utils path for imports
+sys.path.append('MAD')
 from utils.agent import Agent
 from model_interface import ChessModelInterface
 from chess_utils import extract_predicted_move, san_to_uci
@@ -77,7 +77,7 @@ class ChessDebateV2:
         # Load chess debate configuration
         current_script_path = os.path.abspath(__file__)
         config_path = os.path.join(os.path.dirname(current_script_path), 
-                                  'Multi-Agents-Debate/code/utils/config4chess.json')
+                                  'MAD/utils/config4chess.json')
         with open(config_path, 'r') as f:
             self.config = json.load(f)
         

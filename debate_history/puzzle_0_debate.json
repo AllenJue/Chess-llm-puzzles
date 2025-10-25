@@ -1,10 +1,17 @@
 {
-  "round1": {
+  "query1": {
     "aggressive_move": "Qe1#",
+    "aggressive_uci": "e6e1",
+    "aggressive_response": "28... Qe1#"
+  },
+  "query2": {
     "positional_move": "Qe1#",
+    "positional_uci": "e6e1",
+    "positional_response": "28... Qe1#"
+  },
+  "query3": {
     "neutral_move": "Qe1#",
-    "aggressive_response": "28... Qe1#",
-    "positional_response": "28... Qe1#",
+    "neutral_uci": "e6e1",
     "neutral_response": "28... Qe1#"
   },
   "final_moves": {

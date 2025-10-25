@@ -26,7 +26,7 @@ from glicko_rating import update_agent_rating_from_puzzles, Rating
 
 # Import debate functionality
 import sys
-sys.path.append('Multi-Agents-Debate/code')
+sys.path.append('MAD')
 from utils.agent import Agent
 from utils.openai_utils import num_tokens_from_string, model2max_context
 import chess
@@ -408,6 +408,7 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     df_eval["error"] = ""
     df_eval["aggressive_move"] = ""
     df_eval["positional_move"] = ""
+    df_eval["neutral_move"] = ""
     df_eval["final_consensus_move"] = ""
     df_eval["debate_history"] = ""
     df_eval["single_model_response"] = ""
@@ -531,9 +532,10 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         predicted_uci, debate_history = debate.run_debate(user_prompt, expected_uci, played_plies, current_board.fen())
                         print(f"Debate predicted UCI: {predicted_uci}")
                         
-                        # Save debate data to DataFrame
-                        df_eval.loc[idx, "aggressive_move"] = debate_history["round1"]["aggressive_move"]
-                        df_eval.loc[idx, "positional_move"] = debate_history["round1"]["positional_move"]
+                        # Save self-consistency data to DataFrame
+                        df_eval.loc[idx, "aggressive_move"] = debate_history["query1"]["aggressive_move"]
+                        df_eval.loc[idx, "positional_move"] = debate_history["query2"]["positional_move"]
+                        df_eval.loc[idx, "neutral_move"] = debate_history["query3"]["neutral_move"]
                         df_eval.loc[idx, "final_consensus_move"] = debate_history["final_moves"]["consensus_move"]
                         df_eval.loc[idx, "debate_history"] = str(debate_history)
                         
@@ -629,7 +631,7 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         save_debate_history_v2(debate_history, idx)
                     else:
                         # Use single model
-                        raw_response, predicted_san = model_interface.get_move_with_extraction(
+                        raw_response, predicted_san, token_info = model_interface.get_move_with_extraction(
                             system_prompt, user_prompt,
                             current_turn_number=played_plies // 2 + 1,
                             is_white_to_move=current_board.turn

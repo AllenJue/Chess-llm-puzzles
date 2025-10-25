@@ -1,21 +1,52 @@
 {
   "round1": {
-    "affirmative_move": "Qc4",
+    "affirmative_move": "Qe1#",
     "negative_move": "Qe1#",
-    "affirmative_response": "1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rd3 Bd6 25. Bb2 f6 26. Ng4 Bxf4 27. Nd4\nRxf1+ 28. Kxf1 Qc4",
+    "affirmative_response": "1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#",
     "negative_response": "1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5\n8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4\nQe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8\n21. Nfe5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rxd7 27. Nd4\nRxf1+ 28. Kxf1 Qe1#",
-    "moderator_response": {
-      "Whether there is a preference": "Yes",
-      "Supported Side": "Aggressive",
-      "Reason": "The aggressive side has consistently maintained control of the game and has a strong attacking position. Their move 28. Qc4 puts pressure on the positional side's queen and threatens to win material. Overall, the aggressive side has shown more strategic and tactical prowess in this game.",
-      "debate_answer": "28. Qc4"
-    }
+    "affirmative_tokens": {
+      "prompt_tokens": 299,
+      "completion_tokens": 233,
+      "total_tokens": 532,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 299,
+      "completion_tokens": 233,
+      "total_tokens": 532,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
   },
   "final_result": {
-    "final_move_san": "Qc4",
-    "final_move_uci": "e6c4",
+    "final_move_san": "Qe1#",
+    "final_move_uci": "e6e1",
     "success": true,
-    "reason": "The aggressive side has consistently maintained control of the game and has a strong attacking position. Their move 28. Qc4 puts pressure on the positional side's queen and threatens to win material. Overall, the aggressive side has shown more strategic and tactical prowess in this game.",
-    "supported_side": "Aggressive"
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 299,
+      "completion_tokens": 233,
+      "total_tokens": 532,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 299,
+      "completion_tokens": 233,
+      "total_tokens": 532,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 598,
+    "total_completion_tokens": 466,
+    "total_tokens": 1064
   }
 }

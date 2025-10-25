@@ -64,7 +64,7 @@ def test_config_loading():
     """Test that the config file loads correctly"""
     try:
         import json
-        config_path = 'Multi-Agents-Debate/code/utils/config4chess.json'
+        config_path = 'MAD/utils/config4chess.json'
         
         with open(config_path, 'r') as f:
             config = json.load(f)

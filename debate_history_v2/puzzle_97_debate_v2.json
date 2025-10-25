@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "Rxf8#",
+    "negative_move": "Rxf8#",
+    "affirmative_response": "35. Rxf8#",
+    "negative_response": "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Qf6 5. Be3 Bc5 6. c3 Nge7 7. Bc4 d6 8.\nO-O Bb6 9. Na3 Ne5 10. Bb3 Ng4 11. Nc4 Qh4 12. h3 Nxe3 13. fxe3 O-O 14. Nxb6\naxb6 15. Qf3 Ng6 16. Bxf7+ Kh8 17. Qe2 Ne5 18. Be6 Re8 19. Bxc8 Raxc8 20. Nf5\nQxe4 21. Rae1 Rf8 22. Rf4 Qd3 23. Qxd3 Nxd3 24. Ne7 Rxf4 25. Nxc8 Rf7 26. Re2\nRf8 27. Ne7 c6 28. b3 Rf7 29. Nc8 b5 30. Nb6 d5 31. c4 dxc4 32. bxc4 b4 33. Rd2\nNc5 34. Rd8+ Rf8 35. Rxf8#",
+    "affirmative_tokens": {
+      "prompt_tokens": 354,
+      "completion_tokens": 7,
+      "total_tokens": 361,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 354,
+      "completion_tokens": 290,
+      "total_tokens": 644,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "Rxf8#",
+    "final_move_uci": "d8f8",
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 354,
+      "completion_tokens": 7,
+      "total_tokens": 361,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 354,
+      "completion_tokens": 290,
+      "total_tokens": 644,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 708,
+    "total_completion_tokens": 297,
+    "total_tokens": 1005
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "h4",
+    "aggressive_uci": "h3h4",
+    "aggressive_response": "48. h4 gxh4 49. gxh4 Kd6 50. f4 exf4 51. Kxf4 Kd5 52. Kg5 Kc4 53. Kxh5 Kxb4 54. Kg6 a5 55. h5 a4 56. h6 a3 57. h7 a2 58. h8=Q Kb3 59. Qa1 Ka3 60. Kf5 Kb3 61. Ke4 Ka3 62. Kd3 Kb3 63. Kd2 Ka3 64. Kc2 Kb4 65. Qxa2 Kc5 66. Qa4 Kd5 67. Kd3 Ke5 68. Qe4+ Kd6 69. Qf5 Kc6 70. Kc4 Kd6 71. Qd5+ Ke7 72. Qc6 Kf7 73. Kd5 Ke7 74. Qe6+ Kd8 75. Qf7 Kc8 76. Kc6 Kd8 77. Qd7#",
+    "aggressive_tokens": {
+      "prompt_tokens": 436,
+      "completion_tokens": 251,
+      "total_tokens": 687,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "g4",
+    "positional_uci": "g3g4",
+    "positional_response": "48. g4 hxg4 49. hxg4 Kd6 50. Kf5 Kd5 51. Kxg5 Kc4 52. Kf5 Kxb4 53. g5 a5\n54. g6 a4 55. g7 a3 56. g8=Q a2 57. Qxa2 Kc3 58. Kxe5 Kd3 59. Qb3+ Ke2 60.\nf4 Kf2 61. f5 Kg2 62. f6 Kh2 63. f7 Kg2 64. f8=Q Kh2 65. Qf2+ Kh1 66. Qd1#",
+    "positional_tokens": {
+      "prompt_tokens": 436,
+      "completion_tokens": 156,
+      "total_tokens": 592,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "g4",
+    "neutral_uci": "g3g4",
+    "neutral_response": "48. g4 hxg4 49. hxg4 Kd6 50. Kf5 Kd5 51. Kxg5 Kc4 52. Kf5 Kxb4 53. g5 a5\n54. g6 a4 55. g7 a3 56. g8=Q a2 57. Qxa2 Kc3 58. Kxe5 Kd3 59. Qb3+ Ke2 60. Ke4 Kf2\n61. f4 Kg2 62. Qf3+ Kh2 63. Qg4 Kh1 64. Kf3 Kh2 65. Qg2#",
+    "neutral_tokens": {
+      "prompt_tokens": 435,
+      "completion_tokens": 149,
+      "total_tokens": 584,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "h3h4",
+    "positional_uci": "g3g4",
+    "neutral_uci": "g3g4",
+    "consensus_move": "g3g4"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 436,
+      "completion_tokens": 251,
+      "total_tokens": 687,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 436,
+      "completion_tokens": 156,
+      "total_tokens": 592,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 435,
+      "completion_tokens": 149,
+      "total_tokens": 584,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 1307,
+    "total_completion_tokens": 556,
+    "total_tokens": 1863
+  }
+}

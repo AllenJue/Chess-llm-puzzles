@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "axb2",
+    "negative_move": "axb2",
+    "affirmative_response": "1. e4 c5 2. c4 Nc6 3. Nc3 d6 4. d3 g6 5. g3 Bg7 6. Bg2 Nf6 7. Nge2 O-O 8. O-O\na6 9. f4 e6 10. h3 Rb8 11. Be3 b5 12. b3 Nd7 13. Rb1 b4 14. Na4 Nb6 15. Nxb6\nQxb6 16. Qd2 a5 17. g4 a4 18. Ra1 a3 19. Rab1 f5 20. g5 Qc7 21. Ng3 fxe4 22.\ndxe4 Nd4 23. h4 Bb7 24. Ne2 Nxe2+ 25. Qxe2 Rbd8 26. h5 d5 27. exd5 exd5 28.\ncxd5 Bxd5 29. Bxd5+ Rxd5 30. Qc4 Rd8 31. Rbd1 Qf7 32. Rxd5 Qxd5 33. Qxc5 Qxc5\n34. Bxc5 Rd2 35. Rf2 Bd4 36. Bxd4 Rxd4 37. hxg6 hxg6 38. Kg2 Kf7 39. Kf3 Ke6\n40. Ke3 Rd1 41. Re2 Rb1 42. Ke4 Rb2 43. Kd3+ Kf5 44. Rxb2 axb2",
+    "negative_response": "1. e4 c5 2. c4 Nc6 3. Nc3 d6 4. d3 g6 5. g3 Bg7 6. Bg2 Nf6 7. Nge2 O-O 8. O-O\na6 9. f4 e6 10. h3 Rb8 11. Be3 b5 12. b3 Nd7 13. Rb1 b4 14. Na4 Nb6 15. Nxb6\nQxb6 16. Qd2 a5 17. g4 a4 18. Ra1 a3 19. Rab1 f5 20. g5 Qc7 21. Ng3 fxe4 22.\ndxe4 Nd4 23. h4 Bb7 24. Ne2 Nxe2+ 25. Qxe2 Rbd8 26. h5 d5 27. exd5 exd5 28.\ncxd5 Bxd5 29. Bxd5+ Rxd5 30. Qc4 Rd8 31. Rbd1 Qf7 32. Rxd5 Qxd5 33. Qxc5 Qxc5\n34. Bxc5 Rd2 35. Rf2 Bd4 36. Bxd4 Rxd4 37. hxg6 hxg6 38. Kg2 Kf7 39. Kf3 Ke6\n40. Ke3 Rd1 41. Re2 Rb1 42. Ke4 Rb2 43. Kd3+ Kf5 44. Rxb2 axb2",
+    "affirmative_tokens": {
+      "prompt_tokens": 426,
+      "completion_tokens": 358,
+      "total_tokens": 784,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 426,
+      "completion_tokens": 358,
+      "total_tokens": 784,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "axb2",
+    "final_move_uci": "a3b2",
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 426,
+      "completion_tokens": 358,
+      "total_tokens": 784,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 426,
+      "completion_tokens": 358,
+      "total_tokens": 784,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 852,
+    "total_completion_tokens": 716,
+    "total_tokens": 1568
+  }
+}

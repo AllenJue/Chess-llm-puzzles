@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Ke5",
+    "aggressive_uci": "f4e5",
+    "aggressive_response": "50. Ke5 Kg5 51. Ke6 Kf4 52. f6 gxf6 53. Kxf6 Ke4 54. Ke6 Kd4 55. Kd6 Kc3 56. Kc5 Kb2 57. Kb5 Kxa2 58. Kxa5 Kxb3 59. Kb5 Kc3 60. Ka4 b3 61. Ka3 b2 62. Ka2 Kc2 63. Ka3 b1=Q 64. Ka4 Qb6 65. Ka3 Qb3#",
+    "aggressive_tokens": {
+      "prompt_tokens": 454,
+      "completion_tokens": 129,
+      "total_tokens": 583,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Ke5",
+    "positional_uci": "f4e5",
+    "positional_response": "50. Ke5 Kg5 51. Ke6 Kf4 52. f6 gxf6 53. Kxf6 Ke4 54. Ke6 Kd4 55. Kd6 Kc3 56. Kc5 Kb2 57. Kb5 Kxa2 58. Kxa5 Kxb3 59. Kb5 Kc3 60. Ka4 b3 61. Ka3 b2 62. Ka2 Kc2 63. Ka3 b1=Q 64. Ka4 Qb6 65. Ka3 Qb3#",
+    "positional_tokens": {
+      "prompt_tokens": 454,
+      "completion_tokens": 129,
+      "total_tokens": 583,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Ke5",
+    "neutral_uci": "f4e5",
+    "neutral_response": "50. Ke5 Kg5 51. Ke6 Kf4 52. f6 gxf6 53. Kxf6 Ke4 54. Ke6 Kd4 55. Kd6 Kc3 56. Kc5 Kb2 57. Kb5 Kxa2 58. Kxa5 Kxb3 59. Kb5 Kc3 60. Ka4 b3 61. Ka3 b2 62. Ka2 Kc2 63. Ka3 b1=Q 64. Ka4 Qb6 65. Ka3 Qb3#",
+    "neutral_tokens": {
+      "prompt_tokens": 453,
+      "completion_tokens": 129,
+      "total_tokens": 582,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "f4e5",
+    "positional_uci": "f4e5",
+    "neutral_uci": "f4e5",
+    "consensus_move": "f4e5"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 454,
+      "completion_tokens": 129,
+      "total_tokens": 583,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 454,
+      "completion_tokens": 129,
+      "total_tokens": 583,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 453,
+      "completion_tokens": 129,
+      "total_tokens": 582,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 1361,
+    "total_completion_tokens": 387,
+    "total_tokens": 1748
+  }
+}

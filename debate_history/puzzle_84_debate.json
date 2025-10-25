@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "d8=Q",
+    "aggressive_uci": "d7d8q",
+    "aggressive_response": "1. c4 c5 2. Nc3 Nc6 3. Nf3 g6 4. e3 Bg7 5. d4 cxd4 6. exd4 Nf6 7. d5 Nb8 8. Be2 O-O 9. O-O d6 10. Re1 Nbd7 11. Bf4 Qb6 12. Rb1 Nc5 13. Qd2 Bf5 14. Rbc1 Nfe4 15. Nxe4 Nxe4 16. Qe3 Qxe3 17. Bxe3 b6 18. b3 h6 19. Bd4 Rac8 20. h3 Rc7 21. g4 Bd7 22. Bd3 Nf6 23. Rxe7 Re8 24. Bxf6 Bxf6 25. Ree1 Rcc8 26. g5 hxg5 27. Rxe8+ Rxe8 28. Nh2 Bf5 29. Rd1 Bxd3 30. Rxd3 Re2 31. Ng4 Kg7 32. a3 Re1+ 33. Kg2 Ra1 34. b4 Bb2 35. c5 bxc5 36. bxc5 dxc5 37. d6 c4 38. d7 cxd3 39. d8=Q Rxa3\n\n40. Qxg5",
+    "aggressive_tokens": {
+      "prompt_tokens": 362,
+      "completion_tokens": 322,
+      "total_tokens": 684,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "d8=Q",
+    "positional_uci": "d7d8q",
+    "positional_response": "39. d8=Q {White wins a pawn and gains a strong passed pawn on the d-file.}",
+    "positional_tokens": {
+      "prompt_tokens": 362,
+      "completion_tokens": 24,
+      "total_tokens": 386,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "d8=Q",
+    "neutral_uci": "d7d8q",
+    "neutral_response": "1. c4 c5 2. Nc3 Nc6 3. Nf3 g6 4. e3 Bg7 5. d4 cxd4 6. exd4 Nf6 7. d5 Nb8 8. Be2\nO-O 9. O-O d6 10. Re1 Nbd7 11. Bf4 Qb6 12. Rb1 Nc5 13. Qd2 Bf5 14. Rbc1 Nfe4\n15. Nxe4 Nxe4 16. Qe3 Qxe3 17. Bxe3 b6 18. b3 h6 19. Bd4 Rac8 20. h3 Rc7 21. g4\nBd7 22. Bd3 Nf6 23. Rxe7 Re8 24. Bxf6 Bxf6 25. Ree1 Rcc8 26. g5 hxg5 27. Rxe8+\nRxe8 28. Nh2 Bf5 29. Rd1 Bxd3 30. Rxd3 Re2 31. Ng4 Kg7 32. a3 Re1+ 33. Kg2 Ra1\n34. b4 Bb2 35. c5 bxc5 36. bxc5 dxc5 37. d6 c4 38. d7 cxd3 39. d8=Q Rxa3",
+    "neutral_tokens": {
+      "prompt_tokens": 361,
+      "completion_tokens": 318,
+      "total_tokens": 679,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "d7d8q",
+    "positional_uci": "d7d8q",
+    "neutral_uci": "d7d8q",
+    "consensus_move": "d7d8q"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 362,
+      "completion_tokens": 322,
+      "total_tokens": 684,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 362,
+      "completion_tokens": 24,
+      "total_tokens": 386,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 361,
+      "completion_tokens": 318,
+      "total_tokens": 679,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 1085,
+    "total_completion_tokens": 664,
+    "total_tokens": 1749
+  }
+}

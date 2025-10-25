@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Re3+",
+    "aggressive_uci": "f3e3",
+    "aggressive_response": "31. Re3+ Kf6 32. Qxe8 bxa4 33. Qe7#",
+    "aggressive_tokens": {
+      "prompt_tokens": 306,
+      "completion_tokens": 25,
+      "total_tokens": 331,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Re3+",
+    "positional_uci": "f3e3",
+    "positional_response": "31. Re3+ Kf6 32. Qxe8 bxa4 33. Qe7#",
+    "positional_tokens": {
+      "prompt_tokens": 306,
+      "completion_tokens": 25,
+      "total_tokens": 331,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Re3+",
+    "neutral_uci": "f3e3",
+    "neutral_response": "31. Re3+ Kf6 32. Qxe8 bxa4 33. Qe7#",
+    "neutral_tokens": {
+      "prompt_tokens": 305,
+      "completion_tokens": 25,
+      "total_tokens": 330,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "f3e3",
+    "positional_uci": "f3e3",
+    "neutral_uci": "f3e3",
+    "consensus_move": "f3e3"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 306,
+      "completion_tokens": 25,
+      "total_tokens": 331,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 306,
+      "completion_tokens": 25,
+      "total_tokens": 331,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 305,
+      "completion_tokens": 25,
+      "total_tokens": 330,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 917,
+    "total_completion_tokens": 75,
+    "total_tokens": 992
+  }
+}

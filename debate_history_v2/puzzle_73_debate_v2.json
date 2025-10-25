@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "Qxg7",
+    "negative_move": "Qxg7",
+    "affirmative_response": "33...Qxg7*",
+    "negative_response": "33...Qxg7",
+    "affirmative_tokens": {
+      "prompt_tokens": 343,
+      "completion_tokens": 7,
+      "total_tokens": 350,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 343,
+      "completion_tokens": 6,
+      "total_tokens": 349,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "Qxg7",
+    "final_move_uci": null,
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 343,
+      "completion_tokens": 7,
+      "total_tokens": 350,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 343,
+      "completion_tokens": 6,
+      "total_tokens": 349,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 686,
+    "total_completion_tokens": 13,
+    "total_tokens": 699
+  }
+}

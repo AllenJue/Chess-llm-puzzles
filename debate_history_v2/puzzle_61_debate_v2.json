@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "Rxc1+",
+    "negative_move": "Rxc1+",
+    "affirmative_response": "1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. d3 Bg4 5. h3 Bh5 6. Nc3 Nd4 7. Nxe5 dxe5 8.\nQxh5 g6 9. Qxe5+ Ne7 10. Qxh8 Nxc2+ 11. Kd1 Nxa1 12. b3 Qd6 13. Nb5 Qc6 14.\nQxa1 a6 15. Nd4 Qf6 16. Bb2 Qxf2 17. Rh2 O-O-O 18. Nf3 Nc6 19. Bxf7 Rxd3+ 20.\nKc1 Qc2+ 21. Kxc2 Nb4+ 22. Kc1 Bh6+ 23. Kb1 Rd1+ 24. Bc1 Rxc1+ 25. Kb2 Nd3+ 26.\nKa3 Bf8+ 27. Ka4 b5+ 28. Ka5 Kb7 29. Bd5+ c6 30. Bxc6+ Rxc6 31. Qd4 Bb4+ 32.\nQxb4 Nxb4 33. Kxb4 Kb6 34. g4 a5+ 35. Ka3 Rc3 36. Nd4 Rd3 37. Ne6 Re3 38. Ng5\nh6 39. Nf7 Rxe4 40. Nxh6 a4 41. bxa4 Rxa4+ 42. Kb3 Ka5 43. Nf7 Rb4+ 44. Kc3\nRc4+ 45. Kd3 Ra4 46. Ne5 Ra3+ 47. Kd4 Ra4+ 48. Kc5 Ra3 49. Nxg6 Rc3+ 50. Kd4\nRc4+ 51. Kd3 Ra4 52. Ne5 Ra3+ 53. Kd4 Ra4+ 54. Kc5 Ra3 55. Nc6+ Ka6 56. Nb4+\nKa5 57. Nc6+ Ka6 58. Nb4+ Ka5 59.",
+    "negative_response": "1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. d3 Bg4 5. h3 Bh5 6. Nc3 Nd4 7. Nxe5 dxe5 8.\nQxh5 g6 9. Qxe5+ Ne7 10. Qxh8 Nxc2+ 11. Kd1 Nxa1 12. b3 Qd6 13. Nb5 Qc6 14.\nQxa1 a6 15. Nd4 Qf6 16. Bb2 Qxf2 17. Rh2 O-O-O 18. Nf3 Nc6 19. Bxf7 Rxd3+ 20.\nKc1 Qc2+ 21. Kxc2 Nb4+ 22. Kc1 Bh6+ 23. Kb1 Rd1+ 24. Bc1 Rxc1+ 25. Kb2 Nd3+ 26.\nKa3 Bf8+ 27. Ka4 b5+ 28. Ka5 Kb7 29. Bd5+ c6 30. Bxc6+ Rxc6 31. Qd4 Bb4+ 32.\nQxb4 Nxb4 33. Kxb4 Kb6 34. Nd4 a5+ 35. Ka3 Rd6 36. Nf3 b4+ 37. Kb2 Kb5 38. g4\na4 39. bxa4+ Kxa4 40. Rd2 Rf6 41. Nd4 Rf4 42. e5 Re4 43. e6 h5 44. gxh5 gxh5\n45. Re2 Rxd4 46. e7 b3 47. axb3+ Kb4 48. e8=Q Rd5 49. Qe4+ Kc5 50. Rc2+ Kd6\n51. Qg6+ Ke5 52. Qxh5+ Kd4 53. Rd2+ Ke3 54. Qxd5 Kf4 55. Rd4+ Ke3 56. Qe4+ Kf2\n57. Rd2+ Kg3 58. Qg4#",
+    "affirmative_tokens": {
+      "prompt_tokens": 275,
+      "completion_tokens": 500,
+      "total_tokens": 775,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 275,
+      "completion_tokens": 495,
+      "total_tokens": 770,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "Rxc1+",
+    "final_move_uci": "d1c1",
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 275,
+      "completion_tokens": 500,
+      "total_tokens": 775,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    },
+    "negative": {
+      "prompt_tokens": 275,
+      "completion_tokens": 495,
+      "total_tokens": 770,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 550,
+    "total_completion_tokens": 995,
+    "total_tokens": 1545
+  }
+}

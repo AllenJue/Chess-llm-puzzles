@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Nxb3",
+    "aggressive_uci": "d2b3",
+    "aggressive_response": "30. Nxb3 Nb2",
+    "aggressive_tokens": {
+      "prompt_tokens": 287,
+      "completion_tokens": 8,
+      "total_tokens": 295,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Nxb3",
+    "positional_uci": "d2b3",
+    "positional_response": "30. Nxb3 Nb2",
+    "positional_tokens": {
+      "prompt_tokens": 287,
+      "completion_tokens": 8,
+      "total_tokens": 295,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Nxb3",
+    "neutral_uci": "d2b3",
+    "neutral_response": "30. Nxb3 Nb2",
+    "neutral_tokens": {
+      "prompt_tokens": 286,
+      "completion_tokens": 8,
+      "total_tokens": 294,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "d2b3",
+    "positional_uci": "d2b3",
+    "neutral_uci": "d2b3",
+    "consensus_move": "d2b3"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 287,
+      "completion_tokens": 8,
+      "total_tokens": 295,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 287,
+      "completion_tokens": 8,
+      "total_tokens": 295,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 286,
+      "completion_tokens": 8,
+      "total_tokens": 294,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 860,
+    "total_completion_tokens": 24,
+    "total_tokens": 884
+  }
+}

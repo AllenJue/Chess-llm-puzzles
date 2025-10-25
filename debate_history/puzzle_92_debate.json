@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Qxg7#",
+    "aggressive_uci": "d4g7",
+    "aggressive_response": "1. e4 e5 2. Nf3 Nc6 3. d4 d6 4. d5 Nd4 5. Nxd4 exd4 6. Qxd4 Bd7 7. Nc3 Nf6 8. Bg5 Be7 9. Bb5 O-O 10. Bxd7 Nxd7 11. Bxe7 Qxe7 12. O-O Nc5 13. b4 Nd7 14. Ne2 c6 15. c4 c5 16. bxc5 Nxc5 17. Ng3 b6 18. Nf5 Qxe4 19. Qxg7#",
+    "aggressive_tokens": {
+      "prompt_tokens": 198,
+      "completion_tokens": 152,
+      "total_tokens": 350,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Qxg7#",
+    "positional_uci": "d4g7",
+    "positional_response": "19. Qxg7#",
+    "positional_tokens": {
+      "prompt_tokens": 198,
+      "completion_tokens": 8,
+      "total_tokens": 206,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Qxg7#",
+    "neutral_uci": "d4g7",
+    "neutral_response": "19. Qxg7#",
+    "neutral_tokens": {
+      "prompt_tokens": 197,
+      "completion_tokens": 8,
+      "total_tokens": 205,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "d4g7",
+    "positional_uci": "d4g7",
+    "neutral_uci": "d4g7",
+    "consensus_move": "d4g7"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 198,
+      "completion_tokens": 152,
+      "total_tokens": 350,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 198,
+      "completion_tokens": 8,
+      "total_tokens": 206,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 197,
+      "completion_tokens": 8,
+      "total_tokens": 205,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 593,
+    "total_completion_tokens": 168,
+    "total_tokens": 761
+  }
+}

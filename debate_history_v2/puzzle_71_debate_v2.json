@@ -1,0 +1,52 @@
+{
+  "round1": {
+    "affirmative_move": "Nxd3+",
+    "negative_move": "Nxd3+",
+    "affirmative_response": "17... Nxd3+ 18. Rxd3 Qxc6 19. Nd4 Qb6 20. f5 a5 21. Rf1 Ba6 22. fxe6 fxe6 23. Qf4\nO-O-O 24. Rdd1 Bxf1 25. Qxf1 Rhf8 26. Qd3 Rf4 27. Nb5 Rdf8 28. Nd6+ Kb8 29. Qxh7\nRf1 30. Qd3 Rxd1+ 31. Qxd1 Qe3+ 32. Kb1 Qxe5 33. Nb5 Qxh2 34. b3 Qf2 35. Qd3\nQg1+ 36. Kb2 Rf1 37. c3 Rf2+ 38. Qc2 Rxc2+ 39. Kxc2 Qxg4 40. cxb4 axb4 41. a4\nbxa3 42. Nxa3 Qe2+ 43. Kc3 g5 44. Nc2 g4 45. Nd4 Qe3+ 46. Kb4 Qxd4+ 47. Kb5 g3\n48. b4 g2 49. Ka6 g1=Q 50. b5 Qga1#",
+    "negative_response": "17... Nxd3+ 18. Rxd3 Qxc6 19. Nd4 Qb6 20. f5 a5 21. Rf1 Ba6 22. fxe6 fxe6 23. Nxe6\nQxe6 24. Rxd5 Bxf1 25. Rd6 Qxa2 26. Qf3 Rc8 27. Qxf1 Qa1+ 28. Kd2 Qxf1 29. Re6+\nKd7 30. Rd6+ Ke7 31. Ke3 Rhf8 32. Kd4 Qc4+ 33. Ke3 Qf4+ 34. Kd3 Qxe5 35. Rd4 Rf3+\n36. Kd2 Qxd4+ 37. Ke2 Qe3+ 38. Kd1 Rf1#",
+    "affirmative_tokens": {
+      "prompt_tokens": 207,
+      "completion_tokens": 299,
+      "total_tokens": 506,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative_tokens": {
+      "prompt_tokens": 207,
+      "completion_tokens": 192,
+      "total_tokens": 399,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator_response": "Early consensus - no moderator needed",
+    "early_consensus": true
+  },
+  "final_result": {
+    "final_move_san": "Nxd3+",
+    "final_move_uci": "c5d3",
+    "success": true,
+    "reason": "Early consensus - both models agreed",
+    "supported_side": "Both"
+  },
+  "total_tokens": {
+    "affirmative": {
+      "prompt_tokens": 207,
+      "completion_tokens": 299,
+      "total_tokens": 506,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "negative": {
+      "prompt_tokens": 207,
+      "completion_tokens": 192,
+      "total_tokens": 399,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "moderator": null,
+    "judge": null,
+    "total_prompt_tokens": 414,
+    "total_completion_tokens": 491,
+    "total_tokens": 905
+  }
+}

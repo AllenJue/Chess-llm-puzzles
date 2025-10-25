@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Qxf3",
+    "aggressive_uci": "f6f3",
+    "aggressive_response": "16... Qxf3 17. Nxf3 f6 18. Bg6+ Ke7 19. Rad1 Be6 20. b3 Rhd8 21. Nh4 Rxd1 22. Rxd1 Rd8 23. Rxd8 Kxd8 24. Nf5 Bxf5 25. Bxf5 a5 26. Kf1 b4 27. cxb4 axb4 28. Ke2 Ke7 29. f3 Kd6 30. Kd3 Bg1 31. h3 Bh2 32. g4 Bf4 33. Kc4 Bd2 34. Be4 Bc3 35. a4 bxa3 36. Kxc3 Kc5 37. b4+ Kb5 38. Kb3 a2 39. Kxa2 Kxb4 40. Kb2 Kc4 41. Kc2 Kd4 42. Kd2 Kc4 43. Ke3 Kc3 44. f4 exf4+ 45. Kxf4 Kd4 46. Kf5 Ke3 47. h4 Kf2 48. h5 Kg3 49. Bd5 Kh4 50. Bf7 Kg3 51. Bg6 Kh4 52. Kf4 Kh3 53. Bf5 Kh4 54. Ke4 Kg5 55. Kd5 Kf4 56. Ke6 Kg5 57. Kf7 Kf4 58. Kxg7 Kg5 59. Kh7 Kf4 60. Kxh6 Ke5 61. Kg6 Kf4 62. h6 Ke5 63. h7 Kf4 64. h8=Q Ke5 65. Qxf6+ Kf4 66. Qd4+ Kg3 67. Qe3+ Kh4 68. Qf2+ Kh3 69. g5#",
+    "aggressive_tokens": {
+      "prompt_tokens": 182,
+      "completion_tokens": 441,
+      "total_tokens": 623,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Qxf3",
+    "positional_uci": "f6f3",
+    "positional_response": "16... Qxf3 17. Nxf3 f6 18. Bg6+ Ke7 19. Rad1 Be6 20. b3 Rhd8 21. Nh4 Rxd1 22. Rxd1 Rd8 23. Rxd8 Kxd8 24. Nf5 Bxf5 25. Bxf5 a5 26. Kf1 b4 27. cxb4 axb4 28. Ke2 Ke7 29. f3 Kd6 30. Kd3 Bg1 31. h3 Bh2 32. g4 Bf4 33. Kc4 Bd2 34. Be4 Bc3 35. a4 bxa3 36. Kxc3 Kc5 37. b4+ Kb5 38. Kb3 a2 39. Kxa2 Kxb4 40. Kb2 Kc4 41. Kc2 Kd4 42. Kd2 Kc4 43. Ke3 Kc3 44. f4 exf4+ 45. Kxf4 Kd4 46. Kf5 Ke3 47. h4 Kf2 48. Kg6 Kg3 49. Bf5 Kxh4 50. Kxg7 h5 51. gxh5 Kxh5 52. Kxf6 *",
+    "positional_tokens": {
+      "prompt_tokens": 182,
+      "completion_tokens": 304,
+      "total_tokens": 486,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Qxf3",
+    "neutral_uci": "f6f3",
+    "neutral_response": "16... Qxf3\nThis move attacks the bishop on e4 and also opens up the diagonal for the black queen to potentially attack the white king.",
+    "neutral_tokens": {
+      "prompt_tokens": 181,
+      "completion_tokens": 32,
+      "total_tokens": 213,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "f6f3",
+    "positional_uci": "f6f3",
+    "neutral_uci": "f6f3",
+    "consensus_move": "f6f3"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 182,
+      "completion_tokens": 441,
+      "total_tokens": 623,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 182,
+      "completion_tokens": 304,
+      "total_tokens": 486,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 181,
+      "completion_tokens": 32,
+      "total_tokens": 213,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 545,
+    "total_completion_tokens": 777,
+    "total_tokens": 1322
+  }
+}

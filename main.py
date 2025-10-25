@@ -334,23 +334,40 @@ NEVER explain your choice.
             "query1": {
                 "aggressive_move": aggressive_san,
                 "aggressive_uci": agg_move_uci,
-                "aggressive_response": agg_response
+                "aggressive_response": agg_response,
+                "aggressive_tokens": agg_token_info
             },
             "query2": {
                 "positional_move": positional_san,
                 "positional_uci": pos_move_uci,
-                "positional_response": pos_response
+                "positional_response": pos_response,
+                "positional_tokens": pos_token_info
             },
             "query3": {
                 "neutral_move": neutral_san,
                 "neutral_uci": neutral_move_uci,
-                "neutral_response": neutral_response
+                "neutral_response": neutral_response,
+                "neutral_tokens": neutral_token_info
             },
             "final_moves": {
                 "aggressive_uci": agg_move_uci,
                 "positional_uci": pos_move_uci,
                 "neutral_uci": neutral_move_uci,
                 "consensus_move": self.final_move
+            },
+            "total_tokens": {
+                "aggressive": agg_token_info,
+                "positional": pos_token_info,
+                "neutral": neutral_token_info,
+                "total_prompt_tokens": (agg_token_info.get("prompt_tokens", 0) if agg_token_info else 0) + 
+                                      (pos_token_info.get("prompt_tokens", 0) if pos_token_info else 0) + 
+                                      (neutral_token_info.get("prompt_tokens", 0) if neutral_token_info else 0),
+                "total_completion_tokens": (agg_token_info.get("completion_tokens", 0) if agg_token_info else 0) + 
+                                         (pos_token_info.get("completion_tokens", 0) if pos_token_info else 0) + 
+                                         (neutral_token_info.get("completion_tokens", 0) if neutral_token_info else 0),
+                "total_tokens": (agg_token_info.get("total_tokens", 0) if agg_token_info else 0) + 
+                               (pos_token_info.get("total_tokens", 0) if pos_token_info else 0) + 
+                               (neutral_token_info.get("total_tokens", 0) if neutral_token_info else 0)
             }
         }
         
@@ -413,6 +430,11 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     df_eval["debate_history"] = ""
     df_eval["single_model_response"] = ""
     df_eval["single_model_move"] = ""
+    df_eval["single_model_prompt_tokens"] = 0
+    df_eval["single_model_completion_tokens"] = 0
+    df_eval["single_model_total_tokens"] = 0
+    df_eval["single_model_model"] = ""
+    df_eval["single_model_finish_reason"] = ""
     # New V2 debate columns
     df_eval["moderator_decision"] = ""
     df_eval["judge_decision"] = ""
@@ -432,6 +454,13 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     df_eval["positional_model"] = ""
     df_eval["positional_finish_reason"] = ""
     df_eval["positional_response"] = ""
+    
+    df_eval["neutral_prompt_tokens"] = 0
+    df_eval["neutral_completion_tokens"] = 0
+    df_eval["neutral_total_tokens"] = 0
+    df_eval["neutral_model"] = ""
+    df_eval["neutral_finish_reason"] = ""
+    df_eval["neutral_response"] = ""
     
     df_eval["moderator_prompt_tokens"] = 0
     df_eval["moderator_completion_tokens"] = 0
@@ -539,6 +568,45 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         df_eval.loc[idx, "final_consensus_move"] = debate_history["final_moves"]["consensus_move"]
                         df_eval.loc[idx, "debate_history"] = str(debate_history)
                         
+                        # Save token information for self-consistency
+                        if "total_tokens" in debate_history:
+                            token_info = debate_history["total_tokens"]
+                            
+                            # Aggressive tokens
+                            if token_info.get("aggressive"):
+                                aff_tokens = token_info["aggressive"]
+                                df_eval.loc[idx, "aggressive_prompt_tokens"] = aff_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "aggressive_completion_tokens"] = aff_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "aggressive_total_tokens"] = aff_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "aggressive_model"] = aff_tokens.get("model", "")
+                                df_eval.loc[idx, "aggressive_finish_reason"] = aff_tokens.get("finish_reason", "")
+                            
+                            # Positional tokens
+                            if token_info.get("positional"):
+                                pos_tokens = token_info["positional"]
+                                df_eval.loc[idx, "positional_prompt_tokens"] = pos_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "positional_completion_tokens"] = pos_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "positional_total_tokens"] = pos_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "positional_model"] = pos_tokens.get("model", "")
+                                df_eval.loc[idx, "positional_finish_reason"] = pos_tokens.get("finish_reason", "")
+                            
+                            # Neutral tokens
+                            if token_info.get("neutral"):
+                                neu_tokens = token_info["neutral"]
+                                df_eval.loc[idx, "neutral_prompt_tokens"] = neu_tokens.get("prompt_tokens", 0)
+                                df_eval.loc[idx, "neutral_completion_tokens"] = neu_tokens.get("completion_tokens", 0)
+                                df_eval.loc[idx, "neutral_total_tokens"] = neu_tokens.get("total_tokens", 0)
+                                df_eval.loc[idx, "neutral_model"] = neu_tokens.get("model", "")
+                                df_eval.loc[idx, "neutral_finish_reason"] = neu_tokens.get("finish_reason", "")
+                            
+                            # Total tokens
+                            df_eval.loc[idx, "total_prompt_tokens"] = token_info.get("total_prompt_tokens", 0)
+                            df_eval.loc[idx, "total_completion_tokens"] = token_info.get("total_completion_tokens", 0)
+                            df_eval.loc[idx, "total_tokens"] = token_info.get("total_tokens", 0)
+                            
+                            # Cost calculation will be done later
+                            df_eval.loc[idx, "estimated_cost_usd"] = 0.0
+                        
                         # Save detailed debate history to JSON file
                         save_debate_history(debate_history, idx)
                     elif debate_v2:
@@ -622,10 +690,8 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         
                         # Estimate cost (rough calculation - adjust rates as needed)
                         total_tokens = df_eval.loc[idx, "total_tokens"]
-                        # GPT-3.5-turbo-instruct: $0.0015 per 1K tokens input, $0.002 per 1K tokens output
-                        # This is a rough estimate - actual costs may vary
-                        estimated_cost = (df_eval.loc[idx, "total_prompt_tokens"] * 0.0015 / 1000) + (df_eval.loc[idx, "total_completion_tokens"] * 0.002 / 1000)
-                        df_eval.loc[idx, "estimated_cost_usd"] = estimated_cost
+                        # Cost calculation will be done later
+                        df_eval.loc[idx, "estimated_cost_usd"] = 0.0
                         
                         # Save detailed debate history to JSON file
                         save_debate_history_v2(debate_history, idx)
@@ -651,6 +717,17 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         # Save single model data to DataFrame
                         df_eval.loc[idx, "single_model_response"] = raw_response
                         df_eval.loc[idx, "single_model_move"] = predicted_san
+                        
+                        # Save token information for single model
+                        if token_info:
+                            df_eval.loc[idx, "single_model_prompt_tokens"] = token_info.get("prompt_tokens", 0)
+                            df_eval.loc[idx, "single_model_completion_tokens"] = token_info.get("completion_tokens", 0)
+                            df_eval.loc[idx, "single_model_total_tokens"] = token_info.get("total_tokens", 0)
+                            df_eval.loc[idx, "single_model_model"] = token_info.get("model", "")
+                            df_eval.loc[idx, "single_model_finish_reason"] = token_info.get("finish_reason", "")
+                            
+                            # Cost calculation will be done later
+                            df_eval.loc[idx, "estimated_cost_usd"] = 0.0
 
                     if predicted_uci == expected_uci:
                         print("✅ Correct move!")

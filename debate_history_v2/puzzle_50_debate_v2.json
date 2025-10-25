@@ -1,0 +1,21 @@
+{
+  "round1": {
+    "affirmative_move": "Qg2#",
+    "negative_move": "Kf4",
+    "affirmative_response": "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be2 e5 7. Nf3 h6 8. Nd2\nBe6 9. Nc4 Nc6 10. Be3 b5 11. Nb6 Rb8 12. Nbd5 Be7 13. O-O O-O 14. f3 b4 15.\nNxf6+ Bxf6 16. Nd5 a5 17. c3 Bg5 18. Bf2 f5 19. exf5 Rxf5 20. Ne3 Bxe3 21. Bxe3\nd5 22. Rc1 d4 23. cxd4 Nxd4 24. Bc4 Bxc4 25. Rxc4 Rd6 26. Re1 Nxf3+ 27. Qxf3\nRxf3 28. gxf3 Rd1 29. Rc1 Rxe1+ 30. Rxe1 Qd5 31. Kf2 Qxa2 32. Re2 a4 33. Bc5\nQc4 34. Be3 a3 35. bxa3 bxa3 36. Rd2 a2 37. Rd1 Qc2+ 38. Rd2 Qxd2+ 39. Bxd2\na1=Q 40. Be3 Qb2+ 41. Kg3 Qe2 42. Bf2 Kf7 43. h3 Kf6 44. h4 Kf5 45. Kg2 Kf4\n46. Kg1 Kxf3 47. Kh1 Qf1+ 48. Bg1 Qg2# 0-1\n49. Kh2 Qg2#",
+    "negative_response": "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be2 e5 7. Nf3 h6 8. Nd2\nBe6 9. Nc4 Nc6 10. Be3 b5 11. Nb6 Rb8 12. Nbd5 Be7 13. O-O O-O 14. f3 b4 15.\nNxf6+ Bxf6 16. Nd5 a5 17. c3 Bg5 18. Bf2 f5 19. exf5 Rxf5 20. Ne3 Bxe3 21. Bxe3\nd5 22. Rc1 d4 23. cxd4 Nxd4 24. Bc4 Bxc4 25. Rxc4 Rd6 26. Re1 Bxc4 27. Bxd4 Rxd4\n28. Qxd4 Qxd4+ 29. Qxd4 exd4 30. Rd1 Rd5 31. Kf2 Kf7 32. f4 Ke6 33. Kf3 Rc5 34.\nRxd4 Rc2 35. Re4+ Kd5 36. Re2 Rxe2 37. Kxe2 Kd4 38. Kd2 Kc4 39. g3 Kd4 40. b3\nKd5 41. f5 Ke4 42. g4 Kf4 43. h3 Kg3 44. Ke3 Kxh3 45. Kf4 Kh4 46. Kf3 Kg5 47.\nKg3 h5 48. gxh5 Kxh5 49. Kf4 Kh4",
+    "moderator_response": {
+      "Whether there is a preference": "Yes",
+      "Supported Side": "Aggressive",
+      "Reason": "The aggressive side has a clear advantage in material and position, with a strong attack on the opponent's king. The positional side's position is more cramped and their pieces are not as actively placed. Additionally, the aggressive side's final move is a checkmate, while the positional side's final move only leads to a material advantage.",
+      "debate_answer": "49. Kh2 Qg2#"
+    }
+  },
+  "final_result": {
+    "final_move_san": "Kh2",
+    "final_move_uci": "g3h2",
+    "success": true,
+    "reason": "The aggressive side has a clear advantage in material and position, with a strong attack on the opponent's king. The positional side's position is more cramped and their pieces are not as actively placed. Additionally, the aggressive side's final move is a checkmate, while the positional side's final move only leads to a material advantage.",
+    "supported_side": "Aggressive"
+  }
+}

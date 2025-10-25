@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Rxg6",
+    "aggressive_uci": "g7g6",
+    "aggressive_response": "34. Rxg6 Nxh4+ 35. Nxh4 hxg6 36. Nxg6+ Kg7 37. Ne7 Rd3 38. Nxc6 Rxc3 39. Nxa7\nRa3 40. Nc6 Kf7 41. h4 Ke6 42. h5 Kd6 43. Nd8 Ke7 44. Nc6+ Kd6 45. Nd8 Ke7 46.\nNc6+ Kd6 47. Nd8 Ke7 48. Nc6+ Kd6 49. Nd8 Ke7 50. Nc6+ Kd6 51. Nd8 Ke7 52. Nc6+ Kd6 53. Nd8 Ke7 54. Nc6+ Kd6 55. Nd8 Ke7 56. Nc6+ Kd6 57. Nd8 Ke7 58. Nc6+ Kd6 59. Nd8 Ke7 60. Nc6+ Kd6 61. Nd8 Ke7 62. Nc6+ Kd6 63. Nd8 Ke7 64. Nc6+ Kd6 65. Nd8 Ke7 66. Nc6+ Kd6 67. Nd8 Ke7 68. Nc6+ Kd6 69. Nd8 Ke7 70. Nc6+ Kd6 71. Nd8 Ke7 72. Nc6+ Kd6 73. Nd8 Ke7 74. Nc6+ Kd6 75. Nd8 Ke7 76. Nc6+ Kd6 77. Nd8 Ke7 78. Nc6+ Kd6 79. Nd8 Ke7 80. Nc6+ Kd6 81. Nd8 Ke7 82. Nc6+ Kd6 83. Nd8 Ke7 84. Nc6+ Kd6 85. Nd8 Ke7 86. Nc6+ Kd6 87. Nd8 Ke7 88. Nc6+ Kd6 89. Nd8 Ke7 90. Nc6+ Kd6 91. Nd8 Ke7 92. Nc6+ K",
+    "aggressive_tokens": {
+      "prompt_tokens": 326,
+      "completion_tokens": 500,
+      "total_tokens": 826,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    }
+  },
+  "query2": {
+    "positional_move": "Rxg6",
+    "positional_uci": "g7g6",
+    "positional_response": "34. Rxg6 Nxh4+ 35. Nxh4 hxg6 36. Nxg6+ Kg7 37. Ne7 Rd3 38. Nxc6 Rxc3 39. Nxa7\nRc5 40. a6 Ra5 41. Nc6 Rxa6 42. Nb4 Ra3 43. Nd5 Kg6 44. Ne3 Kg5 45. Kg3 Rb3 46.\nh4+ Kg6 47. Kg2 Rb2 48. Kg3 Rb3 49. Kg2 Rb2 50. Kg3 Rb3 51. Kg2 Rb2 52. Kg3 Rb3\n53. Kg2 Rb2 54. Kg3 Rb3 55. Kg2 Rb2 56. Kg3 Rb3 57. Kg2 Rb2 58. Kg3 Rb3 59. Kg2\nRb2 60. Kg3 Rb3 61. Kg2 Rb2 62. Kg3 Rb3 63. Kg2 Rb2 64. Kg3 Rb3 65. Kg2 Rb2 66.\nKg3 Rb3 67. Kg2 Rb2 68. Kg3 Rb3 69. Kg2 Rb2 70. Kg3 Rb3 71. Kg2 Rb2 72. Kg3 Rb3\n73. Kg2 Rb2 74. Kg3 Rb3 75. Kg2 Rb2 76. Kg3 Rb3 77. Kg2 Rb2 78. Kg3 Rb3 79. Kg2\nRb2 80. Kg3 Rb3 81. Kg2 Rb2 82. Kg3 Rb3 83. Kg2 Rb2 84. Kg3 Rb3 85. Kg2 Rb2 86.\nKg3 Rb3 87. Kg2 Rb2 88. Kg3 Rb3 89. Kg2 Rb2 90. Kg3 Rb3 91. Kg2 Rb2 92. Kg3 Rb3\n93. Kg2 Rb2 94. Kg3 Rb3 95. Kg2",
+    "positional_tokens": {
+      "prompt_tokens": 326,
+      "completion_tokens": 500,
+      "total_tokens": 826,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    }
+  },
+  "query3": {
+    "neutral_move": "Rxg6",
+    "neutral_uci": "g7g6",
+    "neutral_response": "34. Rxg6 Nxh4+ 35. Nxh4 hxg6 36. Nxg6+ Kg7 37. Ne7 Rd3 38. Nxc6 Rxc3 39. Nxa7\nRa3 40. Nc6 Kg6 41. h4 Ra2 42. Kg3 Ra3+ 43. Kg2 Ra2 44. Kg3 Ra3+ 45. Kg2 Ra2\n46. Kg3 Ra3+ 47. Kg2 Ra2 48. Kg3 Ra3+ 49. Kg2 Ra2 50. Kg3 Ra3+ 51. Kg2 Ra2\n52. Kg3 Ra3+ 53. Kg2 Ra2 54. Kg3 Ra3+ 55. Kg2 Ra2 56. Kg3 Ra3+ 57. Kg2 Ra2\n58. Kg3 Ra3+ 59. Kg2 Ra2 60. Kg3 Ra3+ 61. Kg2 Ra2 62. Kg3 Ra3+ 63. Kg2 Ra2\n64. Kg3 Ra3+ 65. Kg2 Ra2 66. Kg3 Ra3+ 67. Kg2 Ra2 68. Kg3 Ra3+ 69. Kg2 Ra2\n70. Kg3 Ra3+ 71. Kg2 Ra2 72. Kg3 Ra3+ 73. Kg2 Ra2 74. Kg3 Ra3+ 75. Kg2 Ra2\n76. Kg3 Ra3+ 77. Kg2 Ra2 78. Kg3 Ra3+ 79. Kg2 Ra2 80. Kg3 Ra3+ 81. Kg2 Ra2\n82. Kg3 Ra3+ 83. Kg2 Ra2 84. Kg3 Ra3+ 85. Kg2 Ra2 86. Kg3 Ra3+ 87. Kg2 Ra2\n88. Kg3 Ra3+ 89. Kg2 Ra2 90. Kg3 Ra3+ 91. Kg2 Ra2 92. Kg3 Ra3+ 93. Kg2 Ra2\n94. Kg3 Ra3+ 95. Kg2 Ra2 96. Kg3 Ra3+ 97. Kg2 Ra2 98. Kg3 Ra3+ 99. Kg",
+    "neutral_tokens": {
+      "prompt_tokens": 325,
+      "completion_tokens": 500,
+      "total_tokens": 825,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "g7g6",
+    "positional_uci": "g7g6",
+    "neutral_uci": "g7g6",
+    "consensus_move": "g7g6"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 326,
+      "completion_tokens": 500,
+      "total_tokens": 826,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    },
+    "positional": {
+      "prompt_tokens": 326,
+      "completion_tokens": 500,
+      "total_tokens": 826,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    },
+    "neutral": {
+      "prompt_tokens": 325,
+      "completion_tokens": 500,
+      "total_tokens": 825,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "length"
+    },
+    "total_prompt_tokens": 977,
+    "total_completion_tokens": 1500,
+    "total_tokens": 2477
+  }
+}

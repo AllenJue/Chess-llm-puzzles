@@ -1,0 +1,70 @@
+{
+  "query1": {
+    "aggressive_move": "Rh6+",
+    "aggressive_uci": "h3h6",
+    "aggressive_response": "38. Rh6+ Kf7 39. Rxe6 Kxe6 40. Qh6+ Kd7 41. Qg7+ Kc6 42. Bxc3 d4 43. Bb4 Kb5\n44. Qb7#",
+    "aggressive_tokens": {
+      "prompt_tokens": 358,
+      "completion_tokens": 61,
+      "total_tokens": 419,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query2": {
+    "positional_move": "Rh6+",
+    "positional_uci": "h3h6",
+    "positional_response": "38. Rh6+ Kf7 39. Rxe6 Kxe6 40. Qh6+ Kd7 41. Qg7+ Kc6 42. Bxc3 d4 43. Qf6+ Kb7\n44. Ba5 Rc6 45. Qe7+ Ka6 46. b4 Rc2 47. Qd6+ Kb5 48. Qd5+ Ka4 49. Qb3+ Kb5\n50. Qxc2 Ka6 51. Qc6+ Ka7 52. Bb6+ Ka6 53. Bc5#",
+    "positional_tokens": {
+      "prompt_tokens": 358,
+      "completion_tokens": 138,
+      "total_tokens": 496,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "query3": {
+    "neutral_move": "Rh6+",
+    "neutral_uci": "h3h6",
+    "neutral_response": "38. Rh6+ Kf7 39. Rxe6 Kxe6 40. Qh6+ Kd7 41. Qg7+ Kc6 42. Bxc3 d4 43. Qf6+ Kb7\n44. Ba5 Rc6 45. Qe7+ Ka6 46. Bb4 Kb6 47. a4 Rc2 48. Qd6+ Kb7 49. Qd5+ Kc8\n50. Qe6+ Kb7 51. Qd7+ Kb6 52. a5+ Ka6 53. Qd6+ Kb7 54. Qb6+ Kc8 55. Qa6+ Kd7\n56. Qb5+ Kc8 57. a6 Ra2 58. Qb7+ Kd8 59. a7 Rxe2+ 60. Kf1 Ra2 61. a8=Q+ Rxa8\n62. Qxa8+ Kd7 63. Qd5+ Kc7 64. Ba5+ Kb8 65. Qd7 e4 66. Bb6 d3 67. Qa7+ Kc8\n68. Qa8+ Kd7 69. Qxe4 d2 70. Qd5+ Ke7 71. Bc5+ Kf6 72. Qf5+ Kg7 73. Bd4+ Kg8\n74. Qg6+ Kf8 75. Bc5+ Bd6 76. Bxd6#",
+    "neutral_tokens": {
+      "prompt_tokens": 357,
+      "completion_tokens": 349,
+      "total_tokens": 706,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    }
+  },
+  "final_moves": {
+    "aggressive_uci": "h3h6",
+    "positional_uci": "h3h6",
+    "neutral_uci": "h3h6",
+    "consensus_move": "h3h6"
+  },
+  "total_tokens": {
+    "aggressive": {
+      "prompt_tokens": 358,
+      "completion_tokens": 61,
+      "total_tokens": 419,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "positional": {
+      "prompt_tokens": 358,
+      "completion_tokens": 138,
+      "total_tokens": 496,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "neutral": {
+      "prompt_tokens": 357,
+      "completion_tokens": 349,
+      "total_tokens": 706,
+      "model": "gpt-3.5-turbo-instruct",
+      "finish_reason": "stop"
+    },
+    "total_prompt_tokens": 1073,
+    "total_completion_tokens": 548,
+    "total_tokens": 1621
+  }
+}

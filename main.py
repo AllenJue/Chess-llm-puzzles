@@ -194,7 +194,7 @@ NEVER explain your choice.
         # Re-setup personas after clearing
         self.setup_personas()
 
-    def run_debate(self, user_prompt: str, expected_uci: str = None, played_plies: int = None, board_fen: str = None) -> tuple:
+    def run_debate(self, user_prompt: str, expected_uci: str = None, played_plies: int = 0, board_fen: str = None, board = None) -> tuple:
         """Run a chess self-consistency evaluation using 3 independent queries"""
         print(f"\n<self-consistency> : Starting self-consistency evaluation")
         
@@ -235,10 +235,18 @@ NEVER explain your choice.
         print(f"<debug> : agg_system_prompt: {repr(agg_system_prompt)}")
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
+        # Use board object if available, otherwise fall back to played_plies calculation
+        if board is not None:
+            is_white_to_move = board.turn
+            current_turn_number = played_plies // 2 + 1
+        else:
+            is_white_to_move = (played_plies % 2 == 0)
+            current_turn_number = played_plies // 2 + 1
+            
         agg_response, aggressive_san, agg_token_info = self.aggressive_gm.model_interface.get_move_with_extraction(
             agg_system_prompt, user_prompt, 
-            current_turn_number=played_plies // 2 + 1 if played_plies else None,
-            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            current_turn_number=current_turn_number,
+            is_white_to_move=is_white_to_move
         )
         print(f"<debug> : Aggressive GM response: {repr(agg_response)}")
         print(f"<debug> : Aggressive GM move: {aggressive_san}")
@@ -252,8 +260,8 @@ NEVER explain your choice.
         
         pos_response, positional_san, pos_token_info = self.positional_gm.model_interface.get_move_with_extraction(
             pos_system_prompt, user_prompt, 
-            current_turn_number=played_plies // 2 + 1 if played_plies else None,
-            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            current_turn_number=current_turn_number,
+            is_white_to_move=is_white_to_move
         )
 
         print(f"<debug> : Positional GM response: {repr(pos_response)}")
@@ -268,8 +276,8 @@ NEVER explain your choice.
         
         neutral_response, neutral_san, neutral_token_info = self.neutral_gm.model_interface.get_move_with_extraction(
             system_prompt, user_prompt, 
-            current_turn_number=played_plies // 2 + 1 if played_plies else None,
-            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            current_turn_number=current_turn_number,
+            is_white_to_move=is_white_to_move
         )
 
         print(f"<debug> : Neutral GM response: {repr(neutral_response)}")

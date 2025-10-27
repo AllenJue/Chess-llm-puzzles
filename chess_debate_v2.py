@@ -140,9 +140,10 @@ class ChessDebateV2:
 
 
     def run_debate(self, user_prompt: str, expected_uci: str = None, 
-                   played_plies: int = None, board_fen: str = None) -> Tuple[Optional[str], Dict[str, Any]]:
+                   played_plies: int = 0, board_fen: str = None) -> Tuple[Optional[str], Dict[str, Any]]:
         """Run a chess debate on a position using the new moderator/judge system"""
         print(f"\n<debate_v2> : Starting chess debate with moderator and judge")
+        print(f"<debug> : run_debate called with played_plies={played_plies}")
         
         # Create debate topic
         debate_topic = f"What is the best move in this chess position?\n\nPosition: {user_prompt}"
@@ -162,9 +163,11 @@ class ChessDebateV2:
         # Aggressive side presents initial move using proper extraction
         aff_response, aff_move_san, aff_token_info = self.affirmative.model_interface.get_move_with_extraction(
             self.config['player_meta_prompt'], user_prompt,
-            current_turn_number=played_plies // 2 + 1 if played_plies else None,
-            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            current_turn_number=played_plies // 2 + 1,
+            is_white_to_move=(played_plies % 2 == 0)
         )
+        # Store token info for final case
+        self.aff_token_info = aff_token_info
         
         # Handle empty response
         if not aff_response:
@@ -179,9 +182,11 @@ class ChessDebateV2:
         # Positional side responds using proper extraction
         neg_response, neg_move_san, neg_token_info = self.negative.model_interface.get_move_with_extraction(
             self.config['player_meta_prompt'], user_prompt,
-            current_turn_number=played_plies // 2 + 1 if played_plies else None,
-            is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+            current_turn_number=played_plies // 2 + 1,
+            is_white_to_move=(played_plies % 2 == 0)
         )
+        # Store token info for final case
+        self.neg_token_info = neg_token_info
         
         # Handle empty response
         if not neg_response:
@@ -400,19 +405,19 @@ class ChessDebateV2:
             print(f"===== Debate Round-{round_num + 2} =====")
             
             # Affirmative responds to negative using proper extraction
-            aff_response, aff_move_san = self.affirmative.model_interface.get_move_with_extraction(
+            aff_response, aff_move_san, aff_token_info = self.affirmative.model_interface.get_move_with_extraction(
                 self.config['player_meta_prompt'], user_prompt,
-                current_turn_number=played_plies // 2 + 1 if played_plies else None,
-                is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+                current_turn_number=played_plies // 2 + 1,
+                is_white_to_move=(played_plies % 2 == 0)
             )
             self.affirmative.add_memory(aff_response)
             self.aff_ans = aff_response
             
             # Negative responds to affirmative using proper extraction
-            neg_response, neg_move_san = self.negative.model_interface.get_move_with_extraction(
+            neg_response, neg_move_san, neg_token_info = self.negative.model_interface.get_move_with_extraction(
                 self.config['player_meta_prompt'], user_prompt,
-                current_turn_number=played_plies // 2 + 1 if played_plies else None,
-                is_white_to_move=(played_plies % 2 == 0) if played_plies else True
+                current_turn_number=played_plies // 2 + 1,
+                is_white_to_move=(played_plies % 2 == 0)
             )
             self.negative.add_memory(neg_response)
             self.neg_ans = neg_response
@@ -435,7 +440,11 @@ class ChessDebateV2:
             self.config.update(self.mod_ans)
             self.config['success'] = True
             # Extract move from moderator's final answer
-            final_move_san = extract_predicted_move(self.mod_ans.get("debate_answer", ""))
+            final_move_san = extract_predicted_move(
+                self.mod_ans.get("debate_answer", ""),
+                current_turn_number=played_plies // 2 + 1,
+                is_white_to_move=(played_plies % 2 == 0)
+            )
         else:
             # Use judge as final arbiter
             print(f"===== Judge Round =====")
@@ -466,7 +475,11 @@ class ChessDebateV2:
             judge_player.add_memory(judge_response2)
             
             # Extract move from judge response (should be simple move now)
-            final_move_san = extract_predicted_move(judge_response2)
+            final_move_san = extract_predicted_move(
+                judge_response2,
+                current_turn_number=played_plies // 2 + 1,
+                is_white_to_move=(played_plies % 2 == 0)
+            )
             if final_move_san:
                 self.config['debate_answer'] = final_move_san
                 self.config['success'] = True
@@ -501,6 +514,15 @@ class ChessDebateV2:
                 "success": self.config.get('success', False),
                 "reason": self.config.get('Reason', ''),
                 "supported_side": self.config.get('Supported Side', '')
+            },
+            "total_tokens": {
+                "affirmative": self.aff_token_info,
+                "negative": self.neg_token_info,
+                "moderator": None,
+                "judge": None,
+                "total_prompt_tokens": (self.aff_token_info.get("prompt_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("prompt_tokens", 0) if self.neg_token_info else 0),
+                "total_completion_tokens": (self.aff_token_info.get("completion_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("completion_tokens", 0) if self.neg_token_info else 0),
+                "total_tokens": (self.aff_token_info.get("total_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("total_tokens", 0) if self.neg_token_info else 0)
             }
         }
         

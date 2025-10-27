@@ -36,7 +36,8 @@ class ChessGameEngine:
                  stockfish_path: str = 'stockfish', 
                  stockfish_time: float = 1.0,
                  stockfish_skill: int = 5,
-                 use_self_consistency: bool = False):
+                 use_self_consistency: bool = False,
+                 use_random_opponent: bool = False):
         """
         Initialize the chess game engine
         
@@ -46,12 +47,14 @@ class ChessGameEngine:
             stockfish_time: Time limit for Stockfish moves (seconds)
             stockfish_skill: Stockfish skill level (0-20, where 20 is maximum strength)
             use_self_consistency: Whether to use self-consistency approach
+            use_random_opponent: Whether to use random legal moves instead of Stockfish
         """
         self.model_name = model_name
         self.stockfish_path = stockfish_path
         self.stockfish_time = stockfish_time
         self.stockfish_skill = stockfish_skill
         self.use_self_consistency = use_self_consistency
+        self.use_random_opponent = use_random_opponent
         
         # Initialize model interface
         self.model_interface = ChessModelInterface(
@@ -88,6 +91,26 @@ class ChessGameEngine:
         legal_moves = list(board.legal_moves)
         if legal_moves:
             random_move = random.choice(legal_moves)
+            return random_move.uci()
+        else:
+            # This shouldn't happen in normal play, but just in case
+            return None
+    
+    def _get_random_opponent_move(self, board: chess.Board) -> str:
+        """
+        Get a random legal move for the random opponent
+        
+        Args:
+            board: Current chess board position
+            
+        Returns:
+            UCI move string
+        """
+        legal_moves = list(board.legal_moves)
+        if legal_moves:
+            random_move = random.choice(legal_moves)
+            move_san = board.san(random_move)
+            print(f"🎲 Random opponent plays: {move_san} ({random_move.uci()})")
             return random_move.uci()
         else:
             # This shouldn't happen in normal play, but just in case
@@ -143,25 +166,48 @@ class ChessGameEngine:
         
         try:
             if self.use_self_consistency:
-                # Use self-consistency approach
+                # Use self-consistency approach with retry logic
                 print(f"🤖 Self-consistency model thinking...")
                 print(f"<debug> : Self-consistency system prompt building:")
                 print(f"<debug> : user_prompt: {repr(user_prompt)}")
-                predicted_uci, debate_history = self.self_consistency.run_debate(
-                    user_prompt, 
-                    played_plies=len(board.move_stack),
-                    board_fen=board.fen()
-                )
                 
-                if not predicted_uci:
-                    return self._use_fallback_move(board, "Self-consistency failed to generate a move", str(debate_history))
-                
-                # Validate move is legal
-                move = chess.Move.from_uci(predicted_uci)
-                if move not in board.legal_moves:
-                    return self._use_fallback_move(board, f"Self-consistency generated illegal move: {predicted_uci}", str(debate_history))
-                
-                return predicted_uci
+                # Try up to 3 times for self-consistency
+                for attempt in range(3):
+                    if attempt > 0:
+                        print(f"🔄 Self-consistency retry attempt {attempt + 1}/3...")
+                    
+                    predicted_uci, debate_history = self.self_consistency.run_debate(
+                        user_prompt, 
+                        played_plies=len(board.move_stack),
+                        board_fen=board.fen(),
+                        board=board
+                    )
+                    print(f"<debug> : Self-consistency predicted UCI (attempt {attempt + 1}): {repr(predicted_uci)}")
+                    print(f"<debug> : Self-consistency debate history (attempt {attempt + 1}): {repr(debate_history)}")
+                    
+                    if not predicted_uci:
+                        print(f"❌ Self-consistency attempt {attempt + 1}: Failed to generate move")
+                        if attempt == 2:  # Last attempt
+                            return self._use_fallback_move(board, "Self-consistency failed to generate move after 3 attempts", str(debate_history))
+                        continue
+                    
+                    # Convert and validate move
+                    try:
+                        move = chess.Move.from_uci(predicted_uci)
+                        if move not in board.legal_moves:
+                            print(f"❌ Self-consistency attempt {attempt + 1}: Generated illegal move: {predicted_uci}")
+                            if attempt == 2:  # Last attempt
+                                return self._use_fallback_move(board, f"Self-consistency generated illegal move after 3 attempts: {predicted_uci}", str(debate_history))
+                            continue
+                        
+                        print(f"✅ Self-consistency attempt {attempt + 1}: Valid move generated: {predicted_uci}")
+                        return predicted_uci
+                        
+                    except Exception as e:
+                        print(f"❌ Self-consistency attempt {attempt + 1}: Error validating move: {e}")
+                        if attempt == 2:  # Last attempt
+                            return self._use_fallback_move(board, f"Self-consistency move validation error after 3 attempts: {e}", str(debate_history))
+                        continue
                 
             else:
                 # Use single model with retry logic
@@ -216,7 +262,7 @@ class ChessGameEngine:
     
     def get_stockfish_move(self, board: chess.Board) -> Optional[str]:
         """
-        Get a move from Stockfish
+        Get a move from Stockfish or random opponent
         
         Args:
             board: Current chess board position
@@ -224,6 +270,10 @@ class ChessGameEngine:
         Returns:
             UCI move string or None if failed
         """
+        if self.use_random_opponent:
+            # Use random legal move instead of Stockfish
+            return self._get_random_opponent_move(board)
+        
         try:
             with chess.engine.SimpleEngine.popen_uci(self.stockfish_path) as engine:
                 # Configure Stockfish skill level
@@ -370,6 +420,7 @@ class ChessGameEngine:
             "model_plays_white": model_plays_white,
             "model_approach": "self_consistency" if self.use_self_consistency else "single_model",
             "model_name": self.model_name,
+            "opponent_type": "random" if self.use_random_opponent else "stockfish",
             "moves": self.game_moves,
             "game_history": self.game_history,
             "fallback_moves": self.fallback_moves,
@@ -447,17 +498,20 @@ class ChessGameEngine:
         
         # Create PGN game
         game = chess.pgn.Game()
-        game.headers["Event"] = "LLM vs Stockfish"
+        opponent_name = "Random" if self.use_random_opponent else "Stockfish"
+        game.headers["Event"] = f"LLM vs {opponent_name}"
         game.headers["Site"] = "Chess Game Engine"
         game.headers["Date"] = datetime.now().strftime("%Y.%m.%d")
-        game.headers["White"] = "Model" if game_result["model_plays_white"] else "Stockfish"
-        game.headers["Black"] = "Stockfish" if game_result["model_plays_white"] else "Model"
+        game.headers["White"] = "Model" if game_result["model_plays_white"] else opponent_name
+        game.headers["Black"] = opponent_name if game_result["model_plays_white"] else "Model"
         game.headers["Result"] = self._pgn_result(game_result["result"])
         game.headers["Model"] = self.model_name
         game.headers["Approach"] = "self_consistency" if self.use_self_consistency else "single_model"
+        game.headers["Opponent"] = opponent_name
         game.headers["FallbackMoves"] = str(len(self.fallback_moves))
         game.headers["TotalMoves"] = str(game_result["total_moves"])
-        game.headers["StockfishSkill"] = str(self.stockfish_skill)
+        if not self.use_random_opponent:
+            game.headers["StockfishSkill"] = str(self.stockfish_skill)
         
         # Add moves
         node = game
@@ -497,6 +551,8 @@ def main():
                        help="Stockfish skill level (0-20, where 20 is maximum strength)")
     parser.add_argument("--self-consistency", action="store_true", 
                        help="Use self-consistency approach instead of single model")
+    parser.add_argument("--random-opponent", action="store_true",
+                       help="Use random legal moves instead of Stockfish")
     parser.add_argument("--model-color", choices=["white", "black"], default="white",
                        help="Color for the model to play")
     parser.add_argument("--save-json", action="store_true",
@@ -523,7 +579,8 @@ def main():
         stockfish_path=args.stockfish,
         stockfish_time=args.time,
         stockfish_skill=args.skill,
-        use_self_consistency=args.self_consistency
+        use_self_consistency=args.self_consistency,
+        use_random_opponent=args.random_opponent
     )
     
     # Play the game

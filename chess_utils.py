@@ -219,12 +219,21 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
     if not response_text or not isinstance(response_text, str):
         return None
 
+    # Debug output for chess game engine
+    print(f"<debug> : extract_predicted_move called with:")
+    print(f"<debug> :   current_turn_number: {current_turn_number}")
+    print(f"<debug> :   is_white_to_move: {is_white_to_move}")
+    print(f"<debug> :   response_text: {repr(response_text[:200])}...")
+
     text = response_text.strip()
-    text = re.sub(r'\s+', ' ', text)  # collapse whitespace
+    # Collapse multiple spaces but preserve newlines for move number patterns
+    text = re.sub(r'[ \t]+', ' ', text)  # collapse spaces and tabs but not newlines
     text = re.sub(r'Model output:|Predicted Response:|Completion\(.*?\):?', '', text, flags=re.I)
     # keep result tokens for detection (we'll remove elsewhere as needed)
     text = re.sub(r'\{.*?\}|\(.*?\)', ' ', text)  # remove comments
     text = text.strip()
+    
+    print(f"<debug> :   processed_text: {repr(text[:200])}...")
 
     # SAN pattern for matching chess moves
     SAN_SUB = r'(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x?[a-h][1-8][+#]?|[a-h][1-8][+#]?)'
@@ -232,12 +241,16 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
     # --- 1) explicit labelled prediction e.g. "Predicted move san: Qe1#" ---
     labelled = re.search(r'predicted\s*move\s*(?:san)?\s*[:\-]\s*(' + SAN_SUB + r')', text, flags=re.I)
     if labelled:
-        return labelled.group(1).strip()
+        result = labelled.group(1).strip()
+        print(f"<debug> :   found labelled prediction: {repr(result)}")
+        return result
 
     # --- 2) SAN followed by a result token (likely a final predicted move) ---
     san_with_result = re.search(r'(' + SAN_SUB + r')\s+(?:0-1|1-0|1/2-1/2)\b', text, flags=re.I)
     if san_with_result:
-        return san_with_result.group(1).strip()
+        result = san_with_result.group(1).strip()
+        print(f"<debug> :   found SAN with result: {repr(result)}")
+        return result
 
     # Precompute all SAN tokens and their positions
     san_pattern = re.compile(SAN_SUB, flags=re.I)
@@ -263,15 +276,21 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
     # --- 3) explicit numbered move for current_turn_number if provided ---
     if current_turn_number is not None:
         turn = int(current_turn_number)
+        print(f"<debug> :   looking for explicit move {turn} ({'white' if is_white_to_move else 'black'})")
         # for black: look for "22..." pattern
         if not is_white_to_move:
             m = re.search(rf'\b{turn}\.\.\.\s*({SAN_SUB})', text, flags=re.I)
             if m:
-                return m.group(1).strip()
+                result = m.group(1).strip()
+                print(f"<debug> :   found explicit black move {turn}...: {repr(result)}")
+                return result
         else:
             m = re.search(rf'\b{turn}\.\s*({SAN_SUB})', text, flags=re.I)
             if m:
-                return m.group(1).strip()
+                result = m.group(1).strip()
+                print(f"<debug> :   found explicit white move {turn}.: {repr(result)}")
+                return result
+        print(f"<debug> :   no explicit move found for turn {turn}")
 
     # --- 4) prefer SANs whose nearest preceding move-number <= current_turn_number ---
     if current_turn_number is not None and san_matches:
@@ -314,12 +333,28 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
     if is_white_to_move:
         return san_list[0]
 
-    # if model is black-to-move, prefer penultimate SAN (common pattern "BlackMove WhiteReply ...")
-    if len(san_list) >= 2:
-        return san_list[-2]
+    # if model is black-to-move, use more sophisticated logic
+    if not is_white_to_move:
+        # For black moves, look for patterns like "Qf3 Bg4" where Qf3 is the black move
+        # Try to find alternating patterns: if we have an even number of moves, 
+        # black moves are at odd positions (1, 3, 5, ...)
+        if len(san_list) >= 2:
+            # If we have an even number of moves, black moves are at odd indices
+            if len(san_list) % 2 == 0:
+                # Return the last odd-indexed move (last black move)
+                return san_list[-1]
+            else:
+                # If odd number of moves, black moves are at even indices
+                # Return the last even-indexed move
+                return san_list[-2] if len(san_list) >= 2 else san_list[-1]
+        else:
+            # Single move - if it's black's turn, this should be a black move
+            return san_list[0]
 
     # last resort: return the last SAN
-    return san_list[-1]
+    result = san_list[-1]
+    print(f"<debug> :   final_result: {repr(result)}")
+    return result
 
 
 def get_board_from_pgn(pgn_text: str) -> chess.Board:
@@ -364,7 +399,46 @@ if __name__ == "__main__":
         ("22... Qxh2+ 23. Kf1 Qh1#", 22, False, "Qxh2+"),
         ("28... Qe1#", 28, False, "Qe1#"),
         ("15. Rxg7+ Kh8 16. Rxf7+ Kg8", 15, True, "Rxg7+"),
-        ("Qe1# 0-1 29. Kxe1", 28, False, "Qe1#")
+        ("Qe1# 0-1 29. Kxe1", 28, False, "Qe1#"),
+        # Test cases with newlines interleaved
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 3, True, "Bb5"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6", 4, True, "Ba4"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7", 5, True, "O-O"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7\n6. Re1 b5", 6, True, "Re1"),
+
+        # Test with mixed whitespace and newlines
+        ("1. e4 e5\n\n2. Nf3 Nc6\n\n3. Bb5 a6", 3, True, "Bb5"),
+        ("1. e4 e5\n  \n2. Nf3 Nc6\n  \n3. Bb5 a6", 3, True, "Bb5"),
+        # Test with explicit move numbers and newlines - should extract correct move for given turn
+        ("60. Qg2 Bh3\n61. Qf3 Bg4\n62. Qg2 Bh3", 60, True, "Qg2"),
+        ("60. Qg2 Bh3\n61... Qf3\n62. Qg2 Bh3", 61, False, "Qf3"),  # Black move with proper "61..." format
+        ("60. Qg2 Bh3\n61. Qf3 Bg4\n62. Qg2 Bh3", 62, True, "Qg2"),  # White move for turn 62
+        # Test the specific e4 case mentioned in the user query
+        ("1. e4", 1, True, "e4"),
+        ("1. e4 e5", 1, True, "e4"),
+        ("1. e4 e5\n2. Nf3", 2, True, "Nf3"),
+        # Test cases with explicit \n characters
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 1, True, "e4"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 2, True, "Nf3"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 3, True, "Bb5"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 1, False, "e5"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 2, False, "Nc6"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6", 3, False, "a6"),
+        # Test with longer sequences and explicit \n
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7\n6. Re1 b5\n7. Bb3 O-O\n8. c3 d6", 8, True, "c3"),
+        ("1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7\n6. Re1 b5\n7. Bb3 O-O\n8. c3 d6", 8, False, "d6"),
+        # Test with model response format containing \n
+        ("Model output: '1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7'", 5, True, "O-O"),
+        ("Neutral GM response: '1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7'", 5, True, "O-O"),
+        # Test with checkmate moves and \n
+        ("48. Rh8+ Rg8\n49. Rxg8#", 48, True, "Rh8+"),
+        ("48. Rh8+ Rg8\n49. Rxg8#", 49, True, "Rxg8#"),
+        # Test with complex moves and \n
+        ("25. Nh4 b3\n26. a3 Bb5\n27. Qf3 Bd7", 25, True, "Nh4"),
+        ("25. Nh4 b3\n26. a3 Bb5\n27. Qf3 Bd7", 26, True, "a3"),
+        ("25. Nh4 b3\n26. a3 Bb5\n27. Qf3 Bd7", 27, True, "Qf3"),
+        # Test the long repetitive game sequence - should extract e4 for move 1 white
+        ("'1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7\n6. Re1 b5\n7. Bb3 O-O\n8. c3 d5\n9. exd5 Nxd5\n10. Nxe5 Nxe5\n11. Rxe5 c6\n12. d4 Bd6\n13. Re1 Qh4\n14. g3 Qh3\n15. Be3 Bg4\n16. Qd3 Rae8\n17. Nd2 Re6\n18. Qf1 Qh5\n19. a4 Rfe8\n20. axb5 axb5\n21. Bxd5 Qxd5\n22. Qg2 Qh5\n23. Ra6 Bf8\n24. Rxc6 Bh3\n25. Qf3 Bg4\n26. Qg2 Bh3\n27. Qf3 Bg4\n28. Qg2 Bh3\n29. Qf3 Bg4\n30. Qg2 Bh3\n31. Qf3 Bg4\n32. Qg2 Bh3\n33. Qf3 Bg4\n34. Qg2 Bh3\n35. Qf3 Bg4\n36. Qg2 Bh3\n37. Qf3 Bg4\n38. Qg2 Bh3\n39. Qf3 Bg4\n40. Qg2 Bh3\n41. Qf3 Bg4\n42. Qg2 Bh3\n43. Qf3 Bg4\n44. Qg2 Bh3\n45. Qf3 Bg4\n46. Qg2 Bh3\n47. Qf3 Bg4\n48. Qg2 Bh3\n49. Qf3 Bg4\n50. Qg2 Bh3\n51. Qf3 Bg4\n52. Qg2 Bh3\n53. Qf3 Bg4\n54. Qg2 Bh3\n55. Qf3 Bg4\n56. Qg2 Bh3\n57. Qf3 Bg4\n58. Qg2 Bh3\n59. Qf3 Bg4\n60. Qg2 Bh3'", 1, True, "e4"),
     ]
     
     for text, turn_num, is_white, expected in test_cases:

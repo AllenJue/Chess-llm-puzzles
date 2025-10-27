@@ -48,6 +48,12 @@ python chess_game.py --self-consistency --model-color black --skill 3
 
 # Use GPT-4 with custom Stockfish time and skill level
 python chess_game.py --model gpt-4-turbo --time 2.0 --skill 8
+
+# Play against random legal moves instead of Stockfish
+python chess_game.py --random-opponent --save-pgn
+
+# Self-consistency vs random opponent
+python chess_game.py --self-consistency --random-opponent --save-pgn
 ```
 
 ### Command Line Options
@@ -57,6 +63,7 @@ python chess_game.py --model gpt-4-turbo --time 2.0 --skill 8
 - `--time`: Time limit for Stockfish moves in seconds (default: 1.0)
 - `--skill`: Stockfish skill level 0-20 (default: 5, where 20 is maximum strength)
 - `--self-consistency`: Use self-consistency approach instead of single model
+- `--random-opponent`: Use random legal moves instead of Stockfish
 - `--model-color`: Color for the model (white/black, default: white)
 - `--save-json`: Save game result as JSON file
 - `--save-pgn`: Save game as PGN file

@@ -46,12 +46,14 @@ echo "1. Single model vs Stockfish (White, save PGN)"
 echo "2. Self-consistency vs Stockfish (White, save PGN)"
 echo "3. Single model vs Stockfish (Black, save PGN)"
 echo "4. Self-consistency vs Stockfish (Black, save PGN)"
-echo "5. Quick single model game (no save)"
-echo "6. Quick self-consistency game (no save)"
-echo "7. Custom game"
+echo "5. Single model vs Random (White, save PGN)"
+echo "6. Self-consistency vs Random (White, save PGN)"
+echo "7. Quick single model game (no save)"
+echo "8. Quick self-consistency game (no save)"
+echo "9. Custom game"
 echo ""
 
-read -p "Enter choice (1-7): " choice
+read -p "Enter choice (1-9): " choice
 
 case $choice in
     1)
@@ -67,16 +69,23 @@ case $choice in
         run_game "Self-Consistency vs Stockfish (Model plays Black)" "--self-consistency --model-color black --save-pgn"
         ;;
     5)
-        run_game "Quick Single Model Game" ""
+        run_game "Single Model vs Random (Model plays White)" "--random-opponent --save-pgn"
         ;;
     6)
-        run_game "Quick Self-Consistency Game" "--self-consistency"
+        run_game "Self-Consistency vs Random (Model plays White)" "--self-consistency --random-opponent --save-pgn"
         ;;
     7)
+        run_game "Quick Single Model Game" ""
+        ;;
+    8)
+        run_game "Quick Self-Consistency Game" "--self-consistency"
+        ;;
+    9)
         echo "Custom game options:"
         echo "--model MODEL_NAME (e.g., gpt-4-turbo)"
         echo "--time SECONDS (Stockfish thinking time)"
         echo "--self-consistency (use self-consistency)"
+        echo "--random-opponent (use random legal moves instead of Stockfish)"
         echo "--model-color white|black"
         echo "--save-json (save as JSON)"
         echo "--save-pgn (save as PGN)"
@@ -91,3 +100,4 @@ case $choice in
 esac
 
 echo "🎉 Game completed!"
+

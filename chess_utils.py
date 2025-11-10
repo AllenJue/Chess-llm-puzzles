@@ -10,7 +10,9 @@ import requests
 import chess
 import chess.pgn
 from io import StringIO
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
+
+SAN_SUB_PATTERN = r'(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x?[a-h][1-8][+#]?|[a-h][1-8][+#]?)'
 
 
 def extract_game_id_and_move(url: str) -> Tuple[Optional[str], Optional[int]]:
@@ -129,7 +131,8 @@ def build_chess_prompts(pgn_partial: str) -> Tuple[str, str]:
     """
     system_prompt = """You are a chess grandmaster.
 You will be given a partially completed game.
-After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+After seeing it, you should repeat the ENTIRE GAME and then give the next THREE moves.
+After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.
 Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
 ALWAYS repeat the entire representation of the game so far.
 NEVER explain your choice.
@@ -198,6 +201,55 @@ def san_to_uci(current_fen: str, san_move: str) -> Optional[str]:
         return None
 
 
+def extract_plan_sans(
+    response_text: str,
+    primary_san: Optional[str] = None,
+    max_plies: Optional[int] = None
+) -> List[str]:
+    """
+    Extract a sequence of planned SAN moves from a model response.
+
+    Args:
+        response_text (str): Raw model response text.
+        primary_san (Optional[str]): The primary SAN move that precedes the plan.
+        max_plies (Optional[int]): Maximum number of plies to return.
+
+    Returns:
+        List[str]: Ordered list of SAN moves from the plan section.
+    """
+    if not response_text or not isinstance(response_text, str):
+        return []
+
+    text = response_text.strip()
+    text = re.sub(r'\{.*?\}|\(.*?\)', ' ', text)
+    text = re.sub(r'[ \t]+', ' ', text)
+
+    san_pattern = re.compile(SAN_SUB_PATTERN, flags=re.IGNORECASE)
+    matches = list(san_pattern.finditer(text))
+    if not matches:
+        return []
+
+    def normalize(s: str) -> str:
+        return re.sub(r'[+#?!]+$', '', s.strip())
+
+    start_index = 0
+    if primary_san:
+        norm_primary = normalize(primary_san)
+        last_idx = None
+        for idx, match in enumerate(matches):
+            if normalize(match.group(0)) == norm_primary:
+                last_idx = idx
+        if last_idx is not None:
+            start_index = last_idx + 1
+        else:
+            start_index = len(matches)
+
+    plan_tokens = [matches[i].group(0).strip() for i in range(start_index, len(matches))]
+    if max_plies is not None:
+        plan_tokens = plan_tokens[:max_plies]
+    return plan_tokens
+
+
 def extract_predicted_move(response_text: str, current_turn_number: Optional[int] = None, 
                          is_white_to_move: bool = True) -> Optional[str]:
     """
@@ -235,25 +287,22 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
     
     print(f"<debug> :   processed_text: {repr(text[:200])}...")
 
-    # SAN pattern for matching chess moves
-    SAN_SUB = r'(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x?[a-h][1-8][+#]?|[a-h][1-8][+#]?)'
-
     # --- 1) explicit labelled prediction e.g. "Predicted move san: Qe1#" ---
-    labelled = re.search(r'predicted\s*move\s*(?:san)?\s*[:\-]\s*(' + SAN_SUB + r')', text, flags=re.I)
+    labelled = re.search(r'predicted\s*move\s*(?:san)?\s*[:\-]\s*(' + SAN_SUB_PATTERN + r')', text, flags=re.I)
     if labelled:
         result = labelled.group(1).strip()
         print(f"<debug> :   found labelled prediction: {repr(result)}")
         return result
 
     # --- 2) SAN followed by a result token (likely a final predicted move) ---
-    san_with_result = re.search(r'(' + SAN_SUB + r')\s+(?:0-1|1-0|1/2-1/2)\b', text, flags=re.I)
+    san_with_result = re.search(r'(' + SAN_SUB_PATTERN + r')\s+(?:0-1|1-0|1/2-1/2)\b', text, flags=re.I)
     if san_with_result:
         result = san_with_result.group(1).strip()
         print(f"<debug> :   found SAN with result: {repr(result)}")
         return result
 
     # Precompute all SAN tokens and their positions
-    san_pattern = re.compile(SAN_SUB, flags=re.I)
+    san_pattern = re.compile(SAN_SUB_PATTERN, flags=re.I)
     san_matches = list(san_pattern.finditer(text))
     san_list = [m.group(0).strip() for m in san_matches]
     san_positions = [m.start() for m in san_matches]
@@ -279,13 +328,13 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
         print(f"<debug> :   looking for explicit move {turn} ({'white' if is_white_to_move else 'black'})")
         # for black: look for "22..." pattern
         if not is_white_to_move:
-            m = re.search(rf'\b{turn}\.\.\.\s*({SAN_SUB})', text, flags=re.I)
+            m = re.search(rf'\b{turn}\.\.\.\s*({SAN_SUB_PATTERN})', text, flags=re.I)
             if m:
                 result = m.group(1).strip()
                 print(f"<debug> :   found explicit black move {turn}...: {repr(result)}")
                 return result
         else:
-            m = re.search(rf'\b{turn}\.\s*({SAN_SUB})', text, flags=re.I)
+            m = re.search(rf'\b{turn}\.\s*({SAN_SUB_PATTERN})', text, flags=re.I)
             if m:
                 result = m.group(1).strip()
                 print(f"<debug> :   found explicit white move {turn}.: {repr(result)}")
@@ -314,13 +363,13 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
                 return valid[-1][0]
 
     # --- 5) ellipsis-based explicit black moves anywhere in text ---
-    black_pattern = re.compile(r'\b\d+\.\.\.\s*(' + SAN_SUB + r')', flags=re.I)
+    black_pattern = re.compile(r'\b\d+\.\.\.\s*(' + SAN_SUB_PATTERN + r')', flags=re.I)
     black_moves = [m.group(1).strip() for m in black_pattern.finditer(text)]
     if black_moves and not is_white_to_move:
         return black_moves[-1]
 
     # --- 6) generic explicit white pattern ---
-    white_pattern = re.compile(r'\b\d+\.\s*(' + SAN_SUB + r')', flags=re.I)
+    white_pattern = re.compile(r'\b\d+\.\s*(' + SAN_SUB_PATTERN + r')', flags=re.I)
     white_moves = [m.group(1).strip() for m in white_pattern.finditer(text)]
     if white_moves and is_white_to_move:
         return white_moves[-1]

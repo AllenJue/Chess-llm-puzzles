@@ -8,13 +8,17 @@ using the MAD (Multi-Agent Debate) framework with moderator and judge roles.
 import os
 import json
 import sys
+import re
 import chess
 import chess.pgn
 import io
 from typing import Optional, Tuple, Dict, Any
 
 # Add the MAD utils path for imports
-sys.path.append('MAD')
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+MAD_DIR = os.path.join(CURRENT_DIR, "MAD")
+if MAD_DIR not in sys.path:
+    sys.path.insert(0, MAD_DIR)
 from utils.agent import Agent
 from model_interface import ChessModelInterface
 from chess_utils import extract_predicted_move, san_to_uci
@@ -28,7 +32,14 @@ class ChessDebatePlayer(Agent):
         """Create a chess debate player"""
         super(ChessDebatePlayer, self).__init__(model_name, name, temperature, sleep_time)
         self.openai_api_key = openai_api_key
-        self.model_interface = ChessModelInterface(api_key=openai_api_key, model_name=model_name)
+        self.model_interface = ChessModelInterface(
+            api_key=openai_api_key,
+            model_name=model_name,
+            max_completion_tokens=320,
+            default_temperature=temperature,
+            retry_attempts=2,
+        )
+        self.last_token_info: Optional[dict] = None
 
     def ask(self, temperature: float = None):
         """Query for answer using our model interface instead of the old API"""
@@ -46,16 +57,17 @@ class ChessDebatePlayer(Agent):
         print(f"<debug> : combined_prompt: {repr(combined_prompt[:200])}...")
         
         # Use our model interface instead of the old API
-        response = self.model_interface.query_model_for_move(
+        response, token_info = self.model_interface.query_model_for_move_with_tokens(
             system_prompt="",  # Already included in combined_prompt
             user_prompt=combined_prompt,
-            max_tokens=500,
+            max_tokens=self.model_interface.max_completion_tokens,
             temperature=temperature if temperature else self.temperature,
-            top_p=1
+            top_p=self.model_interface.default_top_p
         )
+        self.last_token_info = token_info
         
         print(f"<debug> : response: {repr(response)}")
-        return response
+        return response or ""
 
 
 class ChessDebateV2:
@@ -66,13 +78,15 @@ class ChessDebateV2:
                  temperature: float = 0.1,
                  openai_api_key: str = None,
                  max_rounds: int = 3,
-                 sleep_time: float = 0.1):
+                 sleep_time: float = 0.1,
+                 plan_plies: int = 0):
         """Create a chess debate with moderator and judge"""
         self.model_name = model_name
         self.temperature = temperature
         self.openai_api_key = openai_api_key
         self.max_rounds = max_rounds
         self.sleep_time = sleep_time
+        self.plan_plies = max(0, plan_plies)
         
         # Load chess debate configuration
         current_script_path = os.path.abspath(__file__)
@@ -80,6 +94,8 @@ class ChessDebateV2:
                                   'MAD/utils/config4chess.json')
         with open(config_path, 'r') as f:
             self.config = json.load(f)
+        self.base_player_meta_prompt = self.config['player_meta_prompt']
+        self.base_moderator_meta_prompt = self.config['moderator_meta_prompt']
         
         # Initialize players
         self.affirmative = ChessDebatePlayer(
@@ -114,6 +130,8 @@ class ChessDebateV2:
     def init_prompt(self, debate_topic: str):
         """Initialize prompts with the debate topic"""
         self.config['debate_topic'] = debate_topic
+        self.config['player_meta_prompt'] = self._apply_plan_instruction(self.base_player_meta_prompt)
+        self.config['moderator_meta_prompt'] = self._apply_plan_instruction(self.base_moderator_meta_prompt)
         
         # Replace placeholders in prompts
         def prompt_replace(key):
@@ -138,12 +156,49 @@ class ChessDebateV2:
         self.negative.memory_lst = []
         self.moderator.memory_lst = []
 
+    def _apply_plan_instruction(self, prompt: str) -> str:
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
+        pattern = re.compile(r"(the next) ([^\s]+) (moves)", flags=re.IGNORECASE)
+
+        def _repl(match: re.Match) -> str:
+            return f"{match.group(1)} {num_future_moves} {match.group(3)}"
+
+        updated_prompt, count = pattern.subn(_repl, prompt, count=1)
+        return updated_prompt if count > 0 else prompt
+
 
     def run_debate(self, user_prompt: str, expected_uci: str = None, 
                    played_plies: int = 0, board_fen: str = None) -> Tuple[Optional[str], Dict[str, Any]]:
         """Run a chess debate on a position using the new moderator/judge system"""
         print(f"\n<debate_v2> : Starting chess debate with moderator and judge")
         print(f"<debug> : run_debate called with played_plies={played_plies}")
+        token_events: list[Dict[str, Any]] = []
+        turn_number = played_plies // 2 + 1
+        is_white_to_move = (played_plies % 2 == 0)
+        final_source_agent: Optional[str] = None
+        final_source_agents: list[str] = []
+        judge_details: Dict[str, Any] = {}
+        moderator_raw_response: Optional[str] = None
+
+        def record_token_event(agent_label: str, role: str, round_number: int, token_info: Optional[dict]) -> None:
+            info = token_info or {}
+            prompt_tokens = info.get("prompt_tokens", 0) or 0
+            completion_tokens = info.get("completion_tokens", 0) or 0
+            total_tokens = info.get("total_tokens", 0) or (prompt_tokens + completion_tokens)
+            token_events.append({
+                "paradigm": "debate",
+                "agent": agent_label,
+                "role": role,
+                "round": round_number,
+                "ply_index": played_plies,
+                "turn_number": turn_number,
+                "is_white_to_move": is_white_to_move,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": total_tokens,
+                "model": info.get("model", self.model_name),
+                "finish_reason": info.get("finish_reason", ""),
+            })
         
         # Create debate topic
         debate_topic = f"What is the best move in this chess position?\n\nPosition: {user_prompt}"
@@ -162,10 +217,15 @@ class ChessDebateV2:
         
         # Aggressive side presents initial move using proper extraction
         aff_response, aff_move_san, aff_token_info = self.affirmative.model_interface.get_move_with_extraction(
-            self.config['player_meta_prompt'], user_prompt,
-            current_turn_number=played_plies // 2 + 1,
-            is_white_to_move=(played_plies % 2 == 0)
+            self.config['player_meta_prompt'],
+            user_prompt,
+            current_turn_number=turn_number,
+            is_white_to_move=is_white_to_move,
+            max_tokens=self.affirmative.model_interface.max_completion_tokens,
+            temperature=self.affirmative.temperature,
+            retry_attempts=self.affirmative.model_interface.retry_attempts,
         )
+        record_token_event("affirmative", "affirmative_round1", 1, aff_token_info)
         # Store token info for final case
         self.aff_token_info = aff_token_info
         
@@ -181,10 +241,15 @@ class ChessDebateV2:
         
         # Positional side responds using proper extraction
         neg_response, neg_move_san, neg_token_info = self.negative.model_interface.get_move_with_extraction(
-            self.config['player_meta_prompt'], user_prompt,
-            current_turn_number=played_plies // 2 + 1,
-            is_white_to_move=(played_plies % 2 == 0)
+            self.config['player_meta_prompt'],
+            user_prompt,
+            current_turn_number=turn_number,
+            is_white_to_move=is_white_to_move,
+            max_tokens=self.negative.model_interface.max_completion_tokens,
+            temperature=self.negative.temperature,
+            retry_attempts=self.negative.model_interface.retry_attempts,
         )
+        record_token_event("negative", "negative_round1", 1, neg_token_info)
         # Store token info for final case
         self.neg_token_info = neg_token_info
         
@@ -223,7 +288,9 @@ class ChessDebateV2:
                     "final_move_uci": None,
                     "success": False,
                     "reason": "Both models failed to provide moves",
-                    "supported_side": "None"
+                    "supported_side": "None",
+                    "source_agent": final_source_agent,
+                    "source_agents": final_source_agents
                 },
                 "total_tokens": {
                     "affirmative": aff_token_info,
@@ -233,6 +300,11 @@ class ChessDebateV2:
                     "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
                     "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
                     "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                },
+                "token_events": list(token_events),
+                "judge": judge_details,
+                "moderator": {
+                    "raw_response": moderator_raw_response
                 }
             }
             
@@ -245,6 +317,8 @@ class ChessDebateV2:
             self.config['success'] = True
             self.config['Reason'] = "Only aggressive model provided a move"
             self.config['Supported Side'] = "Aggressive"
+            final_source_agent = "affirmative"
+            final_source_agents = ["affirmative"]
             
             # Convert to UCI
             if board_fen:
@@ -273,7 +347,9 @@ class ChessDebateV2:
                     "final_move_uci": self.final_move,
                     "success": True,
                     "reason": "Only aggressive model provided a move",
-                    "supported_side": "Aggressive"
+                    "supported_side": "Aggressive",
+                    "source_agent": final_source_agent,
+                    "source_agents": final_source_agents
                 },
                 "total_tokens": {
                     "affirmative": aff_token_info,
@@ -283,6 +359,11 @@ class ChessDebateV2:
                     "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
                     "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
                     "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                },
+                "token_events": list(token_events),
+                "judge": judge_details,
+                "moderator": {
+                    "raw_response": moderator_raw_response
                 }
             }
             
@@ -294,6 +375,8 @@ class ChessDebateV2:
             self.config['success'] = True
             self.config['Reason'] = "Only positional model provided a move"
             self.config['Supported Side'] = "Positional"
+            final_source_agent = "negative"
+            final_source_agents = ["negative"]
             
             # Convert to UCI
             if board_fen:
@@ -322,7 +405,9 @@ class ChessDebateV2:
                     "final_move_uci": self.final_move,
                     "success": True,
                     "reason": "Only positional model provided a move",
-                    "supported_side": "Positional"
+                    "supported_side": "Positional",
+                    "source_agent": final_source_agent,
+                    "source_agents": final_source_agents
                 },
                 "total_tokens": {
                     "affirmative": aff_token_info,
@@ -332,6 +417,11 @@ class ChessDebateV2:
                     "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
                     "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
                     "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                },
+                "token_events": list(token_events),
+                "judge": judge_details,
+                "moderator": {
+                    "raw_response": moderator_raw_response
                 }
             }
             
@@ -344,6 +434,8 @@ class ChessDebateV2:
             self.config['success'] = True
             self.config['Reason'] = "Both debaters agreed on the same move"
             self.config['Supported Side'] = "Both"
+            final_source_agent = "affirmative"
+            final_source_agents = ["affirmative", "negative"]
             
             # Convert to UCI
             if board_fen:
@@ -371,7 +463,9 @@ class ChessDebateV2:
                     "final_move_uci": self.final_move,
                     "success": True,
                     "reason": "Early consensus - both models agreed",
-                    "supported_side": "Both"
+                    "supported_side": "Both",
+                    "source_agent": final_source_agent,
+                    "source_agents": final_source_agents
                 },
                 "total_tokens": {
                     "affirmative": aff_token_info,
@@ -381,6 +475,11 @@ class ChessDebateV2:
                     "total_prompt_tokens": (aff_token_info.get("prompt_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("prompt_tokens", 0) if neg_token_info else 0),
                     "total_completion_tokens": (aff_token_info.get("completion_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("completion_tokens", 0) if neg_token_info else 0),
                     "total_tokens": (aff_token_info.get("total_tokens", 0) if aff_token_info else 0) + (neg_token_info.get("total_tokens", 0) if neg_token_info else 0)
+                },
+                "token_events": list(token_events),
+                "judge": judge_details,
+                "moderator": {
+                    "raw_response": moderator_raw_response
                 }
             }
             
@@ -390,7 +489,10 @@ class ChessDebateV2:
         self.moderator.add_event(self.config['moderator_prompt'].replace('##aff_ans##', self.aff_ans)
                                 .replace('##neg_ans##', self.neg_ans).replace('##round##', 'first'))
         self.mod_ans = self.moderator.ask()
+        moderator_raw_response = self.mod_ans
         self.moderator.add_memory(self.mod_ans)
+        record_token_event("moderator", "moderator_round1", 1, getattr(self.moderator, "last_token_info", None))
+        next_round_index = 2
         
         try:
             self.mod_ans = eval(self.mod_ans)
@@ -402,25 +504,36 @@ class ChessDebateV2:
             if self.mod_ans.get("debate_answer", "") != "":
                 break
                 
-            print(f"===== Debate Round-{round_num + 2} =====")
+            print(f"===== Debate Round-{next_round_index} =====")
+            round_index = next_round_index
             
             # Affirmative responds to negative using proper extraction
             aff_response, aff_move_san, aff_token_info = self.affirmative.model_interface.get_move_with_extraction(
-                self.config['player_meta_prompt'], user_prompt,
-                current_turn_number=played_plies // 2 + 1,
-                is_white_to_move=(played_plies % 2 == 0)
+                self.config['player_meta_prompt'],
+                user_prompt,
+                current_turn_number=turn_number,
+                is_white_to_move=is_white_to_move,
+                max_tokens=self.affirmative.model_interface.max_completion_tokens,
+                temperature=self.affirmative.temperature,
+                retry_attempts=self.affirmative.model_interface.retry_attempts,
             )
             self.affirmative.add_memory(aff_response)
             self.aff_ans = aff_response
+            record_token_event("affirmative", f"affirmative_round{round_index}", round_index, aff_token_info)
             
             # Negative responds to affirmative using proper extraction
             neg_response, neg_move_san, neg_token_info = self.negative.model_interface.get_move_with_extraction(
-                self.config['player_meta_prompt'], user_prompt,
-                current_turn_number=played_plies // 2 + 1,
-                is_white_to_move=(played_plies % 2 == 0)
+                self.config['player_meta_prompt'],
+                user_prompt,
+                current_turn_number=turn_number,
+                is_white_to_move=is_white_to_move,
+                max_tokens=self.negative.model_interface.max_completion_tokens,
+                temperature=self.negative.temperature,
+                retry_attempts=self.negative.model_interface.retry_attempts,
             )
             self.negative.add_memory(neg_response)
             self.neg_ans = neg_response
+            record_token_event("negative", f"negative_round{round_index}", round_index, neg_token_info)
             
             # Moderator evaluates
             self.moderator.add_event(self.config['moderator_prompt']
@@ -428,12 +541,15 @@ class ChessDebateV2:
                                    .replace('##neg_ans##', self.neg_ans)
                                    .replace('##round##', self.round_dct(round_num + 2)))
             self.mod_ans = self.moderator.ask()
+            moderator_raw_response = self.mod_ans
             self.moderator.add_memory(self.mod_ans)
+            record_token_event("moderator", f"moderator_round{round_index}", round_index, getattr(self.moderator, "last_token_info", None))
             
             try:
                 self.mod_ans = eval(self.mod_ans)
             except:
                 self.mod_ans = {"Whether there is a preference": "No", "debate_answer": ""}
+            next_round_index += 1
         
         # Check if moderator reached consensus
         if self.mod_ans.get("debate_answer", "") != "":
@@ -442,9 +558,11 @@ class ChessDebateV2:
             # Extract move from moderator's final answer
             final_move_san = extract_predicted_move(
                 self.mod_ans.get("debate_answer", ""),
-                current_turn_number=played_plies // 2 + 1,
-                is_white_to_move=(played_plies % 2 == 0)
+                current_turn_number=turn_number,
+                is_white_to_move=is_white_to_move
             )
+            final_source_agent = "moderator"
+            final_source_agents = ["moderator"]
         else:
             # Use judge as final arbiter
             print(f"===== Judge Round =====")
@@ -467,28 +585,39 @@ class ChessDebateV2:
             judge_player.add_event(simple_judge_prompt)
             judge_response1 = judge_player.ask()
             judge_player.add_memory(judge_response1)
+            judge_round_index = next_round_index
+            record_token_event("judge", "judge_candidates", judge_round_index, getattr(judge_player, "last_token_info", None))
             
             # Final decision - use simple prompt
             final_judge_prompt = f"Based on the debate, what is the best move? Give just the move in standard algebraic notation."
             judge_player.add_event(final_judge_prompt)
             judge_response2 = judge_player.ask()
             judge_player.add_memory(judge_response2)
+            record_token_event("judge", "judge_final", judge_round_index, getattr(judge_player, "last_token_info", None))
+            judge_details = {
+                "candidates": judge_response1,
+                "final_response": judge_response2
+            }
             
             # Extract move from judge response (should be simple move now)
             final_move_san = extract_predicted_move(
                 judge_response2,
-                current_turn_number=played_plies // 2 + 1,
-                is_white_to_move=(played_plies % 2 == 0)
+                current_turn_number=turn_number,
+                is_white_to_move=is_white_to_move
             )
             if final_move_san:
                 self.config['debate_answer'] = final_move_san
                 self.config['success'] = True
                 self.config['Reason'] = "Judge selected move"
+                final_source_agent = "judge"
+                final_source_agents = ["judge"]
             else:
                 # Fallback: use the most recent affirmative move
                 final_move_san = aff_move_san
                 self.config['debate_answer'] = aff_move_san
                 self.config['Reason'] = "Judge evaluation failed, using affirmative move"
+                final_source_agent = "affirmative"
+                final_source_agents = ["affirmative"]
         
         # Convert to UCI
         if final_move_san and board_fen:
@@ -513,7 +642,9 @@ class ChessDebateV2:
                 "final_move_uci": self.final_move,
                 "success": self.config.get('success', False),
                 "reason": self.config.get('Reason', ''),
-                "supported_side": self.config.get('Supported Side', '')
+                "supported_side": self.config.get('Supported Side', ''),
+                "source_agent": final_source_agent,
+                "source_agents": final_source_agents
             },
             "total_tokens": {
                 "affirmative": self.aff_token_info,
@@ -523,6 +654,11 @@ class ChessDebateV2:
                 "total_prompt_tokens": (self.aff_token_info.get("prompt_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("prompt_tokens", 0) if self.neg_token_info else 0),
                 "total_completion_tokens": (self.aff_token_info.get("completion_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("completion_tokens", 0) if self.neg_token_info else 0),
                 "total_tokens": (self.aff_token_info.get("total_tokens", 0) if self.aff_token_info else 0) + (self.neg_token_info.get("total_tokens", 0) if self.neg_token_info else 0)
+            },
+            "token_events": list(token_events),
+            "judge": judge_details,
+            "moderator": {
+                "raw_response": moderator_raw_response
             }
         }
         
@@ -561,7 +697,8 @@ if __name__ == "__main__":
         temperature=0.1,
         openai_api_key=api_key,
         max_rounds=3,
-        sleep_time=0.1
+        sleep_time=0.1,
+        plan_plies=0
     )
     
     # Example chess position

@@ -32,7 +32,8 @@ def test_debate_v2():
             temperature=0.1,
             openai_api_key=api_key,
             max_rounds=3,
-            sleep_time=0.1
+            sleep_time=0.1,
+            plan_plies=0
         )
         
         # Test with a simple chess position

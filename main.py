@@ -21,12 +21,17 @@ from dotenv import load_dotenv
 # Import our modules
 from csv_reader import read_chess_puzzles_csv, sample_puzzles, save_puzzles_csv, get_puzzle_stats
 from model_interface import ChessModelInterface
-from chess_utils import build_chess_prompts, get_partial_pgn_from_url, extract_predicted_move, san_to_uci
+from chess_utils import build_chess_prompts, get_partial_pgn_from_url, extract_predicted_move, extract_plan_sans, san_to_uci
 from glicko_rating import update_agent_rating_from_puzzles, Rating
 
 # Import debate functionality
 import sys
-sys.path.append('MAD')
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+MAD_DIR = os.path.join(CURRENT_DIR, "MAD")
+if MAD_DIR not in sys.path:
+    sys.path.insert(0, MAD_DIR)
+
 from utils.agent import Agent
 from utils.openai_utils import num_tokens_from_string, model2max_context
 import chess
@@ -42,7 +47,14 @@ class ChessDebatePlayer(Agent):
         """Create a chess debate player"""
         super(ChessDebatePlayer, self).__init__(model_name, name, temperature, sleep_time)
         self.openai_api_key = openai_api_key
-        self.model_interface = ChessModelInterface(api_key=openai_api_key, model_name=model_name)
+        self.model_interface = ChessModelInterface(
+            api_key=openai_api_key,
+            model_name=model_name,
+            max_completion_tokens=320,
+            default_temperature=temperature,
+            retry_attempts=2,
+        )
+        self.last_token_info: Optional[dict] = None
 
     def ask(self, temperature: float=None):
         """Query for answer using our model interface instead of the old API"""
@@ -60,16 +72,17 @@ class ChessDebatePlayer(Agent):
         print(f"<debug> : combined_prompt: {repr(combined_prompt[:200])}...")
         
         # Use our model interface instead of the old API
-        response = self.model_interface.query_model_for_move(
+        response, token_info = self.model_interface.query_model_for_move_with_tokens(
             system_prompt="",  # Already included in combined_prompt
             user_prompt=combined_prompt,
-            max_tokens=500,
+            max_tokens=self.model_interface.max_completion_tokens,
             temperature=temperature if temperature else self.temperature,
-            top_p=1
+            top_p=self.model_interface.default_top_p
         )
+        self.last_token_info = token_info
         
         print(f"<debug> : response: {repr(response)}")
-        return response
+        return response or ""
 
 
 class ChessSelfConsistency:
@@ -78,13 +91,15 @@ class ChessSelfConsistency:
                  temperature: float = 0.1,
                  openai_api_key: str = None,
                  max_rounds: int = 2,
-                 sleep_time: float = 0.1):
+                 sleep_time: float = 0.1,
+                 plan_plies: int = 0):
         """Create a chess self-consistency system"""
         self.model_name = model_name
         self.temperature = temperature
         self.openai_api_key = openai_api_key
         self.max_rounds = max_rounds
         self.sleep_time = sleep_time
+        self.plan_plies = max(0, plan_plies)
         
         # Initialize players
         self.aggressive_gm = ChessDebatePlayer(
@@ -120,47 +135,21 @@ class ChessSelfConsistency:
 
     def setup_personas(self):
         """Set up the grandmaster personas"""
-        # Aggressive GM (Mikhail Tal) - focuses on tactics and sacrifices
-#         aggressive_prompt = """You are an aggressive chess grandmaster, with a style similar to Mikhail Tal.
-# You will be given a partially completed game.
-# After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
-# Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
-# ALWAYS repeat the entire representation of the game so far.
-# NEVER explain your choice.
-# """
-        aggressive_prompt = """You are a chess grandmaster.
-You will be given a partially completed game.
-After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
-Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
-ALWAYS repeat the entire representation of the game so far.
-NEVER explain your choice.
-"""
-        
-        # Positional GM (Magnus Carlsen) - focuses on positional understanding
-#         positional_prompt = """You are a positional chess grandmaster, similar to Magnus Carlsen.
-# You will be given a partially completed game.
-# After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
-# Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
-# ALWAYS repeat the entire representation of the game so far.
-# NEVER explain your choice."""
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
 
-        positional_prompt = """You are a chess grandmaster.
-  You will be given a partially completed game.
-  After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
-  Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
-  ALWAYS repeat the entire representation of the game so far.
-  NEVER explain your choice.
-  """
-        
-        
-        # Neutral GM uses default prompt (no special persona)
-        neutral_prompt = """You are a chess grandmaster.
-You will be given a partially completed game.
-After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
-Use standard algebraic notation, e.g. "e4" or "Rdf8" or "R1a3".
-ALWAYS repeat the entire representation of the game so far.
-NEVER explain your choice.
-"""
+        base_prompt = (
+            "You are a chess grandmaster.\n"
+            "You will be given a partially completed game.\n"
+            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+            "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
+            "ALWAYS repeat the entire representation of the game so far.\n"
+            "NEVER explain your choice."
+        )
+
+        aggressive_prompt = base_prompt
+        positional_prompt = base_prompt
+        neutral_prompt = base_prompt
         
         self.aggressive_gm.set_meta_prompt(aggressive_prompt)
         self.positional_gm.set_meta_prompt(positional_prompt)
@@ -197,27 +186,53 @@ NEVER explain your choice.
     def run_debate(self, user_prompt: str, expected_uci: str = None, played_plies: int = 0, board_fen: str = None, board = None) -> tuple:
         """Run a chess self-consistency evaluation using 3 independent queries"""
         print(f"\n<self-consistency> : Starting self-consistency evaluation")
+        token_events = []
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
+        def record_token_event(agent_label: str, token_info: Optional[dict], response_source: str) -> None:
+            info = token_info or {}
+            token_events.append({
+                "paradigm": "self_consistency",
+                "agent": agent_label,
+                "ply_index": played_plies,
+                "turn_number": current_turn_number,
+                "round": 1,
+                "response_source": response_source,
+                "prompt_tokens": info.get("prompt_tokens", 0) or 0,
+                "completion_tokens": info.get("completion_tokens", 0) or 0,
+                "total_tokens": info.get("total_tokens", 0) or ((info.get("prompt_tokens", 0) or 0) + (info.get("completion_tokens", 0) or 0)),
+                "model": info.get("model", self.model_name),
+                "finish_reason": info.get("finish_reason", ""),
+            })
         
         # Build system prompt
         system_prompt = (
             "You are a chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
-            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
+            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+            "ALWAYS repeat the entire representation of the game so far.\n"
+            "NEVER explain your choice."
         )
 
         agg_system_prompt = (
             "You are an aggressive chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
-            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
+            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+            "ALWAYS repeat the entire representation of the game so far.\n"
+            "NEVER explain your choice."
         )
 
         pos_system_prompt = (
             "You are a positional chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
-            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
+            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+            "ALWAYS repeat the entire representation of the game so far.\n"
+            "NEVER explain your choice."
         )
 
         
@@ -244,12 +259,17 @@ NEVER explain your choice.
             current_turn_number = played_plies // 2 + 1
             
         agg_response, aggressive_san, agg_token_info = self.aggressive_gm.model_interface.get_move_with_extraction(
-            agg_system_prompt, user_prompt, 
+            agg_system_prompt,
+            user_prompt,
             current_turn_number=current_turn_number,
-            is_white_to_move=is_white_to_move
+            is_white_to_move=is_white_to_move,
+            max_tokens=self.aggressive_gm.model_interface.max_completion_tokens,
+            temperature=self.aggressive_gm.temperature,
+            retry_attempts=self.aggressive_gm.model_interface.retry_attempts,
         )
         print(f"<debug> : Aggressive GM response: {repr(agg_response)}")
         print(f"<debug> : Aggressive GM move: {aggressive_san}")
+        record_token_event("aggressive", agg_token_info, "aggressive_gm")
 
         self.aggressive_gm.add_memory(agg_response)
         
@@ -259,13 +279,18 @@ NEVER explain your choice.
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
         pos_response, positional_san, pos_token_info = self.positional_gm.model_interface.get_move_with_extraction(
-            pos_system_prompt, user_prompt, 
+            pos_system_prompt,
+            user_prompt,
             current_turn_number=current_turn_number,
-            is_white_to_move=is_white_to_move
+            is_white_to_move=is_white_to_move,
+            max_tokens=self.positional_gm.model_interface.max_completion_tokens,
+            temperature=self.positional_gm.temperature,
+            retry_attempts=self.positional_gm.model_interface.retry_attempts,
         )
 
         print(f"<debug> : Positional GM response: {repr(pos_response)}")
         print(f"<debug> : Positional GM move: {positional_san}")
+        record_token_event("positional", pos_token_info, "positional_gm")
         
         self.positional_gm.add_memory(f"Positional GM move: {positional_san}")
         
@@ -275,13 +300,18 @@ NEVER explain your choice.
         print(f"<debug> : user_prompt: {repr(user_prompt)}")
         
         neutral_response, neutral_san, neutral_token_info = self.neutral_gm.model_interface.get_move_with_extraction(
-            system_prompt, user_prompt, 
+            system_prompt,
+            user_prompt,
             current_turn_number=current_turn_number,
-            is_white_to_move=is_white_to_move
+            is_white_to_move=is_white_to_move,
+            max_tokens=self.neutral_gm.model_interface.max_completion_tokens,
+            temperature=self.neutral_gm.temperature,
+            retry_attempts=self.neutral_gm.model_interface.retry_attempts,
         )
 
         print(f"<debug> : Neutral GM response: {repr(neutral_response)}")
         print(f"<debug> : Neutral GM move: {neutral_san}")
+        record_token_event("neutral", neutral_token_info, "neutral_gm")
         
         self.neutral_gm.add_memory(f"Neutral GM move: {neutral_san}")
         
@@ -338,6 +368,25 @@ NEVER explain your choice.
         print(f"<self-consistency> : Final consensus move: {self.final_move}")
         
         # Collect self-consistency history
+        move_sources = {
+            "aggressive": agg_move_uci,
+            "positional": pos_move_uci,
+            "neutral": neutral_move_uci,
+        }
+        final_source_agents = []
+        if self.final_move:
+            final_source_agents = [
+                agent for agent, uci in move_sources.items()
+                if uci and uci == self.final_move
+            ]
+        selected_agent = None
+        for agent in ["neutral", "aggressive", "positional"]:
+            if agent in final_source_agents:
+                selected_agent = agent
+                break
+        if not selected_agent and final_source_agents:
+            selected_agent = final_source_agents[0]
+
         self_consistency_history = {
             "query1": {
                 "aggressive_move": aggressive_san,
@@ -361,7 +410,9 @@ NEVER explain your choice.
                 "aggressive_uci": agg_move_uci,
                 "positional_uci": pos_move_uci,
                 "neutral_uci": neutral_move_uci,
-                "consensus_move": self.final_move
+                "consensus_move": self.final_move,
+                "source_agents": final_source_agents,
+                "selected_agent": selected_agent
             },
             "total_tokens": {
                 "aggressive": agg_token_info,
@@ -376,7 +427,8 @@ NEVER explain your choice.
                 "total_tokens": (agg_token_info.get("total_tokens", 0) if agg_token_info else 0) + 
                                (pos_token_info.get("total_tokens", 0) if pos_token_info else 0) + 
                                (neutral_token_info.get("total_tokens", 0) if neutral_token_info else 0)
-            }
+            },
+            "token_events": token_events
         }
         
         return self.final_move, self_consistency_history
@@ -408,7 +460,7 @@ def load_environment():
 
 def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = None, 
                     debate: ChessSelfConsistency = None, debate_v2: ChessDebateV2 = None, 
-                    max_puzzles: int = 5, start_puzzle: int = 0) -> pd.DataFrame:
+                    max_puzzles: int = 5, start_puzzle: int = 0, planning_plies: int = 0) -> pd.DataFrame:
     """
     Evaluate puzzles using either model interface, self-consistency system, or debate system.
     Faithful to the provided evaluation logic:
@@ -488,6 +540,19 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
     df_eval["total_completion_tokens"] = 0
     df_eval["total_tokens"] = 0
     df_eval["estimated_cost_usd"] = 0.0
+    df_eval["self_consistency_total_prompt_tokens"] = 0
+    df_eval["self_consistency_total_completion_tokens"] = 0
+    df_eval["self_consistency_total_tokens"] = 0
+    df_eval["debate_total_prompt_tokens"] = 0
+    df_eval["debate_total_completion_tokens"] = 0
+    df_eval["debate_total_tokens"] = 0
+    df_eval["single_model_total_prompt_tokens"] = 0
+    df_eval["single_model_total_completion_tokens"] = 0
+    df_eval["prompt_token_log"] = ""
+    df_eval["self_consistency_prompt_log"] = ""
+    df_eval["debate_prompt_log"] = ""
+    df_eval["single_model_prompt_log"] = ""
+    df_eval["planned_sequences"] = ""
     
     # Debate process information
     df_eval["debate_rounds"] = 0
@@ -516,6 +581,97 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
         print(f"\n=== Evaluating puzzle {idx} ===")
 
         try:
+            per_prompt_events = []
+            prompt_logs_by_paradigm = {
+                "self_consistency": [],
+                "debate": [],
+                "single_model": []
+            }
+            token_totals = {
+                "self_consistency": {"prompt": 0, "completion": 0, "total": 0},
+                "debate": {"prompt": 0, "completion": 0, "total": 0},
+                "single_model": {"prompt": 0, "completion": 0, "total": 0},
+            }
+
+            def accumulate_token_event(event: Optional[dict], paradigm_override: Optional[str] = None) -> None:
+                if not event:
+                    return
+                event_copy = dict(event)
+                if paradigm_override:
+                    event_copy["paradigm"] = paradigm_override
+                paradigm = event_copy.get("paradigm", "single_model")
+                event_copy.setdefault("puzzle_index", int(idx))
+                event_copy.setdefault("role", "prediction")
+                event_copy["prompt_tokens"] = event_copy.get("prompt_tokens", 0) or 0
+                event_copy["completion_tokens"] = event_copy.get("completion_tokens", 0) or 0
+                event_copy["total_tokens"] = event_copy.get("total_tokens", 0) or (
+                    event_copy["prompt_tokens"] + event_copy["completion_tokens"]
+                )
+                # Normalize booleans
+                if "is_white_to_move" in event_copy:
+                    event_copy["is_white_to_move"] = bool(event_copy["is_white_to_move"])
+                per_prompt_events.append(event_copy)
+                if paradigm not in prompt_logs_by_paradigm:
+                    prompt_logs_by_paradigm[paradigm] = []
+                    token_totals[paradigm] = {"prompt": 0, "completion": 0, "total": 0}
+                prompt_logs_by_paradigm[paradigm].append(event_copy)
+                totals = token_totals[paradigm]
+                totals["prompt"] += event_copy["prompt_tokens"]
+                totals["completion"] += event_copy["completion_tokens"]
+                totals["total"] += event_copy["total_tokens"]
+
+            current_plan_moves: list[str] = []
+            current_plan_actor: Optional[str] = None
+            current_plan_paradigm: Optional[str] = None
+            current_plan_origin: Optional[str] = None
+            current_plan_log_entry: Optional[dict] = None
+            planned_sequences_log: list[dict] = []
+
+            def reset_plan(status: str) -> None:
+                nonlocal current_plan_moves, current_plan_actor, current_plan_paradigm, current_plan_origin, current_plan_log_entry
+                if current_plan_log_entry and current_plan_log_entry.get("status", "active") == "active":
+                    current_plan_log_entry["status"] = status
+                current_plan_moves = []
+                current_plan_actor = None
+                current_plan_paradigm = None
+                current_plan_origin = None
+                current_plan_log_entry = None
+
+            def set_plan(paradigm: str, source_agent: str, response_text: Optional[str], *, selected_move: Optional[str] = None, selected_san: Optional[str] = None) -> None:
+                nonlocal current_plan_moves, current_plan_actor, current_plan_paradigm, current_plan_origin, current_plan_log_entry
+                plan_full = extract_plan_sans(response_text, primary_san=selected_san)
+                active_plan_moves = plan_full[:planning_plies] if planning_plies > 0 else []
+
+                if current_plan_moves:
+                    reset_plan("replaced")
+
+                plan_entry = {
+                    "paradigm": paradigm,
+                    "source_agent": source_agent,
+                    "moves_for_execution": active_plan_moves,
+                    "full_moves": plan_full,
+                    "status": "active" if active_plan_moves else ("logged" if plan_full else "empty")
+                }
+                if selected_move:
+                    plan_entry["selected_move"] = selected_move
+                if selected_san:
+                    plan_entry["selected_san"] = selected_san
+
+                planned_sequences_log.append(plan_entry)
+
+                if active_plan_moves:
+                    current_plan_moves = active_plan_moves.copy()
+                    current_plan_actor = "opponent"
+                    current_plan_paradigm = paradigm
+                    current_plan_origin = source_agent
+                    current_plan_log_entry = plan_entry
+                else:
+                    current_plan_moves = []
+                    current_plan_actor = None
+                    current_plan_paradigm = None
+                    current_plan_origin = None
+                    current_plan_log_entry = None
+
             # --- Build starting board from PGN partial
             pgn_io = io.StringIO(row["PGN_partial"])
             game = chess.pgn.read_game(pgn_io)
@@ -548,12 +704,48 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
 
                 if current_board.turn == initial_model_side:
                     # Model's turn to play
+                    if planning_plies > 0 and current_plan_moves and current_plan_actor == "model":
+                        planned_san = current_plan_moves[0]
+                        planned_uci = san_to_uci(current_board.fen(), planned_san)
+                        if planned_uci and planned_uci == expected_uci:
+                            print(f"<planning> : Executing planned model move {planned_san} ({planned_uci})")
+                            current_board.push_uci(expected_uci)
+                            correct_for_puzzle += 1
+                            total_correct_moves += 1
+                            total_moves += 1
+                            ply += 1
+                            played_plies += 1
+                            current_plan_moves.pop(0)
+                            if current_plan_moves:
+                                current_plan_actor = "opponent"
+                            else:
+                                if current_plan_log_entry and current_plan_log_entry.get("status") == "active":
+                                    current_plan_log_entry["status"] = "completed"
+                                current_plan_actor = None
+                                current_plan_paradigm = None
+                                current_plan_origin = None
+                                current_plan_log_entry = None
+                            continue
+                        else:
+                            print(f"<planning> : Planned model move {planned_san} did not match expected {expected_uci}; discarding plan.")
+                            reset_plan("aborted")
+
+                    move_paradigm: Optional[str] = None
+                    move_source_agent: Optional[str] = None
+                    move_response_text: Optional[str] = None
+                    move_selected_san: Optional[str] = None
+
+                    num_future_moves = planning_plies + 1 if planning_plies > 0 else 3
+
                     system_prompt = (
-                        "You are a chess grandmaster.\n"
-                        "You will be given a partially completed game.\n"
-                        "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
-                        "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
-                    )
+                         "You are a chess grandmaster.\n"
+                         "You will be given a partially completed game.\n"
+                         f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+                         "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+                         "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+                         "ALWAYS repeat the entire representation of the game so far.\n"
+                         "NEVER explain your choice."
+                     )
 
                     exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
                     current_game = chess.pgn.Game.from_board(current_board)
@@ -576,6 +768,78 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         df_eval.loc[idx, "final_consensus_move"] = debate_history["final_moves"]["consensus_move"]
                         df_eval.loc[idx, "debate_history"] = str(debate_history)
                         
+                        token_events = debate_history.get("token_events") or []
+                        if not token_events:
+                            fallback_events = []
+                            fallback_map = [
+                                ("aggressive", debate_history["query1"].get("aggressive_tokens") if debate_history.get("query1") else None),
+                                ("positional", debate_history["query2"].get("positional_tokens") if debate_history.get("query2") else None),
+                                ("neutral", debate_history["query3"].get("neutral_tokens") if debate_history.get("query3") else None),
+                            ]
+                            current_turn_number = played_plies // 2 + 1
+                            is_white = bool(current_board.turn) if current_board else (played_plies % 2 == 0)
+                            for agent_label, token_info in fallback_map:
+                                if not token_info:
+                                    continue
+                                fallback_events.append({
+                                    "paradigm": "self_consistency",
+                                    "agent": agent_label,
+                                    "role": f"{agent_label}_query",
+                                    "ply_index": played_plies,
+                                    "turn_number": current_turn_number,
+                                    "is_white_to_move": is_white,
+                                    "prompt_tokens": token_info.get("prompt_tokens", 0) or 0,
+                                    "completion_tokens": token_info.get("completion_tokens", 0) or 0,
+                                    "total_tokens": token_info.get("total_tokens", 0) or (
+                                        (token_info.get("prompt_tokens", 0) or 0) + (token_info.get("completion_tokens", 0) or 0)
+                                    ),
+                                    "model": token_info.get("model", debate.model_name if debate else ""),
+                                    "finish_reason": token_info.get("finish_reason", ""),
+                                })
+                            token_events = fallback_events
+                        for event in token_events:
+                            accumulate_token_event(event, paradigm_override="self_consistency")
+
+                        move_paradigm = "self_consistency"
+                        final_moves_info = debate_history.get("final_moves", {})
+                        selected_agent = final_moves_info.get("selected_agent")
+                        source_agents = list(final_moves_info.get("source_agents", []) or [])
+                        if selected_agent and selected_agent not in source_agents:
+                            source_agents.insert(0, selected_agent)
+                        uci_agent_map = {
+                            final_moves_info.get("aggressive_uci"): "aggressive",
+                            final_moves_info.get("positional_uci"): "positional",
+                            final_moves_info.get("neutral_uci"): "neutral",
+                        }
+                        if not source_agents and predicted_uci in uci_agent_map:
+                            source_agents.append(uci_agent_map[predicted_uci])
+                        response_lookup = {
+                            "aggressive": debate_history.get("query1", {}).get("aggressive_response"),
+                            "positional": debate_history.get("query2", {}).get("positional_response"),
+                            "neutral": debate_history.get("query3", {}).get("neutral_response"),
+                        }
+                        san_lookup = {
+                            "aggressive": debate_history.get("query1", {}).get("aggressive_move"),
+                            "positional": debate_history.get("query2", {}).get("positional_move"),
+                            "neutral": debate_history.get("query3", {}).get("neutral_move"),
+                        }
+                        for candidate_agent in source_agents:
+                            response_candidate = response_lookup.get(candidate_agent)
+                            if response_candidate:
+                                move_source_agent = candidate_agent
+                                move_response_text = response_candidate
+                                move_selected_san = san_lookup.get(candidate_agent)
+                                break
+                        if not move_source_agent and predicted_uci in uci_agent_map:
+                            candidate_agent = uci_agent_map[predicted_uci]
+                            move_source_agent = candidate_agent
+                            move_response_text = response_lookup.get(candidate_agent)
+                            move_selected_san = san_lookup.get(candidate_agent)
+                        if not move_source_agent:
+                            move_source_agent = selected_agent
+                            move_response_text = response_lookup.get(move_source_agent or "", "")
+                            move_selected_san = san_lookup.get(move_source_agent or "")
+
                         # Save token information for self-consistency
                         if "total_tokens" in debate_history:
                             token_info = debate_history["total_tokens"]
@@ -607,11 +871,6 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                                 df_eval.loc[idx, "neutral_model"] = neu_tokens.get("model", "")
                                 df_eval.loc[idx, "neutral_finish_reason"] = neu_tokens.get("finish_reason", "")
                             
-                            # Total tokens
-                            df_eval.loc[idx, "total_prompt_tokens"] = token_info.get("total_prompt_tokens", 0)
-                            df_eval.loc[idx, "total_completion_tokens"] = token_info.get("total_completion_tokens", 0)
-                            df_eval.loc[idx, "total_tokens"] = token_info.get("total_tokens", 0)
-                            
                             # Cost calculation will be done later
                             df_eval.loc[idx, "estimated_cost_usd"] = 0.0
                         
@@ -630,6 +889,53 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         df_eval.loc[idx, "final_consensus_move"] = debate_history["final_result"]["final_move_uci"]
                         df_eval.loc[idx, "debate_v2_history"] = str(debate_history)
                         
+                        debate_token_events = debate_history.get("token_events") or []
+                        if not debate_token_events:
+                            token_info = debate_history.get("total_tokens", {})
+                            fallback_events = []
+                            current_turn_number = played_plies // 2 + 1
+                            is_white = bool(current_board.turn) if current_board else (played_plies % 2 == 0)
+                            for agent_label, key in (("affirmative", "affirmative"), ("negative", "negative"), ("moderator", "moderator"), ("judge", "judge")):
+                                token_info_entry = token_info.get(key)
+                                if not token_info_entry:
+                                    continue
+                                fallback_events.append({
+                                    "paradigm": "debate",
+                                    "agent": agent_label,
+                                    "role": f"{agent_label}_round",
+                                    "ply_index": played_plies,
+                                    "turn_number": current_turn_number,
+                                    "is_white_to_move": is_white,
+                                    "prompt_tokens": token_info_entry.get("prompt_tokens", 0) or 0,
+                                    "completion_tokens": token_info_entry.get("completion_tokens", 0) or 0,
+                                    "total_tokens": token_info_entry.get("total_tokens", 0) or (
+                                        (token_info_entry.get("prompt_tokens", 0) or 0) + (token_info_entry.get("completion_tokens", 0) or 0)
+                                    ),
+                                    "model": token_info_entry.get("model", debate_v2.model_name if debate_v2 else ""),
+                                    "finish_reason": token_info_entry.get("finish_reason", ""),
+                                })
+                            debate_token_events = fallback_events
+                        for event in debate_token_events:
+                            accumulate_token_event(event, paradigm_override="debate")
+
+                        move_paradigm = "debate"
+                        final_result_info = debate_history.get("final_result", {})
+                        move_source_agent = final_result_info.get("source_agent")
+                        move_selected_san = final_result_info.get("final_move_san")
+                        response_lookup_debate = {
+                            "affirmative": debate_history.get("round1", {}).get("affirmative_response"),
+                            "negative": debate_history.get("round1", {}).get("negative_response"),
+                            "moderator": debate_history.get("moderator", {}).get("raw_response"),
+                            "judge": debate_history.get("judge", {}).get("final_response") if isinstance(debate_history.get("judge"), dict) else None,
+                        }
+                        move_response_text = response_lookup_debate.get(move_source_agent or "", None)
+                        if not move_response_text and move_source_agent in ("affirmative", "negative"):
+                            move_response_text = response_lookup_debate.get(move_source_agent)
+                        if not move_response_text and move_source_agent == "moderator":
+                            move_response_text = response_lookup_debate.get("moderator") or str(debate_history.get("round1", {}).get("moderator_response"))
+                        if not move_response_text and move_source_agent == "judge":
+                            move_response_text = response_lookup_debate.get("judge")
+
                         # Token information
                         if "total_tokens" in debate_history:
                             token_info = debate_history["total_tokens"]
@@ -670,11 +976,6 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                                 df_eval.loc[idx, "judge_model"] = judge_tokens.get("model", "")
                                 df_eval.loc[idx, "judge_finish_reason"] = judge_tokens.get("finish_reason", "")
                             
-                            # Total tokens
-                            df_eval.loc[idx, "total_prompt_tokens"] = token_info.get("total_prompt_tokens", 0)
-                            df_eval.loc[idx, "total_completion_tokens"] = token_info.get("total_completion_tokens", 0)
-                            df_eval.loc[idx, "total_tokens"] = token_info.get("total_tokens", 0)
-                        
                         # Response information
                         df_eval.loc[idx, "aggressive_response"] = debate_history["round1"]["affirmative_response"]
                         df_eval.loc[idx, "positional_response"] = debate_history["round1"]["negative_response"]
@@ -706,9 +1007,13 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                     else:
                         # Use single model
                         raw_response, predicted_san, token_info = model_interface.get_move_with_extraction(
-                            system_prompt, user_prompt,
+                            system_prompt,
+                            user_prompt,
                             current_turn_number=played_plies // 2 + 1,
-                            is_white_to_move=current_board.turn
+                            is_white_to_move=current_board.turn,
+                            max_tokens=model_interface.max_completion_tokens,
+                            temperature=model_interface.default_temperature,
+                            retry_attempts=model_interface.retry_attempts,
                         )
                         print("Predicted Response:", raw_response)
                         print("Turn number:", played_plies // 2 + 1)
@@ -721,6 +1026,10 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                             
                         predicted_uci = san_to_uci(current_board.fen(), predicted_san)
                         print(f"Predicted UCI: {predicted_uci}")
+                        move_paradigm = "single_model"
+                        move_source_agent = "single"
+                        move_response_text = raw_response
+                        move_selected_san = predicted_san
                         
                         # Save single model data to DataFrame
                         df_eval.loc[idx, "single_model_response"] = raw_response
@@ -733,12 +1042,40 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                             df_eval.loc[idx, "single_model_total_tokens"] = token_info.get("total_tokens", 0)
                             df_eval.loc[idx, "single_model_model"] = token_info.get("model", "")
                             df_eval.loc[idx, "single_model_finish_reason"] = token_info.get("finish_reason", "")
+                            accumulate_token_event({
+                                "paradigm": "single_model",
+                                "agent": "single",
+                                "role": "move_prediction",
+                                "ply_index": played_plies,
+                                "turn_number": played_plies // 2 + 1,
+                                "is_white_to_move": bool(current_board.turn),
+                                "prompt_tokens": token_info.get("prompt_tokens", 0) or 0,
+                                "completion_tokens": token_info.get("completion_tokens", 0) or 0,
+                                "total_tokens": token_info.get("total_tokens", 0) or (
+                                    (token_info.get("prompt_tokens", 0) or 0) + (token_info.get("completion_tokens", 0) or 0)
+                                ),
+                                "model": token_info.get("model", ""),
+                                "finish_reason": token_info.get("finish_reason", ""),
+                            })
                             
                             # Cost calculation will be done later
                             df_eval.loc[idx, "estimated_cost_usd"] = 0.0
 
                     if predicted_uci == expected_uci:
                         print("✅ Correct move!")
+                        if not move_selected_san and predicted_uci:
+                            try:
+                                move_obj_for_san = chess.Move.from_uci(predicted_uci)
+                                move_selected_san = current_board.san(move_obj_for_san)
+                            except Exception:
+                                move_selected_san = None
+                        set_plan(
+                            move_paradigm or "unknown",
+                            move_source_agent or "unknown",
+                            move_response_text,
+                            selected_move=predicted_uci,
+                            selected_san=move_selected_san,
+                        )
                         current_board.push_uci(expected_uci)
                         correct_for_puzzle += 1
                         total_correct_moves += 1
@@ -746,8 +1083,32 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                     else:
                         error = f"Mismatch: expected {expected_uci} but got {predicted_uci}"
                         print(f"❌ Mismatch: expected {expected_uci} but got {predicted_uci}")
+                        if planning_plies > 0:
+                            reset_plan("aborted")
                         break
                 else:
+                    if planning_plies > 0 and current_plan_moves and current_plan_actor == "opponent":
+                        try:
+                            move_obj = chess.Move.from_uci(expected_uci)
+                            expected_san = current_board.san(move_obj)
+                        except Exception:
+                            expected_san = None
+                        if expected_san and current_plan_moves[0] == expected_san:
+                            print(f"<planning> : Opponent move matched plan {expected_san}")
+                            current_plan_moves.pop(0)
+                            if current_plan_moves:
+                                current_plan_actor = "model"
+                            else:
+                                if current_plan_log_entry and current_plan_log_entry.get("status") == "active":
+                                    current_plan_log_entry["status"] = "completed"
+                                current_plan_actor = None
+                                current_plan_paradigm = None
+                                current_plan_origin = None
+                                current_plan_log_entry = None
+                        else:
+                            if expected_san:
+                                print(f"<planning> : Opponent move {expected_san} diverged from plan {current_plan_moves[0] if current_plan_moves else 'None'}, clearing plan.")
+                            reset_plan("aborted")
                     # Opponent's turn, automatically play this move (no testing or scoring)
                     try:
                         current_board.push_uci(expected_uci)
@@ -763,6 +1124,40 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
             df_eval.loc[idx, "correct_moves"] = correct_for_puzzle
             df_eval.loc[idx, "puzzle_solved"] = (correct_for_puzzle == (len(solution_moves) // 2))
             df_eval.loc[idx, "error"] = error
+            if current_plan_moves:
+                reset_plan("incomplete")
+            df_eval.loc[idx, "self_consistency_total_prompt_tokens"] = token_totals["self_consistency"]["prompt"]
+            df_eval.loc[idx, "self_consistency_total_completion_tokens"] = token_totals["self_consistency"]["completion"]
+            df_eval.loc[idx, "self_consistency_total_tokens"] = token_totals["self_consistency"]["total"]
+            df_eval.loc[idx, "debate_total_prompt_tokens"] = token_totals["debate"]["prompt"]
+            df_eval.loc[idx, "debate_total_completion_tokens"] = token_totals["debate"]["completion"]
+            df_eval.loc[idx, "debate_total_tokens"] = token_totals["debate"]["total"]
+            df_eval.loc[idx, "single_model_total_prompt_tokens"] = token_totals["single_model"]["prompt"]
+            df_eval.loc[idx, "single_model_total_completion_tokens"] = token_totals["single_model"]["completion"]
+            df_eval.loc[idx, "single_model_total_tokens"] = token_totals["single_model"]["total"]
+            overall_prompt_tokens = (
+                token_totals["self_consistency"]["prompt"] +
+                token_totals["debate"]["prompt"] +
+                token_totals["single_model"]["prompt"]
+            )
+            overall_completion_tokens = (
+                token_totals["self_consistency"]["completion"] +
+                token_totals["debate"]["completion"] +
+                token_totals["single_model"]["completion"]
+            )
+            overall_total_tokens = (
+                token_totals["self_consistency"]["total"] +
+                token_totals["debate"]["total"] +
+                token_totals["single_model"]["total"]
+            )
+            df_eval.loc[idx, "total_prompt_tokens"] = overall_prompt_tokens
+            df_eval.loc[idx, "total_completion_tokens"] = overall_completion_tokens
+            df_eval.loc[idx, "total_tokens"] = overall_total_tokens
+            df_eval.loc[idx, "prompt_token_log"] = json.dumps(per_prompt_events)
+            df_eval.loc[idx, "self_consistency_prompt_log"] = json.dumps(prompt_logs_by_paradigm["self_consistency"])
+            df_eval.loc[idx, "debate_prompt_log"] = json.dumps(prompt_logs_by_paradigm["debate"])
+            df_eval.loc[idx, "single_model_prompt_log"] = json.dumps(prompt_logs_by_paradigm["single_model"])
+            df_eval.loc[idx, "planned_sequences"] = json.dumps(planned_sequences_log)
             
             # Number of moves model should play (half the moves after skipping the first)
             print("Model solved everything:", correct_for_puzzle == (len(solution_moves) // 2))
@@ -807,6 +1202,8 @@ def main():
                        help="Use multi-agent debate system with moderator and judge")
     parser.add_argument("--output", default=None,
                        help="Output file for results")
+    parser.add_argument("--plan-plies", type=int, default=0,
+                       help="Number of future plies to request in planning prompts (0 disables planning)")
     
     args = parser.parse_args()
     
@@ -849,10 +1246,17 @@ def main():
                 temperature=0.1,
                 openai_api_key=api_key,
                 max_rounds=2,
-                sleep_time=0.1
+                sleep_time=0.1,
+                plan_plies=args.plan_plies
             )
             # Evaluate puzzles with self-consistency system
-            df_results = evaluate_puzzles(df, debate=self_consistency, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
+            df_results = evaluate_puzzles(
+                df,
+                debate=self_consistency,
+                max_puzzles=args.max_puzzles,
+                start_puzzle=args.start_puzzle,
+                planning_plies=args.plan_plies,
+            )
         elif args.debate:
             print(f"\nEvaluating puzzles with new multi-agent debate system (moderator + judge)...")
             debate_v2 = ChessDebateV2(
@@ -860,15 +1264,34 @@ def main():
                 temperature=0.1,
                 openai_api_key=api_key,
                 max_rounds=3,
-                sleep_time=0.1
+                sleep_time=0.1,
+                plan_plies=args.plan_plies
             )
             # Evaluate puzzles with new debate system
-            df_results = evaluate_puzzles(df, debate_v2=debate_v2, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
+            df_results = evaluate_puzzles(
+                df,
+                debate_v2=debate_v2,
+                max_puzzles=args.max_puzzles,
+                start_puzzle=args.start_puzzle,
+                planning_plies=args.plan_plies,
+            )
         else:
             print(f"\nEvaluating puzzles with {args.model}...")
-            model_interface = ChessModelInterface(api_key=api_key, model_name=args.model)
+            model_interface = ChessModelInterface(
+                api_key=api_key,
+                model_name=args.model,
+                max_completion_tokens=320,
+                default_temperature=0.1,
+                retry_attempts=2,
+            )
             # Evaluate puzzles with single model
-            df_results = evaluate_puzzles(df, model_interface=model_interface, max_puzzles=args.max_puzzles, start_puzzle=args.start_puzzle)
+            df_results = evaluate_puzzles(
+                df,
+                model_interface=model_interface,
+                max_puzzles=args.max_puzzles,
+                start_puzzle=args.start_puzzle,
+                planning_plies=args.plan_plies,
+            )
         
         # Save results
         if args.output:

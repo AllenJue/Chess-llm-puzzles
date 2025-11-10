@@ -59,7 +59,10 @@ class ChessGameEngine:
         # Initialize model interface
         self.model_interface = ChessModelInterface(
             model_name=model_name,
-            api_key=os.getenv('OPENAI_API_KEY')
+            api_key=os.getenv('OPENAI_API_KEY'),
+            max_completion_tokens=320,
+            default_temperature=0.1,
+            retry_attempts=2,
         )
         
         # Initialize self-consistency system if needed
@@ -222,9 +225,13 @@ class ChessGameEngine:
                         print(f"🔄 Retry attempt {attempt + 1}/3...")
                     
                     raw_response, predicted_san, token_info = self.model_interface.get_move_with_extraction(
-                        system_prompt, user_prompt,
+                        system_prompt,
+                        user_prompt,
                         current_turn_number=len(board.move_stack) // 2 + 1,
-                        is_white_to_move=board.turn
+                        is_white_to_move=board.turn,
+                        max_tokens=self.model_interface.max_completion_tokens,
+                        temperature=self.model_interface.default_temperature,
+                        retry_attempts=self.model_interface.retry_attempts,
                     )
                     print(f"<debug> : Model response (attempt {attempt + 1}): {repr(raw_response)}")
                     print(f"<debug> : Extracted move (attempt {attempt + 1}): {repr(predicted_san)}")

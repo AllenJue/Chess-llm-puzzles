@@ -22,6 +22,7 @@ if MAD_DIR not in sys.path:
 from utils.agent import Agent
 from model_interface import ChessModelInterface
 from chess_utils import extract_predicted_move, san_to_uci
+from MAD.utils.openai_utils import num_tokens_from_string, model2max_context
 
 
 class ChessDebatePlayer(Agent):
@@ -41,26 +42,39 @@ class ChessDebatePlayer(Agent):
         )
         self.last_token_info: Optional[dict] = None
 
+    def _build_combined_prompt(self) -> str:
+        return "\n".join(msg["content"] for msg in self.memory_lst if msg.get("content"))
+
+    def _ensure_memory_budget(self) -> Tuple[str, int, int]:
+        max_context = model2max_context.get(self.model_name, 8192)
+        safety_margin = 32
+        while True:
+            combined_prompt = self._build_combined_prompt()
+            prompt_tokens = num_tokens_from_string(combined_prompt, self.model_name)
+            available_completion = max_context - prompt_tokens - safety_margin
+            if available_completion >= safety_margin or len(self.memory_lst) <= 1:
+                return combined_prompt, prompt_tokens, max_context
+            # prune the oldest non-system message
+            for idx, msg in enumerate(self.memory_lst):
+                if msg.get("role") != "system":
+                    del self.memory_lst[idx]
+                    break
+            else:
+                return combined_prompt, prompt_tokens, max_context
+
     def ask(self, temperature: float = None):
         """Query for answer using our model interface instead of the old API"""
-        # Build combined prompt from memory
-        combined_prompt = ""
-        for msg in self.memory_lst:
-            if msg["role"] == "system":
-                combined_prompt += msg["content"] + "\n"
-            elif msg["role"] == "user":
-                combined_prompt += msg["content"] + "\n"
-            elif msg["role"] == "assistant":
-                combined_prompt += msg["content"] + "\n"
-        
+        combined_prompt, prompt_tokens, max_context = self._ensure_memory_budget()
+        available_completion = max_context - prompt_tokens - 32
+        max_tokens = max(16, min(self.model_interface.max_completion_tokens, available_completion))
         print(f"\n<debug> : ChessDebatePlayer '{self.name}' ask() method:")
         print(f"<debug> : combined_prompt: {repr(combined_prompt[:200])}...")
-        
-        # Use our model interface instead of the old API
+        print(f"<debug> : prompt_tokens={prompt_tokens}, max_tokens={max_tokens}")
+
         response, token_info = self.model_interface.query_model_for_move_with_tokens(
             system_prompt="",  # Already included in combined_prompt
             user_prompt=combined_prompt,
-            max_tokens=self.model_interface.max_completion_tokens,
+            max_tokens=max_tokens,
             temperature=temperature if temperature else self.temperature,
             top_p=self.model_interface.default_top_p
         )
@@ -489,6 +503,8 @@ class ChessDebateV2:
         self.moderator.add_event(self.config['moderator_prompt'].replace('##aff_ans##', self.aff_ans)
                                 .replace('##neg_ans##', self.neg_ans).replace('##round##', 'first'))
         self.mod_ans = self.moderator.ask()
+        if not self.mod_ans:
+            self.mod_ans = "No response from moderator"
         moderator_raw_response = self.mod_ans
         self.moderator.add_memory(self.mod_ans)
         record_token_event("moderator", "moderator_round1", 1, getattr(self.moderator, "last_token_info", None))
@@ -517,6 +533,9 @@ class ChessDebateV2:
                 temperature=self.affirmative.temperature,
                 retry_attempts=self.affirmative.model_interface.retry_attempts,
             )
+            if not aff_response:
+                aff_response = "No response from model"
+                aff_move_san = None
             self.affirmative.add_memory(aff_response)
             self.aff_ans = aff_response
             record_token_event("affirmative", f"affirmative_round{round_index}", round_index, aff_token_info)
@@ -531,6 +550,9 @@ class ChessDebateV2:
                 temperature=self.negative.temperature,
                 retry_attempts=self.negative.model_interface.retry_attempts,
             )
+            if not neg_response:
+                neg_response = "No response from model"
+                neg_move_san = None
             self.negative.add_memory(neg_response)
             self.neg_ans = neg_response
             record_token_event("negative", f"negative_round{round_index}", round_index, neg_token_info)
@@ -541,6 +563,8 @@ class ChessDebateV2:
                                    .replace('##neg_ans##', self.neg_ans)
                                    .replace('##round##', self.round_dct(round_num + 2)))
             self.mod_ans = self.moderator.ask()
+            if not self.mod_ans:
+                self.mod_ans = "No response from moderator"
             moderator_raw_response = self.mod_ans
             self.moderator.add_memory(self.mod_ans)
             record_token_event("moderator", f"moderator_round{round_index}", round_index, getattr(self.moderator, "last_token_info", None))
@@ -584,6 +608,8 @@ class ChessDebateV2:
             simple_judge_prompt = f"Affirmative side: {aff_final}\n\nNegative side: {neg_final}\n\nWhat are the move candidates? List them simply."
             judge_player.add_event(simple_judge_prompt)
             judge_response1 = judge_player.ask()
+            if not judge_response1:
+                judge_response1 = "No response from judge"
             judge_player.add_memory(judge_response1)
             judge_round_index = next_round_index
             record_token_event("judge", "judge_candidates", judge_round_index, getattr(judge_player, "last_token_info", None))
@@ -592,6 +618,8 @@ class ChessDebateV2:
             final_judge_prompt = f"Based on the debate, what is the best move? Give just the move in standard algebraic notation."
             judge_player.add_event(final_judge_prompt)
             judge_response2 = judge_player.ask()
+            if not judge_response2:
+                judge_response2 = "No response from judge"
             judge_player.add_memory(judge_response2)
             record_token_event("judge", "judge_final", judge_round_index, getattr(judge_player, "last_token_info", None))
             judge_details = {

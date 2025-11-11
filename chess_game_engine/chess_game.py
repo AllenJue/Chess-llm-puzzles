@@ -18,16 +18,22 @@ from typing import Optional, Tuple, Dict, Any
 # Load environment variables from .env file
 try:
     from dotenv import load_dotenv
-    load_dotenv('../.env')  # Load from parent directory
+    load_dotenv(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), '.env'))  # Load from chess_puzzles directory
 except ImportError:
     pass  # dotenv not available, continue without it
 
 # Add parent directory to path for imports
-sys.path.append('..')
-sys.path.append('../MAD')  # Add MAD directory for utils
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..'))
+MAD_DIR = os.path.abspath(os.path.join(CURRENT_DIR, '..', 'MAD'))
+if PARENT_DIR not in sys.path:
+    sys.path.append(PARENT_DIR)
+if MAD_DIR not in sys.path:
+    sys.path.append(MAD_DIR)
 
 from model_interface import ChessModelInterface
 from main import ChessSelfConsistency
+from chess_debate_v2 import ChessDebateV2
 from chess_utils import extract_predicted_move, san_to_uci
 
 
@@ -37,7 +43,9 @@ class ChessGameEngine:
                  stockfish_time: float = 1.0,
                  stockfish_skill: int = 5,
                  use_self_consistency: bool = False,
-                 use_random_opponent: bool = False):
+                 use_debate: bool = False,
+                 use_random_opponent: bool = False,
+                 plan_plies: int = 0):
         """
         Initialize the chess game engine
         
@@ -54,7 +62,9 @@ class ChessGameEngine:
         self.stockfish_time = stockfish_time
         self.stockfish_skill = stockfish_skill
         self.use_self_consistency = use_self_consistency
+        self.use_debate = use_debate
         self.use_random_opponent = use_random_opponent
+        self.plan_plies = max(0, plan_plies)
         
         # Initialize model interface
         self.model_interface = ChessModelInterface(
@@ -72,7 +82,17 @@ class ChessGameEngine:
                 temperature=0.1,
                 openai_api_key=os.getenv('OPENAI_API_KEY'),
                 max_rounds=2,
-                sleep_time=0.1
+                sleep_time=0.1,
+                plan_plies=self.plan_plies
+            )
+        elif use_debate:
+            self.debate_v2 = ChessDebateV2(
+                model_name=model_name,
+                temperature=0.1,
+                openai_api_key=os.getenv('OPENAI_API_KEY'),
+                max_rounds=3,
+                sleep_time=0.1,
+                plan_plies=self.plan_plies
             )
         
         # Game state
@@ -159,12 +179,15 @@ class ChessGameEngine:
         current_game = chess.pgn.Game.from_board(board)
         user_prompt = current_game.accept(exporter)
         
-        # System prompt (same as chess_puzzles)
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
         system_prompt = (
             "You are a chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
-            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'."
+            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+            "ALWAYS repeat the entire representation of the game so far.\n"
+            "NEVER explain your choice."
         )
         
         try:
@@ -212,6 +235,42 @@ class ChessGameEngine:
                             return self._use_fallback_move(board, f"Self-consistency move validation error after 3 attempts: {e}", str(debate_history))
                         continue
                 
+            elif self.use_debate:
+                print(f"🧠 Debate (multi-agent) thinking...")
+                for attempt in range(3):
+                    if attempt > 0:
+                        print(f"🔄 Debate retry attempt {attempt + 1}/3...")
+
+                    predicted_uci, debate_history = self.debate_v2.run_debate(
+                        user_prompt,
+                        played_plies=len(board.move_stack),
+                        board_fen=board.fen()
+                    )
+                    print(f"<debug> : Debate predicted UCI (attempt {attempt + 1}): {repr(predicted_uci)}")
+
+                    if not predicted_uci:
+                        print(f"❌ Debate attempt {attempt + 1}: Failed to generate move")
+                        if attempt == 2:
+                            return self._use_fallback_move(board, "Debate failed to generate move after 3 attempts", str(debate_history))
+                        continue
+
+                    try:
+                        move = chess.Move.from_uci(predicted_uci)
+                        if move not in board.legal_moves:
+                            print(f"❌ Debate attempt {attempt + 1}: Generated illegal move: {predicted_uci}")
+                            if attempt == 2:
+                                return self._use_fallback_move(board, f"Debate generated illegal move after 3 attempts: {predicted_uci}", str(debate_history))
+                            continue
+
+                        print(f"✅ Debate attempt {attempt + 1}: Valid move generated: {predicted_uci}")
+                        return predicted_uci
+
+                    except Exception as e:
+                        print(f"❌ Debate attempt {attempt + 1}: Error validating move: {e}")
+                        if attempt == 2:
+                            return self._use_fallback_move(board, f"Debate move validation error after 3 attempts: {e}", str(debate_history))
+                        continue
+
             else:
                 # Use single model with retry logic
                 print(f"🤖 Single model thinking...")
@@ -305,7 +364,13 @@ class ChessGameEngine:
         print(f"🎮 Starting chess game!")
         print(f"🤖 Model plays: {'White' if model_plays_white else 'Black'}")
         print(f"🐟 Stockfish plays: {'Black' if model_plays_white else 'White'} (Skill Level: {self.stockfish_skill}/20)")
-        print(f"🧠 Model approach: {'Self-consistency' if self.use_self_consistency else 'Single model'}")
+        if self.use_self_consistency:
+            approach_label = 'Self-consistency'
+        elif self.use_debate:
+            approach_label = 'Debate (multi-agent)'
+        else:
+            approach_label = 'Single model'
+        print(f"🧠 Model approach: {approach_label}")
         print("=" * 60)
         
         self.board = chess.Board()
@@ -425,7 +490,7 @@ class ChessGameEngine:
             "result": result,
             "total_moves": len(self.game_moves),
             "model_plays_white": model_plays_white,
-            "model_approach": "self_consistency" if self.use_self_consistency else "single_model",
+            "model_approach": "self_consistency" if self.use_self_consistency else ("debate" if self.use_debate else "single_model"),
             "model_name": self.model_name,
             "opponent_type": "random" if self.use_random_opponent else "stockfish",
             "moves": self.game_moves,
@@ -453,7 +518,7 @@ class ChessGameEngine:
         
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            approach = "self_consistency" if self.use_self_consistency else "single_model"
+            approach = "self_consistency" if self.use_self_consistency else ("debate" if self.use_debate else "single_model")
             color = "white" if game_result["model_plays_white"] else "black"
             filename = f"chess_game_{approach}_{color}_{timestamp}.json"
         
@@ -464,7 +529,7 @@ class ChessGameEngine:
         enhanced_result.update({
             "metadata": {
                 "model_name": self.model_name,
-                "model_approach": "self_consistency" if self.use_self_consistency else "single_model",
+                "model_approach": "self_consistency" if self.use_self_consistency else ("debate" if self.use_debate else "single_model"),
                 "stockfish_time": self.stockfish_time,
                 "stockfish_skill": self.stockfish_skill,
                 "total_fallback_moves": len(self.fallback_moves),
@@ -497,7 +562,7 @@ class ChessGameEngine:
         
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            approach = "self_consistency" if self.use_self_consistency else "single_model"
+            approach = "self_consistency" if self.use_self_consistency else ("debate" if self.use_debate else "single_model")
             color = "white" if game_result["model_plays_white"] else "black"
             filename = f"chess_game_{approach}_{color}_{timestamp}.pgn"
         
@@ -513,7 +578,7 @@ class ChessGameEngine:
         game.headers["Black"] = opponent_name if game_result["model_plays_white"] else "Model"
         game.headers["Result"] = self._pgn_result(game_result["result"])
         game.headers["Model"] = self.model_name
-        game.headers["Approach"] = "self_consistency" if self.use_self_consistency else "single_model"
+        game.headers["Approach"] = "self_consistency" if self.use_self_consistency else ("debate" if self.use_debate else "single_model")
         game.headers["Opponent"] = opponent_name
         game.headers["FallbackMoves"] = str(len(self.fallback_moves))
         game.headers["TotalMoves"] = str(game_result["total_moves"])
@@ -558,10 +623,14 @@ def main():
                        help="Stockfish skill level (0-20, where 20 is maximum strength)")
     parser.add_argument("--self-consistency", action="store_true", 
                        help="Use self-consistency approach instead of single model")
+    parser.add_argument("--debate", action="store_true",
+                       help="Use multi-agent debate approach instead of single model")
     parser.add_argument("--random-opponent", action="store_true",
                        help="Use random legal moves instead of Stockfish")
     parser.add_argument("--model-color", choices=["white", "black"], default="white",
                        help="Color for the model to play")
+    parser.add_argument("--plan-plies", type=int, default=0,
+                       help="Number of future plies to plan (debate/self-consistency)")
     parser.add_argument("--save-json", action="store_true",
                        help="Save game result as JSON")
     parser.add_argument("--save-pgn", action="store_true", 
@@ -587,7 +656,9 @@ def main():
         stockfish_time=args.time,
         stockfish_skill=args.skill,
         use_self_consistency=args.self_consistency,
-        use_random_opponent=args.random_opponent
+        use_debate=args.debate,
+        use_random_opponent=args.random_opponent,
+        plan_plies=args.plan_plies
     )
     
     # Play the game

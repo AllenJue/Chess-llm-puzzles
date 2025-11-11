@@ -13,7 +13,7 @@ import argparse
 import json
 import random
 from datetime import datetime
-from typing import Optional, Tuple, Dict, Any
+from typing import Optional, Tuple, Dict, Any, List
 
 # Load environment variables from .env file
 try:
@@ -34,7 +34,7 @@ if MAD_DIR not in sys.path:
 from model_interface import ChessModelInterface
 from main import ChessSelfConsistency
 from chess_debate_v2 import ChessDebateV2
-from chess_utils import extract_predicted_move, san_to_uci
+from chess_utils import extract_predicted_move, san_to_uci, extract_plan_sans
 
 
 class ChessGameEngine:
@@ -65,8 +65,13 @@ class ChessGameEngine:
         self.use_debate = use_debate
         self.use_random_opponent = use_random_opponent
         self.plan_plies = max(0, plan_plies)
-        
-        # Initialize model interface
+        self.single_model_token_log: list[dict] = []
+        self.self_consistency_token_log: list[dict] = []
+        self.single_model_plan_log: list[dict] = []
+        self.self_consistency_plan_log: list[dict] = []
+        self.active_plan: Optional[dict] = None
+
+        # Core model interface for single-model play
         self.model_interface = ChessModelInterface(
             model_name=model_name,
             api_key=os.getenv('OPENAI_API_KEY'),
@@ -74,8 +79,8 @@ class ChessGameEngine:
             default_temperature=0.1,
             retry_attempts=2,
         )
-        
-        # Initialize self-consistency system if needed
+
+        # Initialize strategy-specific helpers
         if use_self_consistency:
             self.self_consistency = ChessSelfConsistency(
                 model_name=model_name,
@@ -94,12 +99,114 @@ class ChessGameEngine:
                 sleep_time=0.1,
                 plan_plies=self.plan_plies
             )
-        
-        # Game state
-        self.board = chess.Board()
-        self.game_moves = []
-        self.game_history = []
-        self.fallback_moves = []  # Track when random moves were used
+
+    # ------------------------------------------------------------------
+    # Planning helpers
+    # ------------------------------------------------------------------
+    def _log_plan_event(self, source: str, event: str, **data) -> None:
+        entry = {
+            "event": event,
+            "source": source,
+            **data
+        }
+        print(f"<planning> : {entry}")
+        if source == "single_model":
+            self.single_model_plan_log.append(entry)
+        elif source == "self_consistency":
+            self.self_consistency_plan_log.append(entry)
+
+    def _discard_active_plan(self, reason: str) -> None:
+        if self.active_plan:
+            self._log_plan_event(
+                self.active_plan.get("source", "unknown"),
+                "plan_discarded",
+                reason=reason,
+                remaining_plan=self.active_plan.get("remaining_san", [])
+            )
+        self.active_plan = None
+
+    def _set_active_plan(self, source: str, plan_full: List[str], plan_execute: List[str], *, turn: int, attempt: int, selected_san: Optional[str]) -> None:
+        if self.active_plan and self.active_plan.get("source") == source:
+            self._log_plan_event(source, "plan_replaced", turn=turn, attempt=attempt)
+            self.active_plan = None
+
+        self._log_plan_event(
+            source,
+            "plan_generated",
+            turn=turn,
+            attempt=attempt,
+            plan_full=plan_full,
+            plan_execute=plan_execute,
+            selected_move=selected_san
+        )
+
+        if not plan_execute:
+            return
+
+        self.active_plan = {
+            "source": source,
+            "remaining_san": list(plan_execute),
+            "plan_full": list(plan_full) if plan_full else list(plan_execute),
+            "turn": turn,
+            "attempt": attempt,
+            "selected_move": selected_san
+        }
+
+    def _attempt_planned_move(self, board: chess.Board) -> Optional[str]:
+        if not self.active_plan:
+            return None
+        if not self.active_plan.get("remaining_san"):
+            self._discard_active_plan("no_remaining_moves")
+            return None
+
+        next_san = self.active_plan["remaining_san"][0]
+        try:
+            move = board.parse_san(next_san)
+        except ValueError:
+            # Not a legal move for the current side (likely waiting for opponent)
+            return None
+
+        if move not in board.legal_moves:
+            self._discard_active_plan(f"planned move {next_san} not legal")
+            return None
+
+        self.active_plan["remaining_san"].pop(0)
+        move_uci = move.uci()
+        self._log_plan_event(
+            self.active_plan.get("source", "unknown"),
+            "plan_move_used",
+            planned_san=next_san,
+            move_uci=move_uci
+        )
+
+        if not self.active_plan["remaining_san"]:
+            self._log_plan_event(
+                self.active_plan.get("source", "unknown"),
+                "plan_completed",
+                reason="plan fully executed"
+            )
+            self.active_plan = None
+
+        return move_uci
+
+    def _handle_opponent_plan(self, move_san: str) -> None:
+        if not self.active_plan:
+            return
+        if not self.active_plan.get("remaining_san"):
+            self._discard_active_plan("no_remaining_moves_for_opponent")
+            return
+
+        expected_san = self.active_plan["remaining_san"][0]
+        source = self.active_plan.get("source", "unknown")
+        if move_san == expected_san:
+            self.active_plan["remaining_san"].pop(0)
+            self._log_plan_event(source, "plan_opponent_matched", move_san=move_san)
+            if not self.active_plan["remaining_san"]:
+                self._log_plan_event(source, "plan_completed", reason="opponent finished plan")
+                self.active_plan = None
+        else:
+            self._log_plan_event(source, "plan_aborted", expected_san=expected_san, actual_san=move_san)
+            self.active_plan = None
     
     def get_random_legal_move(self, board: chess.Board) -> str:
         """
@@ -152,6 +259,7 @@ class ChessGameEngine:
             UCI move string
         """
         print(f"🎲 Using random legal move as fallback...")
+        self._discard_active_plan("fallback_move_used")
         fallback_move = self.get_random_legal_move(board)
         
         if fallback_move:
@@ -174,6 +282,13 @@ class ChessGameEngine:
         Returns:
             UCI move string or None if failed
         """
+        planned_move = self._attempt_planned_move(board)
+        if planned_move:
+            move_obj = chess.Move.from_uci(planned_move)
+            move_san = board.san(move_obj)
+            print(f"🤖 Using planned move without prompting: {move_san} ({planned_move})")
+            return planned_move
+        
         # Use the same infrastructure as chess_puzzles
         exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
         current_game = chess.pgn.Game.from_board(board)
@@ -226,6 +341,40 @@ class ChessGameEngine:
                                 return self._use_fallback_move(board, f"Self-consistency generated illegal move after 3 attempts: {predicted_uci}", str(debate_history))
                             continue
                         
+                        plan_info = debate_history.get("final_plan", {}) if isinstance(debate_history, dict) else {}
+                        plan_execute = plan_info.get("moves_for_execution") or []
+                        if self.plan_plies > 0:
+                            plan_execute = plan_execute[:self.plan_plies]
+                        plan_full = plan_info.get("full_moves") or list(plan_execute)
+                        if self.plan_plies > 0:
+                            print(f"<self-consistency> : plan (full): {plan_full}")
+                            print(f"<self-consistency> : plan (first {self.plan_plies} plies): {plan_execute}")
+                        token_totals = (debate_history or {}).get("total_tokens", {}) if isinstance(debate_history, dict) else {}
+                        if token_totals:
+                            prompt_tokens = token_totals.get("total_prompt_tokens", 0)
+                            completion_tokens = token_totals.get("total_completion_tokens", 0)
+                            total_tokens = token_totals.get("total_tokens", prompt_tokens + completion_tokens)
+                            print(f"<self-consistency> : token usage -> prompt {prompt_tokens}, completion {completion_tokens}, total {total_tokens}")
+                        else:
+                            prompt_tokens = completion_tokens = total_tokens = 0
+                        self.self_consistency_token_log.append({
+                            "turn": len(board.move_stack) + 1,
+                            "attempt": attempt + 1,
+                            "token_events": (debate_history or {}).get("token_events", []) if isinstance(debate_history, dict) else [],
+                            "total_prompt_tokens": prompt_tokens,
+                            "total_completion_tokens": completion_tokens,
+                            "total_tokens": total_tokens
+                        })
+                        move_san = board.san(move)
+                        self._set_active_plan(
+                            "self_consistency",
+                            plan_full,
+                            plan_execute,
+                            turn=len(board.move_stack) + 1,
+                            attempt=attempt + 1,
+                            selected_san=move_san
+                        )
+                        
                         print(f"✅ Self-consistency attempt {attempt + 1}: Valid move generated: {predicted_uci}")
                         return predicted_uci
                         
@@ -270,7 +419,7 @@ class ChessGameEngine:
                         if attempt == 2:
                             return self._use_fallback_move(board, f"Debate move validation error after 3 attempts: {e}", str(debate_history))
                         continue
-
+                
             else:
                 # Use single model with retry logic
                 print(f"🤖 Single model thinking...")
@@ -294,6 +443,21 @@ class ChessGameEngine:
                     )
                     print(f"<debug> : Model response (attempt {attempt + 1}): {repr(raw_response)}")
                     print(f"<debug> : Extracted move (attempt {attempt + 1}): {repr(predicted_san)}")
+                    if token_info:
+                        print(f"<single-model> : token usage -> prompt {token_info.get('prompt_tokens', 0)}, completion {token_info.get('completion_tokens', 0)}, total {token_info.get('total_tokens', 0)}")
+                        self.single_model_token_log.append({
+                            "turn": len(board.move_stack) + 1,
+                            "attempt": attempt + 1,
+                            "prompt_tokens": token_info.get("prompt_tokens", 0),
+                            "completion_tokens": token_info.get("completion_tokens", 0),
+                            "total_tokens": token_info.get("total_tokens", 0)
+                        })
+
+                    plan_full = extract_plan_sans(raw_response, primary_san=predicted_san)
+                    plan_execute = plan_full[:self.plan_plies] if self.plan_plies > 0 else []
+                    if self.plan_plies > 0:
+                        print(f"<single-model> : plan (full): {plan_full}")
+                        print(f"<single-model> : plan (first {self.plan_plies} plies): {plan_execute}")
                     
                     if not predicted_san:
                         print(f"❌ Attempt {attempt + 1}: Failed to extract move from response")
@@ -312,6 +476,14 @@ class ChessGameEngine:
                             continue
                         
                         print(f"✅ Attempt {attempt + 1}: Valid move generated: {predicted_san} -> {predicted_uci}")
+                        self._set_active_plan(
+                            "single_model",
+                            plan_full,
+                            plan_execute,
+                            turn=len(board.move_stack) + 1,
+                            attempt=attempt + 1,
+                            selected_san=predicted_san
+                        )
                         return predicted_uci
                         
                     except Exception as e:
@@ -377,6 +549,11 @@ class ChessGameEngine:
         self.game_moves = []
         self.game_history = []
         self.fallback_moves = []  # Reset fallback moves for new game
+        self.single_model_token_log = []
+        self.self_consistency_token_log = []
+        self.single_model_plan_log = []
+        self.self_consistency_plan_log = []
+        self.active_plan = None
         
         move_number = 1
         
@@ -408,6 +585,8 @@ class ChessGameEngine:
                 if move in self.board.legal_moves:
                     # Get SAN notation before pushing the move
                     move_san = self.board.san(move)
+                    if not is_model_turn:
+                        self._handle_opponent_plan(move_san)
                     
                     self.board.push(move)
                     self.game_moves.append(move_uci)
@@ -486,6 +665,17 @@ class ChessGameEngine:
         else:
             print(f"✅ No fallback moves needed - all model moves were valid")
         
+        if self.single_model_token_log:
+            total_prompt = sum(entry["prompt_tokens"] for entry in self.single_model_token_log)
+            total_completion = sum(entry["completion_tokens"] for entry in self.single_model_token_log)
+            total_tokens = sum(entry["total_tokens"] for entry in self.single_model_token_log)
+            print(f"📊 Single-model token usage -> prompt {total_prompt}, completion {total_completion}, total {total_tokens}")
+        if self.self_consistency_token_log:
+            total_prompt = sum(entry["total_prompt_tokens"] for entry in self.self_consistency_token_log)
+            total_completion = sum(entry["total_completion_tokens"] for entry in self.self_consistency_token_log)
+            total_tokens = sum(entry["total_tokens"] for entry in self.self_consistency_token_log)
+            print(f"📊 Self-consistency token usage -> prompt {total_prompt}, completion {total_completion}, total {total_tokens}")
+
         return {
             "result": result,
             "total_moves": len(self.game_moves),
@@ -498,7 +688,11 @@ class ChessGameEngine:
             "fallback_moves": self.fallback_moves,
             "fallback_count": len(self.fallback_moves),
             "final_fen": self.board.fen(),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "single_model_token_log": self.single_model_token_log,
+            "self_consistency_token_log": self.self_consistency_token_log,
+            "single_model_plan_log": self.single_model_plan_log,
+            "self_consistency_plan_log": self.self_consistency_plan_log
         }
     
     def save_game(self, game_result: Dict[str, Any], filename: Optional[str] = None) -> str:

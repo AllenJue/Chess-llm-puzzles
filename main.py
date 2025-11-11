@@ -271,7 +271,13 @@ class ChessSelfConsistency:
         print(f"<debug> : Aggressive GM move: {aggressive_san}")
         record_token_event("aggressive", agg_token_info, "aggressive_gm")
 
-        self.aggressive_gm.add_memory(agg_response)
+        aggressive_plan_full = extract_plan_sans(agg_response, primary_san=aggressive_san)
+        aggressive_plan_execute = aggressive_plan_full[:self.plan_plies] if self.plan_plies > 0 else []
+        if self.plan_plies > 0:
+            print(f"<self-consistency> : Aggressive plan (full): {aggressive_plan_full}")
+            print(f"<self-consistency> : Aggressive plan (first {self.plan_plies} plies): {aggressive_plan_execute}")
+
+        self.aggressive_gm.add_memory(f"Aggressive GM move: {aggressive_san}")
         
         # Positional GM analysis
         print(f"\n<debug> : Positional GM - using query_model_for_move:")
@@ -292,6 +298,12 @@ class ChessSelfConsistency:
         print(f"<debug> : Positional GM move: {positional_san}")
         record_token_event("positional", pos_token_info, "positional_gm")
         
+        positional_plan_full = extract_plan_sans(pos_response, primary_san=positional_san)
+        positional_plan_execute = positional_plan_full[:self.plan_plies] if self.plan_plies > 0 else []
+        if self.plan_plies > 0:
+            print(f"<self-consistency> : Positional plan (full): {positional_plan_full}")
+            print(f"<self-consistency> : Positional plan (first {self.plan_plies} plies): {positional_plan_execute}")
+
         self.positional_gm.add_memory(f"Positional GM move: {positional_san}")
         
         # Neutral GM analysis
@@ -313,6 +325,12 @@ class ChessSelfConsistency:
         print(f"<debug> : Neutral GM move: {neutral_san}")
         record_token_event("neutral", neutral_token_info, "neutral_gm")
         
+        neutral_plan_full = extract_plan_sans(neutral_response, primary_san=neutral_san)
+        neutral_plan_execute = neutral_plan_full[:self.plan_plies] if self.plan_plies > 0 else []
+        if self.plan_plies > 0:
+            print(f"<self-consistency> : Neutral plan (full): {neutral_plan_full}")
+            print(f"<self-consistency> : Neutral plan (first {self.plan_plies} plies): {neutral_plan_execute}")
+
         self.neutral_gm.add_memory(f"Neutral GM move: {neutral_san}")
         
         # Convert all moves to UCI
@@ -387,24 +405,88 @@ class ChessSelfConsistency:
         if not selected_agent and final_source_agents:
             selected_agent = final_source_agents[0]
 
+        # Determine consensus plan
+        from collections import Counter
+        plan_map = {
+            "aggressive": {
+                "full": aggressive_plan_full,
+                "execute": aggressive_plan_execute
+            },
+            "positional": {
+                "full": positional_plan_full,
+                "execute": positional_plan_execute
+            },
+            "neutral": {
+                "full": neutral_plan_full,
+                "execute": neutral_plan_execute
+            },
+        }
+
+        self.final_plan_moves = []
+        self.final_plan_full = []
+        self.final_plan_source = None
+
+        if self.plan_plies > 0 and self.final_move:
+            candidate_agents = [agent for agent in ["neutral", "aggressive", "positional"]
+                                if move_sources.get(agent) == self.final_move]
+            plan_counter = Counter(
+                tuple(plan_map[agent]["execute"])
+                for agent in candidate_agents
+                if plan_map[agent]["execute"]
+            )
+
+            selected_plan_tuple = None
+            if plan_counter:
+                selected_plan_tuple, count = plan_counter.most_common(1)[0]
+                if selected_plan_tuple:
+                    for agent in candidate_agents:
+                        if tuple(plan_map[agent]["execute"]) == selected_plan_tuple:
+                            self.final_plan_moves = list(selected_plan_tuple)
+                            self.final_plan_full = list(plan_map[agent]["full"])
+                            self.final_plan_source = agent
+                            break
+            if not self.final_plan_moves:
+                for agent in ["neutral", "aggressive", "positional"]:
+                    if agent in candidate_agents and plan_map[agent]["execute"]:
+                        self.final_plan_moves = list(plan_map[agent]["execute"])
+                        self.final_plan_full = list(plan_map[agent]["full"])
+                        self.final_plan_source = agent
+                        break
+
+            if self.final_plan_moves:
+                print(f"<self-consistency> : Selected plan source: {self.final_plan_source}")
+                print(f"<self-consistency> : Selected plan (first {self.plan_plies} plies): {self.final_plan_moves}")
+            else:
+                print(f"<self-consistency> : No consensus plan available")
+        else:
+            self.final_plan_moves = []
+            self.final_plan_full = []
+            self.final_plan_source = None
+
         self_consistency_history = {
             "query1": {
                 "aggressive_move": aggressive_san,
                 "aggressive_uci": agg_move_uci,
                 "aggressive_response": agg_response,
-                "aggressive_tokens": agg_token_info
+                "aggressive_tokens": agg_token_info,
+                "plan_full": aggressive_plan_full,
+                "plan_execute": aggressive_plan_execute
             },
             "query2": {
                 "positional_move": positional_san,
                 "positional_uci": pos_move_uci,
                 "positional_response": pos_response,
-                "positional_tokens": pos_token_info
+                "positional_tokens": pos_token_info,
+                "plan_full": positional_plan_full,
+                "plan_execute": positional_plan_execute
             },
             "query3": {
                 "neutral_move": neutral_san,
                 "neutral_uci": neutral_move_uci,
                 "neutral_response": neutral_response,
-                "neutral_tokens": neutral_token_info
+                "neutral_tokens": neutral_token_info,
+                "plan_full": neutral_plan_full,
+                "plan_execute": neutral_plan_execute
             },
             "final_moves": {
                 "aggressive_uci": agg_move_uci,
@@ -413,6 +495,25 @@ class ChessSelfConsistency:
                 "consensus_move": self.final_move,
                 "source_agents": final_source_agents,
                 "selected_agent": selected_agent
+            },
+            "plans": {
+                "aggressive": {
+                    "full": aggressive_plan_full,
+                    "execute": aggressive_plan_execute
+                },
+                "positional": {
+                    "full": positional_plan_full,
+                    "execute": positional_plan_execute
+                },
+                "neutral": {
+                    "full": neutral_plan_full,
+                    "execute": neutral_plan_execute
+                }
+            },
+            "final_plan": {
+                "moves_for_execution": self.final_plan_moves,
+                "full_moves": self.final_plan_full,
+                "source_agent": self.final_plan_source
             },
             "total_tokens": {
                 "aggressive": agg_token_info,

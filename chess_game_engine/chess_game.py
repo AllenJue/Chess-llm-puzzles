@@ -45,7 +45,8 @@ class ChessGameEngine:
                  use_self_consistency: bool = False,
                  use_debate: bool = False,
                  use_random_opponent: bool = False,
-                 plan_plies: int = 0):
+                 plan_plies: int = 0,
+                 stockfish_depth: Optional[int] = None):
         """
         Initialize the chess game engine
         
@@ -65,6 +66,7 @@ class ChessGameEngine:
         self.use_debate = use_debate
         self.use_random_opponent = use_random_opponent
         self.plan_plies = max(0, plan_plies)
+        self.stockfish_depth = stockfish_depth
         self.single_model_token_log: list[dict] = []
         self.self_consistency_token_log: list[dict] = []
         self.single_model_plan_log: list[dict] = []
@@ -75,7 +77,7 @@ class ChessGameEngine:
         self.model_interface = ChessModelInterface(
             model_name=model_name,
             api_key=os.getenv('OPENAI_API_KEY'),
-            max_completion_tokens=320,
+            max_completion_tokens=640,
             default_temperature=0.1,
             retry_attempts=2,
         )
@@ -517,7 +519,12 @@ class ChessGameEngine:
                 # Configure Stockfish skill level
                 engine.configure({"Skill Level": self.stockfish_skill})
                 
-                result = engine.play(board, chess.engine.Limit(time=self.stockfish_time))
+                limit_kwargs = {}
+                if self.stockfish_depth is not None:
+                    limit = chess.engine.Limit(depth=self.stockfish_depth)
+                else:
+                    limit = chess.engine.Limit(time=self.stockfish_time)
+                result = engine.play(board, limit)
                 return result.move.uci()
         except Exception as e:
             print(f"❌ Error getting Stockfish move: {e}")
@@ -815,6 +822,8 @@ def main():
                        help="Time limit for Stockfish moves (seconds)")
     parser.add_argument("--skill", type=int, default=5, 
                        help="Stockfish skill level (0-20, where 20 is maximum strength)")
+    parser.add_argument("--stockfish-depth", type=int, default=None,
+                       help="Optional fixed search depth for Stockfish (overrides time limit if set)")
     parser.add_argument("--self-consistency", action="store_true", 
                        help="Use self-consistency approach instead of single model")
     parser.add_argument("--debate", action="store_true",
@@ -852,7 +861,8 @@ def main():
         use_self_consistency=args.self_consistency,
         use_debate=args.debate,
         use_random_opponent=args.random_opponent,
-        plan_plies=args.plan_plies
+        plan_plies=args.plan_plies,
+        stockfish_depth=args.stockfish_depth
     )
     
     # Play the game

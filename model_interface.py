@@ -22,7 +22,7 @@ class ChessModelInterface:
         api_key: Optional[str] = None,
         model_name: str = "gpt-3.5-turbo-instruct",
         *,
-        max_completion_tokens: int = 200,
+        max_completion_tokens: int = 640,
         default_temperature: float = 0.1,
         default_top_p: float = 1.0,
         retry_attempts: int = 1,

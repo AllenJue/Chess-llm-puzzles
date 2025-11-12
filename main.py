@@ -50,7 +50,7 @@ class ChessDebatePlayer(Agent):
         self.model_interface = ChessModelInterface(
             api_key=openai_api_key,
             model_name=model_name,
-            max_completion_tokens=320,
+            max_completion_tokens=640,
             default_temperature=temperature,
             retry_attempts=2,
         )
@@ -1381,7 +1381,7 @@ def main():
             model_interface = ChessModelInterface(
                 api_key=api_key,
                 model_name=args.model,
-                max_completion_tokens=320,
+                max_completion_tokens=640,
                 default_temperature=0.1,
                 retry_attempts=2,
             )

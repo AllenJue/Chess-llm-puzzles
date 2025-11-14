@@ -7,6 +7,7 @@ This helps verify that each model works correctly with the chess framework.
 import os
 import sys
 import argparse
+import time
 from pathlib import Path
 
 # Add parent directory to path
@@ -30,7 +31,7 @@ WORKING_FREE_MODELS = [
 ]
 
 
-def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base_url: str = None):
+def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base_url: str = None, delay: float = 0.5):
     """Test a single model on puzzles."""
     print(f"\n{'='*60}")
     print(f"Testing model: {model_name}")
@@ -39,14 +40,18 @@ def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base
     # Load environment
     load_environment()
     
-    # Get API key and base URL
+    # Get API key and base URL - same way as smoke test
     api_key = os.getenv("ANANNAS_API_KEY")
     if not api_key:
         print("Error: ANANNAS_API_KEY not found in .env file")
+        print("Please ensure ANANNAS_API_KEY is set in chess_puzzles/.env")
         return None
     
     if base_url is None:
         base_url = os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+    
+    print(f"<debug> : API key loaded: {bool(api_key)}")
+    print(f"<debug> : Base URL: {base_url}")
     
     # Default CSV file
     if csv_file is None:
@@ -95,6 +100,7 @@ def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base
             max_puzzles=num_puzzles,
             start_puzzle=0,
             planning_plies=0,
+            api_delay=delay,
         )
         
         # Save results
@@ -134,8 +140,20 @@ def main():
     parser.add_argument(
         "--num-puzzles",
         type=int,
-        default=3,
-        help="Number of puzzles to test per model (default: 3)"
+        default=50,
+        help="Number of puzzles to test per model (default: 50)"
+    )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=3.0,
+        help="Delay between models in seconds (default: 3.0)"
+    )
+    parser.add_argument(
+        "--api-delay",
+        type=float,
+        default=0.5,
+        help="Delay between API calls in seconds (default: 0.5)"
     )
     parser.add_argument(
         "--csv-file",
@@ -162,25 +180,66 @@ def main():
         models_to_test = [args.model]
     
     print(f"\nTesting {len(models_to_test)} model(s) on {args.num_puzzles} puzzle(s) each")
-    print("Using Anannas API for free models\n")
+    print("Using Anannas API for free models")
+    print(f"Delay between models: {args.delay}s, Delay between API calls: {args.api_delay}s\n")
     
     results = {}
-    for model in models_to_test:
-        result = test_model(model, args.num_puzzles, args.csv_file, args.anannas_base_url)
+    api_issues = []
+    
+    for i, model in enumerate(models_to_test):
+        # Add delay between models (except for the first one)
+        if i > 0:
+            print(f"\nWaiting {args.delay} seconds before next model...")
+            time.sleep(args.delay)
+        
+        result = test_model(model, args.num_puzzles, args.csv_file, args.anannas_base_url, delay=args.api_delay)
         results[model] = result
+        
+        # Track API issues
+        if result is None:
+            api_issues.append({
+                "model": model,
+                "issue": "Failed to initialize or run",
+            })
+        elif len(result) == 0:
+            api_issues.append({
+                "model": model,
+                "issue": "No results returned",
+            })
     
     # Summary
     print(f"\n{'='*60}")
     print("SUMMARY")
     print(f"{'='*60}")
+    
+    successful = []
+    failed = []
+    
     for model, result in results.items():
         if result is not None and len(result) > 0:
             solved = result['puzzle_solved'].sum() if 'puzzle_solved' in result.columns else 0
             total = len(result)
             status = "✅" if solved > 0 else "⚠️"
-            print(f"{status} {model}: {solved}/{total} solved")
+            print(f"{status} {model}: {solved}/{total} solved ({100*solved/total:.1f}%)")
+            successful.append(model)
         else:
             print(f"❌ {model}: Failed")
+            failed.append(model)
+            if model not in [issue["model"] for issue in api_issues]:
+                api_issues.append({
+                    "model": model,
+                    "issue": "Evaluation failed",
+                })
+    
+    # Print API issues summary
+    if api_issues:
+        print(f"\n{'='*60}")
+        print("API ISSUES DETECTED")
+        print(f"{'='*60}")
+        for issue in api_issues:
+            print(f"  ❌ {issue['model']}: {issue.get('issue', 'Unknown error')}")
+    
+    print(f"\nCompleted: {len(successful)} successful, {len(failed)} failed out of {len(results)} total")
 
 
 if __name__ == "__main__":

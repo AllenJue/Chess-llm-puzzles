@@ -53,6 +53,11 @@ class ChessModelInterface:
         client_kwargs = {"api_key": api_key}
         if base_url:
             client_kwargs["base_url"] = base_url
+        
+        # Debug: print API setup
+        if base_url and "anannas" in base_url.lower():
+            print(f"<debug> : Using Anannas API with base_url={base_url}")
+            print(f"<debug> : API key present: {bool(api_key)}")
 
         self.client = OpenAI(**client_kwargs)
         self.model_name = model_name
@@ -69,7 +74,18 @@ class ChessModelInterface:
         self.default_temperature = default_temperature
         self.default_top_p = default_top_p
         self.retry_attempts = max(0, retry_attempts)
-        self.is_chat_model = "instruct" not in normalized_name and not normalized_name.startswith("text-")
+        
+        # For Anannas API, all models use chat.completions endpoint
+        # For OpenAI, detect based on model name
+        is_anannas = base_url and "anannas" in base_url.lower()
+        if is_anannas:
+            # All Anannas models use chat.completions (same as smoke test)
+            self.is_chat_model = True
+            print(f"<debug> : Detected Anannas API - using chat.completions for all models")
+        else:
+            # OpenAI models: instruct models use completions, others use chat.completions
+            self.is_chat_model = "instruct" not in normalized_name and not normalized_name.startswith("text-")
+            print(f"<debug> : Using OpenAI API - is_chat_model={self.is_chat_model}")
  
     def _call_model_endpoint(
         self,
@@ -85,17 +101,62 @@ class ChessModelInterface:
         top_p = self.default_top_p if top_p is None else top_p
 
         if self.is_chat_model:
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=[
+            # Some Anannas models don't support system messages
+            # Known models that don't support system messages:
+            models_without_system = [
+                "google/gemma-3-12b-it:free",
+                "google/gemma-3-4b-it:free",
+            ]
+            is_anannas = self.base_url and "anannas" in self.base_url.lower()
+            model_needs_combined = is_anannas and self.model_name in models_without_system
+            
+            if model_needs_combined:
+                # Combine system and user prompts into a single user message
+                # Format: system prompt on first line, then blank line, then user prompt
+                combined_user_prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
+                messages = [{"role": "user", "content": combined_user_prompt}]
+                print(f"<debug> : Using combined prompt (no system message support)")
+            else:
+                # Try with system message first (most models support it)
+                messages = [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
-                ],
-                max_tokens=max_tokens,
-                temperature=temperature,
-                top_p=top_p,
-            )
-            print(f"Model response: {response}")
+                ]
+                print(f"<debug> : Using system + user messages")
+            
+            # Debug: show prompt format (first 200 chars)
+            if messages[0].get("role") == "user":
+                prompt_preview = messages[0]["content"][:200]
+            else:
+                prompt_preview = f"System: {messages[0]['content'][:100]}... User: {messages[1]['content'][:100]}"
+            print(f"<debug> : Prompt preview: {prompt_preview}...")
+            
+            # Try the request, fallback to combined if system message fails
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    top_p=top_p,
+                )
+            except Exception as e:
+                # If system message failed and we haven't tried combined yet, retry
+                error_str = str(e)
+                if ("400" in error_str or "Provider returned error" in error_str) and not model_needs_combined and is_anannas:
+                    # Fallback: combine system and user prompts
+                    print(f"<debug> : System message failed, falling back to combined prompt")
+                    combined_user_prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
+                    messages = [{"role": "user", "content": combined_user_prompt}]
+                    response = self.client.chat.completions.create(
+                        model=self.model_name,
+                        messages=messages,
+                        max_tokens=max_tokens,
+                        temperature=temperature,
+                        top_p=top_p,
+                    )
+                else:
+                    raise
             text_output = ""
             finish_reason = None
             if getattr(response, "choices", None):
@@ -124,7 +185,6 @@ class ChessModelInterface:
             temperature=temperature,
             top_p=top_p,
         )
-        print(f"Model response: {response}")
         text_output = ""
         finish_reason = None
         if getattr(response, "choices", None):
@@ -141,7 +201,10 @@ class ChessModelInterface:
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
+        api_delay: float = 0.0,
     ) -> Optional[str]:
+        if api_delay > 0:
+            time.sleep(api_delay)
         try:
             predicted_move_san, _, _ = self._call_model_endpoint(
                 system_prompt,
@@ -164,6 +227,7 @@ class ChessModelInterface:
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
+        api_delay: float = 0.0,
     ) -> tuple[Optional[str], Optional[dict]]:
         """
         Call OpenAI model with system and user prompts and return predicted move SAN with token info.
@@ -174,10 +238,13 @@ class ChessModelInterface:
             max_tokens (int): Maximum tokens to generate
             temperature (float): Sampling temperature
             top_p (float): Top-p sampling parameter
+            api_delay (float): Delay in seconds before API call (to avoid rate limits)
             
         Returns:
             tuple[Optional[str], Optional[dict]]: (predicted_move_san, token_info)
         """
+        if api_delay > 0:
+            time.sleep(api_delay)
         try:
             predicted_move_san, response, finish_reason = self._call_model_endpoint(
                 system_prompt,
@@ -210,6 +277,7 @@ class ChessModelInterface:
         top_p: Optional[float] = None,
         retry_attempts: Optional[int] = None,
         force_fallback_move: Optional[str] = None,
+        api_delay: float = 0.0,
     ) -> tuple[Optional[str], Optional[str], Optional[dict]]:
         """
         Get move from model and extract SAN move from response.
@@ -249,6 +317,7 @@ class ChessModelInterface:
                 max_tokens=max_tokens,
                 temperature=temperature,
                 top_p=top_p,
+                api_delay=api_delay,
             )
 
             if response_text:

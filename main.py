@@ -142,11 +142,11 @@ class ChessSelfConsistency:
         base_prompt = (
             "You are a chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
             "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
             "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
-            "NEVER explain your choice."
+            "NO other explanations. Just complete the algebraic notation."
         )
 
         aggressive_prompt = base_prompt
@@ -210,31 +210,31 @@ class ChessSelfConsistency:
         system_prompt = (
             "You are a chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
             "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
             "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
-            "NEVER explain your choice."
+            "NO other explanations. Just complete the algebraic notation."
         )
 
         agg_system_prompt = (
             "You are an aggressive chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
             "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
             "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
-            "NEVER explain your choice."
+            "NO other explanations. Just complete the algebraic notation."
         )
 
         pos_system_prompt = (
             "You are a positional chess grandmaster.\n"
             "You will be given a partially completed game.\n"
-            f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
+            f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
             "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
             "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
-            "NEVER explain your choice."
+            "NO other explanations. Just complete the algebraic notation."
         )
 
         
@@ -561,9 +561,38 @@ def load_environment():
         print("No .env file found, using system environment variables")
 
 
+def _is_open_source_model(model_interface: Optional[ChessModelInterface] = None, 
+                         debate: Optional[ChessSelfConsistency] = None,
+                         debate_v2: Optional[ChessDebateV2] = None) -> bool:
+    """Detect if we're using an open source model (Anannas API)."""
+    if model_interface:
+        return model_interface.base_url and "anannas" in (model_interface.base_url or "").lower()
+    elif debate:
+        # Check if debate uses Anannas
+        return hasattr(debate, 'base_url') and debate.base_url and "anannas" in debate.base_url.lower()
+    elif debate_v2:
+        # Check if debate_v2 uses Anannas
+        return hasattr(debate_v2, 'base_url') and debate_v2.base_url and "anannas" in debate_v2.base_url.lower()
+    return False
+
+def _get_system_prompt_for_model(num_future_moves: int, is_open_source: bool) -> str:
+    """Get the appropriate system prompt based on model type."""
+    # Use the same prompt for both OpenAI and open source models
+    # (Open source models were getting confused by "*" in the PGN, which we'll remove separately)
+    return (
+        "You are a chess grandmaster.\n"
+        "You will be given a partially completed game.\n"
+        f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
+        "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
+        "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+        "ALWAYS repeat the entire representation of the game so far.\n"
+        "NO other explanations. Just complete the algebraic notation."
+    )
+
 def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = None, 
                     debate: ChessSelfConsistency = None, debate_v2: ChessDebateV2 = None, 
-                    max_puzzles: int = 5, start_puzzle: int = 0, planning_plies: int = 0) -> pd.DataFrame:
+                    max_puzzles: int = 5, start_puzzle: int = 0, planning_plies: int = 0,
+                    api_delay: float = 0.0) -> pd.DataFrame:
     """
     Evaluate puzzles using either model interface, self-consistency system, or debate system.
     Faithful to the provided evaluation logic:
@@ -840,19 +869,18 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
 
                     num_future_moves = planning_plies + 1 if planning_plies > 0 else 3
 
-                    system_prompt = (
-                         "You are a chess grandmaster.\n"
-                         "You will be given a partially completed game.\n"
-                         f"After seeing it, you should repeat the ENTIRE GAME and then give the next {num_future_moves} moves.\n"
-                         "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
-                         "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
-                         "ALWAYS repeat the entire representation of the game so far.\n"
-                         "NEVER explain your choice."
-                     )
+                    # Detect if using open source model and use appropriate prompt
+                    is_open_source = _is_open_source_model(model_interface, debate, debate_v2)
+                    system_prompt = _get_system_prompt_for_model(num_future_moves, is_open_source)
 
                     exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
                     current_game = chess.pgn.Game.from_board(current_board)
                     user_prompt = current_game.accept(exporter)
+                    
+                    # Remove "*" (checkmate symbol) from user prompt for open source models
+                    # They get confused by this symbol
+                    if is_open_source:
+                        user_prompt = user_prompt.replace("*", "").strip()
 
                     print("\n--- Model Turn ---")
                     print("Board:")
@@ -1117,6 +1145,7 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                             max_tokens=model_interface.max_completion_tokens,
                             temperature=model_interface.default_temperature,
                             retry_attempts=model_interface.retry_attempts,
+                            api_delay=api_delay,
                         )
                         print("Predicted Response:", raw_response)
                         print("Turn number:", played_plies // 2 + 1)

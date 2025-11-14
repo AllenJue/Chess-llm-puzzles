@@ -46,7 +46,9 @@ class ChessGameEngine:
                  use_debate: bool = False,
                  use_random_opponent: bool = False,
                  plan_plies: int = 0,
-                 stockfish_depth: Optional[int] = None):
+                 stockfish_depth: Optional[int] = None,
+                 api_key: Optional[str] = None,
+                 base_url: Optional[str] = None):
         """
         Initialize the chess game engine
         
@@ -73,10 +75,17 @@ class ChessGameEngine:
         self.self_consistency_plan_log: list[dict] = []
         self.active_plan: Optional[dict] = None
 
+        # Get API key if not provided
+        if api_key is None:
+            api_key = os.getenv('ANANNAS_API_KEY') or os.getenv('OPENAI_API_KEY')
+        if base_url is None:
+            base_url = os.getenv('ANANNAS_API_URL') or os.getenv('OPENAI_BASE_URL') or os.getenv('OPENAI_API_BASE')
+        
         # Core model interface for single-model play
         self.model_interface = ChessModelInterface(
             model_name=model_name,
-            api_key=os.getenv('OPENAI_API_KEY'),
+            api_key=api_key,
+            base_url=base_url,
             max_completion_tokens=640,
             default_temperature=0.1,
             retry_attempts=2,
@@ -87,7 +96,8 @@ class ChessGameEngine:
             self.self_consistency = ChessSelfConsistency(
                 model_name=model_name,
                 temperature=0.1,
-                openai_api_key=os.getenv('OPENAI_API_KEY'),
+                openai_api_key=api_key,
+                base_url=base_url,
                 max_rounds=2,
                 sleep_time=0.1,
                 plan_plies=self.plan_plies
@@ -96,7 +106,8 @@ class ChessGameEngine:
             self.debate_v2 = ChessDebateV2(
                 model_name=model_name,
                 temperature=0.1,
-                openai_api_key=os.getenv('OPENAI_API_KEY'),
+                openai_api_key=api_key,
+                base_url=base_url,
                 max_rounds=3,
                 sleep_time=0.1,
                 plan_plies=self.plan_plies
@@ -840,17 +851,55 @@ def main():
                        help="Save game as PGN file")
     parser.add_argument("--no-save", action="store_true",
                        help="Don't save any files")
+    parser.add_argument("--use-anannas", action="store_true",
+                       help="Use Anannas API (requires ANANNAS_API_KEY in .env file)")
+    parser.add_argument("--anannas-base-url", type=str, default=None,
+                       help="Anannas API base URL (defaults to https://api.anannas.ai/v1, or ANANNAS_API_URL from .env)")
     
     args = parser.parse_args()
     
-    # Check for OpenAI API key
-    if not os.getenv('OPENAI_API_KEY'):
-        print("❌ Error: OPENAI_API_KEY environment variable not set")
-        print("💡 Please set your API key in one of these ways:")
-        print("   1. Export it: export OPENAI_API_KEY='your-key-here'")
-        print("   2. Add it to ../.env file: OPENAI_API_KEY=your-key-here")
-        print("   3. Set it in your shell profile")
-        sys.exit(1)
+    # Determine which API to use and get the key from .env
+    use_anannas = args.use_anannas
+    api_key = None
+    base_url = None
+    
+    if use_anannas:
+        # Use Anannas API
+        api_key = os.getenv("ANANNAS_API_KEY")
+        base_url = args.anannas_base_url or os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+        if not api_key:
+            print("Error: ANANNAS_API_KEY not found in .env file")
+            print("Please add ANANNAS_API_KEY=your-key-here to your .env file")
+            sys.exit(1)
+        
+        # Warn if using OpenAI model name with Anannas
+        openai_models = ["gpt-3.5-turbo-instruct", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"]
+        if args.model in openai_models:
+            print(f"\n⚠️  WARNING: You're using Anannas API with OpenAI model name '{args.model}'")
+            print("   Anannas uses different model names. Examples:")
+            print("   - qwen/qwen3-4b:free")
+            print("   - google/gemma-3-4b-it:free")
+            print("   - microsoft/phi-3-mini-128k-instruct:free")
+            print("   - meta-llama/llama-3.3-8b-instruct:free")
+            print("   This will likely result in a 404 error.\n")
+    else:
+        # Use OpenAI API (default)
+        api_key = os.getenv("OPENAI_API_KEY")
+        base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
+        if not api_key:
+            # Fallback: check if Anannas key is available
+            api_key = os.getenv("ANANNAS_API_KEY")
+            base_url = os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+            if api_key:
+                print("Warning: OPENAI_API_KEY not found in .env, using ANANNAS_API_KEY instead")
+                print("Tip: Use --use-anannas flag to explicitly use Anannas API")
+                use_anannas = True
+            else:
+                print("Error: Neither OPENAI_API_KEY nor ANANNAS_API_KEY found in .env file")
+                print("Please add one of these to your .env file:")
+                print("  OPENAI_API_KEY=your-openai-key-here")
+                print("  ANANNAS_API_KEY=your-anannas-key-here")
+                sys.exit(1)
     
     # Initialize game engine
     engine = ChessGameEngine(
@@ -862,7 +911,9 @@ def main():
         use_debate=args.debate,
         use_random_opponent=args.random_opponent,
         plan_plies=args.plan_plies,
-        stockfish_depth=args.stockfish_depth
+        stockfish_depth=args.stockfish_depth,
+        api_key=api_key,
+        base_url=base_url
     )
     
     # Play the game

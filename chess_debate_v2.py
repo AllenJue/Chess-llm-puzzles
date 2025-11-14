@@ -29,13 +29,14 @@ class ChessDebatePlayer(Agent):
     """Chess-specific debate player that extends the base Agent class"""
     
     def __init__(self, model_name: str, name: str, temperature: float, 
-                 openai_api_key: str, sleep_time: float = 0) -> None:
+                 openai_api_key: str, sleep_time: float = 0, base_url: str = None) -> None:
         """Create a chess debate player"""
         super(ChessDebatePlayer, self).__init__(model_name, name, temperature, sleep_time)
         self.openai_api_key = openai_api_key
         self.model_interface = ChessModelInterface(
             api_key=openai_api_key,
             model_name=model_name,
+            base_url=base_url,
             max_completion_tokens=640,
             default_temperature=temperature,
             retry_attempts=2,
@@ -93,7 +94,8 @@ class ChessDebateV2:
                  openai_api_key: str = None,
                  max_rounds: int = 3,
                  sleep_time: float = 0.1,
-                 plan_plies: int = 0):
+                 plan_plies: int = 0,
+                 base_url: str = None):
         """Create a chess debate with moderator and judge"""
         self.model_name = model_name
         self.temperature = temperature
@@ -117,7 +119,8 @@ class ChessDebateV2:
             name="Affirmative side",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         self.negative = ChessDebatePlayer(
@@ -125,7 +128,8 @@ class ChessDebateV2:
             name="Negative side",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         self.moderator = ChessDebatePlayer(
@@ -133,7 +137,8 @@ class ChessDebateV2:
             name="Moderator",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         # Debate results

@@ -24,9 +24,6 @@ from model_interface import ChessModelInterface
 from chess_utils import build_chess_prompts, get_partial_pgn_from_url, extract_predicted_move, extract_plan_sans, san_to_uci
 from glicko_rating import update_agent_rating_from_puzzles, Rating
 
-# Import debate functionality
-import sys
-
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 MAD_DIR = os.path.join(CURRENT_DIR, "MAD")
 if MAD_DIR not in sys.path:
@@ -43,13 +40,14 @@ from chess_debate_v2 import ChessDebateV2, save_debate_history_v2
 
 
 class ChessDebatePlayer(Agent):
-    def __init__(self, model_name: str, name: str, temperature: float, openai_api_key: str, sleep_time: float = 0) -> None:
+    def __init__(self, model_name: str, name: str, temperature: float, openai_api_key: str, sleep_time: float = 0, base_url: str = None) -> None:
         """Create a chess debate player"""
         super(ChessDebatePlayer, self).__init__(model_name, name, temperature, sleep_time)
         self.openai_api_key = openai_api_key
         self.model_interface = ChessModelInterface(
             api_key=openai_api_key,
             model_name=model_name,
+            base_url=base_url,
             max_completion_tokens=640,
             default_temperature=temperature,
             retry_attempts=2,
@@ -92,7 +90,8 @@ class ChessSelfConsistency:
                  openai_api_key: str = None,
                  max_rounds: int = 2,
                  sleep_time: float = 0.1,
-                 plan_plies: int = 0):
+                 plan_plies: int = 0,
+                 base_url: str = None):
         """Create a chess self-consistency system"""
         self.model_name = model_name
         self.temperature = temperature
@@ -107,7 +106,8 @@ class ChessSelfConsistency:
             name="Mikhail Tal (Aggressive)",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         self.positional_gm = ChessDebatePlayer(
@@ -115,7 +115,8 @@ class ChessSelfConsistency:
             name="Magnus Carlsen (Positional)",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         self.neutral_gm = ChessDebatePlayer(
@@ -123,7 +124,8 @@ class ChessSelfConsistency:
             name="Neutral GM",
             temperature=temperature,
             openai_api_key=openai_api_key,
-            sleep_time=sleep_time
+            sleep_time=sleep_time,
+            base_url=base_url
         )
         
         # Set up personas
@@ -1287,8 +1289,8 @@ def main():
                        help="Maximum number of puzzles to evaluate")
     parser.add_argument("--start-puzzle", type=int, default=0,
                        help="Starting puzzle index (0-based)")
-    parser.add_argument("--model", choices=["gpt-3.5-turbo-instruct", "gpt-4-turbo"],
-                       default="gpt-3.5-turbo-instruct", help="Model to use")
+    parser.add_argument("--model", type=str, default="gpt-3.5-turbo-instruct",
+                       help="Model to use (e.g., 'gpt-3.5-turbo-instruct', 'qwen/qwen3-4b:free')")
     parser.add_argument("--evaluate", action="store_true",
                        help="Run puzzle evaluation")
     parser.add_argument("--sample", type=int, default=None,
@@ -1305,18 +1307,49 @@ def main():
                        help="Output file for results")
     parser.add_argument("--plan-plies", type=int, default=0,
                        help="Number of future plies to request in planning prompts (0 disables planning)")
+    parser.add_argument("--use-anannas", action="store_true",
+                       help="Use Anannas API (requires ANANNAS_API_KEY in .env file)")
+    parser.add_argument("--anannas-base-url", type=str, default=None,
+                       help="Anannas API base URL (defaults to https://api.anannas.ai/v1, or ANANNAS_API_URL from .env)")
     
     args = parser.parse_args()
     
     # Load environment
     load_environment()
     
-    # Check for API key
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        print("Error: OPENAI_API_KEY not found in environment")
-        print("Please set your OpenAI API key in the .env file or environment")
-        sys.exit(1)
+    # Determine which API to use and get the key from .env
+    use_anannas = args.use_anannas
+    api_key = None
+    base_url = None
+    
+    if use_anannas:
+        # Use Anannas API
+        api_key = os.getenv("ANANNAS_API_KEY")
+        base_url = args.anannas_base_url or os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+        if not api_key:
+            print("Error: ANANNAS_API_KEY not found in .env file")
+            print("Please add ANANNAS_API_KEY=your-key-here to your .env file")
+            sys.exit(1)
+        
+        # Warn if using OpenAI model name with Anannas may not exist
+    else:
+        # Use OpenAI API (default)
+        api_key = os.getenv("OPENAI_API_KEY")
+        base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
+        if not api_key:
+            # Fallback: check if Anannas key is available
+            api_key = os.getenv("ANANNAS_API_KEY")
+            base_url = os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+            if api_key:
+                print("Warning: OPENAI_API_KEY not found in .env, using ANANNAS_API_KEY instead")
+                print("Tip: Use --use-anannas flag to explicitly use Anannas API")
+                use_anannas = True
+            else:
+                print("Error: Neither OPENAI_API_KEY nor ANANNAS_API_KEY found in .env file")
+                print("Please add one of these to your .env file:")
+                print("  OPENAI_API_KEY=your-openai-key-here")
+                print("  ANANNAS_API_KEY=your-anannas-key-here")
+                sys.exit(1)
     
     # Read CSV file
     try:
@@ -1346,6 +1379,7 @@ def main():
                 model_name=args.model,
                 temperature=0.1,
                 openai_api_key=api_key,
+                base_url=base_url,
                 max_rounds=2,
                 sleep_time=0.1,
                 plan_plies=args.plan_plies
@@ -1364,6 +1398,7 @@ def main():
                 model_name=args.model,
                 temperature=0.1,
                 openai_api_key=api_key,
+                base_url=base_url,
                 max_rounds=3,
                 sleep_time=0.1,
                 plan_plies=args.plan_plies
@@ -1381,6 +1416,7 @@ def main():
             model_interface = ChessModelInterface(
                 api_key=api_key,
                 model_name=args.model,
+                base_url=base_url,
                 max_completion_tokens=640,
                 default_temperature=0.1,
                 retry_attempts=2,

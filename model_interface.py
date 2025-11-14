@@ -22,6 +22,7 @@ class ChessModelInterface:
         api_key: Optional[str] = None,
         model_name: str = "gpt-3.5-turbo-instruct",
         *,
+        base_url: Optional[str] = None,
         max_completion_tokens: int = 640,
         default_temperature: float = 0.1,
         default_top_p: float = 1.0,
@@ -35,17 +36,39 @@ class ChessModelInterface:
             model_name (str): Model name to use
         """
         if api_key is None:
-            api_key = os.getenv("OPENAI_API_KEY")
+            api_key = (
+                os.getenv("ANANNAS_API_KEY")
+                or os.getenv("OPENAI_API_KEY")
+            )
             if not api_key:
-                raise ValueError("OpenAI API key not provided and not found in environment")
-        
-        self.client = OpenAI(api_key=api_key)
+                raise ValueError("OpenAI/Anannas API key not provided and not found in environment")
+
+        if base_url is None:
+            base_url = (
+                os.getenv("ANANNAS_API_URL")
+                or os.getenv("OPENAI_BASE_URL")
+                or os.getenv("OPENAI_API_BASE")
+            )
+
+        client_kwargs = {"api_key": api_key}
+        if base_url:
+            client_kwargs["base_url"] = base_url
+
+        self.client = OpenAI(**client_kwargs)
         self.model_name = model_name
-        self.max_completion_tokens = max_completion_tokens
+        self.base_url = base_url
+        # Reasoning models (like qwen3-4b) need more tokens to complete their reasoning
+        # Detect if this is a reasoning model and increase max_tokens accordingly
+        normalized_name = (model_name or "").lower()
+        is_reasoning_model = "qwen" in normalized_name and "qwen3" in normalized_name
+        if is_reasoning_model and max_completion_tokens < 512:
+            # Reasoning models need at least 512 tokens to complete their thought process
+            self.max_completion_tokens = max(512, max_completion_tokens)
+        else:
+            self.max_completion_tokens = max_completion_tokens
         self.default_temperature = default_temperature
         self.default_top_p = default_top_p
         self.retry_attempts = max(0, retry_attempts)
-        normalized_name = (model_name or "").lower()
         self.is_chat_model = "instruct" not in normalized_name and not normalized_name.startswith("text-")
  
     def _call_model_endpoint(
@@ -80,6 +103,16 @@ class ChessModelInterface:
                 message = getattr(first_choice, "message", None)
                 text_output = (message.content if message else "") or ""
                 finish_reason = getattr(first_choice, "finish_reason", None)
+                
+                # If content is empty but reasoning exists, use reasoning text
+                # This handles reasoning models like Qwen that put output in reasoning field
+                if not text_output or text_output.strip() == "":
+                    reasoning = getattr(message, 'reasoning', None)
+                    if reasoning:
+                        reasoning_text = reasoning if isinstance(reasoning, str) else str(reasoning)
+                        # Use reasoning text as the response - extract functions will parse it
+                        text_output = reasoning_text
+                        print(f"<debug> : Using reasoning text as response (content was empty)")
             text_output = text_output.strip()
             return text_output, response, finish_reason
 

@@ -7,21 +7,27 @@ import os
 import sys
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from .env file in parent directory
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env_file = os.path.join(parent_dir, '.env')
+if os.path.exists(env_file):
+    load_dotenv(env_file)
+else:
+    load_dotenv()  # Fallback to default location
 
-# Add the current directory to the path
-sys.path.append('.')
+# Add the parent directory (chess_puzzles) to the path
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 def test_debate_v2():
     """Test the new debate system"""
     try:
         from chess_debate_v2 import ChessDebateV2
         
-        # Get API key
-        api_key = os.getenv("OPENAI_API_KEY")
+        # Get API key (prioritize Anannas, then OpenAI)
+        api_key = os.getenv("ANANNAS_API_KEY") or os.getenv("OPENAI_API_KEY")
         if not api_key:
-            print("Error: OPENAI_API_KEY not found in environment")
+            print("Error: Neither ANANNAS_API_KEY nor OPENAI_API_KEY found in environment")
             return False
         
         print("Testing Chess Debate V2 system...")
@@ -65,7 +71,8 @@ def test_config_loading():
     """Test that the config file loads correctly"""
     try:
         import json
-        config_path = 'MAD/utils/config4chess.json'
+        # Config path relative to chess_puzzles directory
+        config_path = os.path.join(parent_dir, 'MAD', 'utils', 'config4chess.json')
         
         with open(config_path, 'r') as f:
             config = json.load(f)

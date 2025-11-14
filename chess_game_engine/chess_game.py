@@ -683,16 +683,17 @@ class ChessGameEngine:
         else:
             print(f"✅ No fallback moves needed - all model moves were valid")
         
-        if self.single_model_token_log:
-            total_prompt = sum(entry["prompt_tokens"] for entry in self.single_model_token_log)
-            total_completion = sum(entry["completion_tokens"] for entry in self.single_model_token_log)
-            total_tokens = sum(entry["total_tokens"] for entry in self.single_model_token_log)
-            print(f"📊 Single-model token usage -> prompt {total_prompt}, completion {total_completion}, total {total_tokens}")
-        if self.self_consistency_token_log:
-            total_prompt = sum(entry["total_prompt_tokens"] for entry in self.self_consistency_token_log)
-            total_completion = sum(entry["total_completion_tokens"] for entry in self.self_consistency_token_log)
-            total_tokens = sum(entry["total_tokens"] for entry in self.self_consistency_token_log)
-            print(f"📊 Self-consistency token usage -> prompt {total_prompt}, completion {total_completion}, total {total_tokens}")
+        single_model_total_prompt = sum(entry["prompt_tokens"] for entry in self.single_model_token_log)
+        single_model_total_completion = sum(entry["completion_tokens"] for entry in self.single_model_token_log)
+        single_model_total_tokens = sum(entry["total_tokens"] for entry in self.single_model_token_log)
+        if single_model_total_tokens:
+            print(f"📊 Single-model token usage -> prompt {single_model_total_prompt}, completion {single_model_total_completion}, total {single_model_total_tokens}")
+
+        sc_total_prompt = sum(entry["total_prompt_tokens"] for entry in self.self_consistency_token_log)
+        sc_total_completion = sum(entry["total_completion_tokens"] for entry in self.self_consistency_token_log)
+        sc_total_tokens = sum(entry["total_tokens"] for entry in self.self_consistency_token_log)
+        if sc_total_tokens:
+            print(f"📊 Self-consistency token usage -> prompt {sc_total_prompt}, completion {sc_total_completion}, total {sc_total_tokens}")
 
         return {
             "result": result,
@@ -709,6 +710,12 @@ class ChessGameEngine:
             "timestamp": datetime.now().isoformat(),
             "single_model_token_log": self.single_model_token_log,
             "self_consistency_token_log": self.self_consistency_token_log,
+            "single_model_total_prompt_tokens": single_model_total_prompt,
+            "single_model_total_completion_tokens": single_model_total_completion,
+            "single_model_total_tokens": single_model_total_tokens,
+            "self_consistency_total_prompt_tokens": sc_total_prompt,
+            "self_consistency_total_completion_tokens": sc_total_completion,
+            "self_consistency_total_tokens": sc_total_tokens,
             "single_model_plan_log": self.single_model_plan_log,
             "self_consistency_plan_log": self.self_consistency_plan_log
         }
@@ -746,6 +753,12 @@ class ChessGameEngine:
                 "stockfish_skill": self.stockfish_skill,
                 "total_fallback_moves": len(self.fallback_moves),
                 "fallback_details": self.fallback_moves,
+                "single_model_total_prompt_tokens": game_result.get("single_model_total_prompt_tokens", 0),
+                "single_model_total_completion_tokens": game_result.get("single_model_total_completion_tokens", 0),
+                "single_model_total_tokens": game_result.get("single_model_total_tokens", 0),
+                "self_consistency_total_prompt_tokens": game_result.get("self_consistency_total_prompt_tokens", 0),
+                "self_consistency_total_completion_tokens": game_result.get("self_consistency_total_completion_tokens", 0),
+                "self_consistency_total_tokens": game_result.get("self_consistency_total_tokens", 0),
                 "game_engine_version": "1.0",
                 "saved_at": datetime.now().isoformat()
             }

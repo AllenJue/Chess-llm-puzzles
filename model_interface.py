@@ -11,6 +11,18 @@ from typing import Optional, Any, Dict
 from openai import OpenAI
 from chess_utils import extract_predicted_move, san_to_uci
 
+try:
+    from MAD.utils.openai_utils import num_tokens_from_string  # type: ignore
+except Exception:  # pragma: no cover
+    def num_tokens_from_string(text: str, model_name: str = "") -> int:
+        """
+        Fallback token estimator when the true tokenizer is unavailable.
+        Uses a simple word-count heuristic.
+        """
+        if not text:
+            return 0
+        return max(1, len(text.split()))
+
 
 class ChessModelInterface:
     """
@@ -86,6 +98,8 @@ class ChessModelInterface:
             # OpenAI models: instruct models use completions, others use chat.completions
             self.is_chat_model = "instruct" not in normalized_name and not normalized_name.startswith("text-")
             print(f"<debug> : Using OpenAI API - is_chat_model={self.is_chat_model}")
+
+        self._last_prompt_info: Optional[Dict[str, Any]] = None
  
     def _call_model_endpoint(
         self,
@@ -175,6 +189,20 @@ class ChessModelInterface:
                         text_output = reasoning_text
                         print(f"<debug> : Using reasoning text as response (content was empty)")
             text_output = text_output.strip()
+
+            prompt_text = ""
+            if messages:
+                prompt_text = "\n".join(
+                    msg.get("content", "") for msg in messages if isinstance(msg, dict)
+                )
+
+            self._last_prompt_info = {
+                "prompt_text": prompt_text,
+                "system_prompt": system_prompt,
+                "user_prompt": user_prompt,
+                "is_chat": True,
+                "model": self.model_name,
+            }
             return text_output, response, finish_reason
 
         combined_prompt = system_prompt + "\n" + user_prompt
@@ -191,6 +219,13 @@ class ChessModelInterface:
             first_choice = response.choices[0]
             text_output = (getattr(first_choice, "text", "") or "").strip()
             finish_reason = getattr(first_choice, "finish_reason", None)
+        self._last_prompt_info = {
+            "prompt_text": combined_prompt,
+            "system_prompt": system_prompt,
+            "user_prompt": user_prompt,
+            "is_chat": False,
+            "model": self.model_name,
+        }
         return text_output, response, finish_reason
 
     def query_model_for_move(
@@ -217,6 +252,11 @@ class ChessModelInterface:
             return predicted_move_san
         except Exception as e:
             print(f"Error calling OpenAI API: {e}")
+            error_message = str(e)
+            if "503" in error_message or "service temporarily unavailable" in error_message.lower():
+                wait_seconds = 60
+                print(f"<debug> : Encountered 503/service unavailable error. Sleeping {wait_seconds} seconds before retry.")
+                time.sleep(wait_seconds)
             return None
 
     def query_model_for_move_with_tokens(
@@ -258,10 +298,17 @@ class ChessModelInterface:
                 response,
                 model_override=self.model_name,
                 finish_reason_override=finish_reason,
+                prompt_context=getattr(self, "_last_prompt_info", None),
+                response_text=predicted_move_san,
             ) if response is not None else None
             return predicted_move_san, token_info
         except Exception as e:
             print(f"Error calling OpenAI API: {e}")
+            error_message = str(e)
+            if "503" in error_message or "service temporarily unavailable" in error_message.lower():
+                wait_seconds = 60
+                print(f"<debug> : Encountered 503/service unavailable error. Sleeping {wait_seconds} seconds before retry.")
+                time.sleep(wait_seconds)
             return None, None
 
     def get_move_with_extraction(
@@ -383,6 +430,8 @@ class ChessModelInterface:
         *,
         model_override: Optional[str] = None,
         finish_reason_override: Optional[str] = None,
+        prompt_context: Optional[Dict[str, Any]] = None,
+        response_text: Optional[str] = None,
     ) -> Dict[str, Any]:
         usage = getattr(response, "usage", None)
         prompt_tokens = getattr(usage, "prompt_tokens", 0) if usage else 0
@@ -390,6 +439,29 @@ class ChessModelInterface:
         total_tokens = getattr(usage, "total_tokens", 0) if usage else prompt_tokens + completion_tokens
         if total_tokens == 0 and prompt_tokens and completion_tokens:
             total_tokens = prompt_tokens + completion_tokens
+
+        prompt_text = ""
+        model_for_estimation = model_override or self.model_name
+        if prompt_context:
+            prompt_text = prompt_context.get("prompt_text", "") or ""
+            model_for_estimation = prompt_context.get("model", model_for_estimation)
+
+        # Estimate prompt tokens if missing
+        if (prompt_tokens is None or prompt_tokens == 0) and prompt_text:
+            try:
+                prompt_tokens = num_tokens_from_string(prompt_text, model_for_estimation)
+            except Exception:
+                prompt_tokens = num_tokens_from_string(prompt_text)
+
+        # Estimate completion tokens if missing
+        if (completion_tokens is None or completion_tokens == 0) and response_text:
+            try:
+                completion_tokens = num_tokens_from_string(response_text, model_for_estimation)
+            except Exception:
+                completion_tokens = num_tokens_from_string(response_text)
+
+        if total_tokens in (None, 0):
+            total_tokens = (prompt_tokens or 0) + (completion_tokens or 0)
 
         finish_reason = finish_reason_override
         if finish_reason is None and getattr(response, "choices", None):

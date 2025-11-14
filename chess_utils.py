@@ -301,6 +301,60 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
         print(f"<debug> :   found SAN with result: {repr(result)}")
         return result
 
+    # --- 2a) Sequential parsing with move numbers to determine exact ply ---
+    sequential_pattern = re.compile(r'(\d+\.\.\.)|(\d+\.)|(' + SAN_SUB_PATTERN + r')', flags=re.I)
+    sequential_moves: list[tuple[str, Optional[int], Optional[bool]]] = []
+    current_marker: Optional[int] = None
+    expect_white: Optional[bool] = None
+    for token_match in sequential_pattern.finditer(text):
+        token = token_match.group(0)
+        if re.fullmatch(r'\d+\.\.\.', token):
+            current_marker = int(token.split('.')[0])
+            expect_white = False
+            continue
+        if re.fullmatch(r'\d+\.', token):
+            current_marker = int(token[:-1])
+            expect_white = True
+            continue
+        # SAN token
+        san_token = token.strip()
+        sequential_moves.append((san_token, current_marker, expect_white))
+        if expect_white is None:
+            continue
+        if expect_white:
+            expect_white = False
+        else:
+            expect_white = True
+            if current_marker is not None:
+                current_marker += 1
+
+    if current_turn_number is not None:
+        desired_turn = int(current_turn_number)
+        desired_side = bool(is_white_to_move)
+        for san_token, marker, side in reversed(sequential_moves):
+            if marker == desired_turn and side is not None and side == desired_side:
+                print(f"<debug> :   sequential match for turn {desired_turn} ({'white' if desired_side else 'black'}): {san_token}")
+                return san_token
+
+    # --- 2b) Handle trailing non-numbered lines (models often append future moves without move numbers) ---
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if lines:
+        trailing_candidate: Optional[str] = None
+        for line in reversed(lines):
+            if re.search(r'\b\d+\.', line):
+                # Once we hit a numbered line we are back in the original PGN context
+                break
+            if re.match(r'^(plan|analysis|thought|commentary)\b', line, flags=re.I):
+                continue
+            cleaned_line = re.sub(r'^[A-Za-z ]*[:\-]\s*', '', line)
+            tokens = re.findall(SAN_SUB_PATTERN, cleaned_line, flags=re.IGNORECASE)
+            if tokens:
+                trailing_candidate = tokens[0]
+                print(f"<debug> :   trailing_line_candidate: {repr(trailing_candidate)} from line {repr(line)}")
+                break
+        if trailing_candidate:
+            return trailing_candidate
+
     # Precompute all SAN tokens and their positions
     san_pattern = re.compile(SAN_SUB_PATTERN, flags=re.I)
     san_matches = list(san_pattern.finditer(text))

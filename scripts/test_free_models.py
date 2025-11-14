@@ -9,6 +9,7 @@ import sys
 import argparse
 import time
 from pathlib import Path
+from typing import List, Optional, Set
 
 # Add parent directory to path
 parent_dir = Path(__file__).parent.parent
@@ -31,7 +32,48 @@ WORKING_FREE_MODELS = [
 ]
 
 
-def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base_url: str = None, delay: float = 0.5):
+CONFIG_MODES = ["single", "self_consistency", "debate"]
+
+
+def _select_output_file(model_name: str, mode: str, num_puzzles: int) -> str:
+    """Helper to build consistent output filenames."""
+    safe_model = model_name.replace("/", "_").replace(":", "_")
+    return os.path.join(
+        parent_dir,
+        "data",
+        f"test_results_{safe_model}_{mode}_{num_puzzles}.csv",
+    )
+
+
+def _create_model_interface(model_name: str, base_url: Optional[str], api_key: str, use_openai: bool) -> ChessModelInterface:
+    """Factory to produce a ChessModelInterface with correct provider prioritization."""
+    # Prioritize provider based on flag
+    provider_base_url = base_url
+    if use_openai:
+        provider_base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
+        api_key = os.getenv("OPENAI_API_KEY") or api_key
+
+    return ChessModelInterface(
+        api_key=api_key,
+        model_name=model_name,
+        base_url=provider_base_url,
+        max_completion_tokens=640,
+        default_temperature=0.1,
+        retry_attempts=2,
+    )
+
+
+def test_model(
+    model_name: str,
+    *,
+    num_puzzles: int,
+    csv_file: str,
+    base_url: Optional[str],
+    api_delay: float,
+    use_openai: bool,
+    modes: Optional[List[str]] = None,
+    single_model_only: bool = False,
+):
     """Test a single model on puzzles."""
     print(f"\n{'='*60}")
     print(f"Testing model: {model_name}")
@@ -40,18 +82,21 @@ def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base
     # Load environment
     load_environment()
     
-    # Get API key and base URL - same way as smoke test
-    api_key = os.getenv("ANANNAS_API_KEY")
+    # Get API key and base URL - prioritize based on selected provider
+    api_key = os.getenv("OPENAI_API_KEY") if use_openai else os.getenv("ANANNAS_API_KEY")
     if not api_key:
-        print("Error: ANANNAS_API_KEY not found in .env file")
-        print("Please ensure ANANNAS_API_KEY is set in chess_puzzles/.env")
-        return None
-    
-    if base_url is None:
+        provider_label = "OPENAI_API_KEY" if use_openai else "ANANNAS_API_KEY"
+        print(f"Error: {provider_label} not found in .env file")
+        print("Please ensure the appropriate API key is set in chess_puzzles/.env")
+        return []
+
+    if base_url is None and not use_openai:
         base_url = os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
-    
-    print(f"<debug> : API key loaded: {bool(api_key)}")
-    print(f"<debug> : Base URL: {base_url}")
+    if use_openai:
+        base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
+
+    print(f"<debug> : API key loaded: {bool(api_key)} (provider={'openai' if use_openai else 'anannas'})")
+    print(f"<debug> : Base URL: {base_url or 'OpenAI default'}")
     
     # Default CSV file
     if csv_file is None:
@@ -69,62 +114,194 @@ def test_model(model_name: str, num_puzzles: int = 3, csv_file: str = None, base
         print(f"Error loading CSV: {e}")
         return None
     
-    # Create model interface
-    try:
-        model_interface = ChessModelInterface(
-            api_key=api_key,
-            model_name=model_name,
-            base_url=base_url,
-            max_completion_tokens=640,  # Will auto-increase for reasoning models
-            default_temperature=0.1,
-            retry_attempts=2,
-        )
-    except Exception as e:
-        print(f"Error creating model interface: {e}")
-        return None
-    
-    # Test with single model
-    output_file = os.path.join(
-        parent_dir, 
-        "data", 
-        f"test_results_{model_name.replace('/', '_').replace(':', '_')}.csv"
-    )
-    
-    # Run evaluation
-    try:
-        result_df = evaluate_puzzles(
-            df=df,
-            model_interface=model_interface,
-            debate=None,
-            debate_v2=None,
-            max_puzzles=num_puzzles,
-            start_puzzle=0,
-            planning_plies=0,
-            api_delay=delay,
-        )
-        
-        # Save results
-        result_df.to_csv(output_file, index=False)
-        print(f"\n✅ Results saved to: {output_file}")
-        
-        # Print summary
-        if len(result_df) > 0:
-            solved = result_df['puzzle_solved'].sum() if 'puzzle_solved' in result_df.columns else 0
-            total = len(result_df)
-            print(f"Solved: {solved}/{total} ({100*solved/total:.1f}%)")
-            
-            # Show token usage if available
-            if 'single_model_total_prompt_tokens' in result_df.columns:
-                total_prompt = result_df['single_model_total_prompt_tokens'].sum()
-                total_completion = result_df['single_model_total_completion_tokens'].sum()
-                print(f"Total tokens - Prompt: {total_prompt}, Completion: {total_completion}")
-        
-        return result_df
-    except Exception as e:
-        print(f"❌ Error testing model {model_name}: {e}")
-        import traceback
-        traceback.print_exc()
-        return None
+    modes = modes or CONFIG_MODES
+    results: List[pd.DataFrame] = []
+
+    for mode in modes:
+        if single_model_only and mode != "single":
+            continue
+
+        print(f"\n--- Running mode: {mode} ---")
+        output_file = _select_output_file(model_name, mode, num_puzzles)
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+        try:
+            if mode == "single":
+                model_interface = _create_model_interface(model_name, base_url, api_key, use_openai)
+                result_df = evaluate_puzzles(
+                    df=df,
+                    model_interface=model_interface,
+                    max_puzzles=num_puzzles,
+                    start_puzzle=0,
+                    planning_plies=0,
+                    api_delay=api_delay,
+                )
+            elif mode == "self_consistency":
+                from main import ChessSelfConsistency  # delayed import to avoid circular
+
+                sc_player = ChessSelfConsistency(
+                    model_name=model_name,
+                    temperature=0.1,
+                    openai_api_key=api_key,
+                    base_url=base_url,
+                    max_rounds=2,
+                    sleep_time=api_delay,
+                    plan_plies=0,
+                )
+                result_df = evaluate_puzzles(
+                    df=df,
+                    debate=sc_player,
+                    max_puzzles=num_puzzles,
+                    start_puzzle=0,
+                    planning_plies=0,
+                    api_delay=api_delay,
+                )
+            else:  # debate
+                from chess_debate_v2 import ChessDebateV2
+
+                debate_player = ChessDebateV2(
+                    model_name=model_name,
+                    temperature=0.1,
+                    openai_api_key=api_key,
+                    base_url=base_url,
+                    max_rounds=3,
+                    sleep_time=api_delay,
+                    plan_plies=0,
+                )
+                result_df = evaluate_puzzles(
+                    df=df,
+                    debate_v2=debate_player,
+                    max_puzzles=num_puzzles,
+                    start_puzzle=0,
+                    planning_plies=0,
+                    api_delay=api_delay,
+                )
+
+            trimmed_df = trim_results_dataframe(result_df, mode)
+            trimmed_df.to_csv(output_file, index=False)
+            print(f"✅ Saved {mode} results to: {output_file}")
+
+            solved = trimmed_df["puzzle_solved"].sum() if "puzzle_solved" in trimmed_df.columns else 0
+            total = len(trimmed_df)
+            print(f"   Solved: {solved}/{total} ({100 * solved / total:.1f}%)")
+
+            if "total_prompt_tokens" in trimmed_df.columns:
+                total_prompt = trimmed_df["total_prompt_tokens"].sum()
+                total_completion = trimmed_df["total_completion_tokens"].sum()
+                print(f"   Tokens -> prompt {total_prompt}, completion {total_completion}")
+
+            results.append(trimmed_df)
+        except Exception as e:
+            print(f"❌ Error running mode {mode} for {model_name}: {e}")
+            continue
+
+    return results
+
+
+def trim_results_dataframe(df: pd.DataFrame, mode: str) -> pd.DataFrame:
+    """Reduce dataframe to essential columns for downstream analysis."""
+    common_keep: Set[str] = {
+        "PuzzleId",
+        "FEN",
+        "Moves",
+        "Rating",
+        "Themes",
+        "correct_moves",
+        "puzzle_solved",
+        "total_moves",
+        "accuracy_percentage",
+        "error",
+        "total_prompt_tokens",
+        "total_completion_tokens",
+        "total_tokens",
+        "estimated_cost_usd",
+        "prompt_token_log",
+        "board_fen",
+        "played_plies",
+        "current_turn",
+        "is_white_to_move",
+        "user_prompt",
+        "system_prompt",
+    }
+    single_keep: Set[str] = {
+        "single_model_move",
+        "single_model_response",
+        "single_model_prompt_tokens",
+        "single_model_completion_tokens",
+        "single_model_total_tokens",
+        "single_model_total_prompt_tokens",
+        "single_model_total_completion_tokens",
+        "single_model_model",
+        "single_model_finish_reason",
+        "single_model_prompt_log",
+        "single_model_fallback",
+    }
+    sc_keep: Set[str] = {
+        "aggressive_move",
+        "aggressive_response",
+        "aggressive_prompt_tokens",
+        "aggressive_completion_tokens",
+        "aggressive_total_tokens",
+        "aggressive_model",
+        "aggressive_finish_reason",
+        "positional_move",
+        "positional_response",
+        "positional_prompt_tokens",
+        "positional_completion_tokens",
+        "positional_total_tokens",
+        "positional_model",
+        "positional_finish_reason",
+        "neutral_move",
+        "neutral_response",
+        "neutral_prompt_tokens",
+        "neutral_completion_tokens",
+        "neutral_total_tokens",
+        "neutral_model",
+        "neutral_finish_reason",
+        "final_consensus_move",
+        "self_consistency_total_prompt_tokens",
+        "self_consistency_total_completion_tokens",
+        "self_consistency_total_tokens",
+        "self_consistency_prompt_log",
+    }
+    debate_keep: Set[str] = {
+        "debate_history",
+        "debate_v2_history",
+        "moderator_decision",
+        "moderator_prompt_tokens",
+        "moderator_completion_tokens",
+        "moderator_total_tokens",
+        "moderator_model",
+        "moderator_finish_reason",
+        "moderator_response",
+        "judge_decision",
+        "judge_prompt_tokens",
+        "judge_completion_tokens",
+        "judge_total_tokens",
+        "judge_model",
+        "judge_finish_reason",
+        "judge_response",
+        "final_reason",
+        "supported_side",
+        "debate_total_prompt_tokens",
+        "debate_total_completion_tokens",
+        "debate_total_tokens",
+        "debate_prompt_log",
+        "debate_success",
+        "debate_rounds",
+    }
+
+    keep_columns = set(col for col in df.columns if col in common_keep)
+    if mode == "single":
+        keep_columns |= single_keep
+    elif mode == "self_consistency":
+        keep_columns |= sc_keep | single_keep  # retain single columns for comparison
+    elif mode == "debate":
+        keep_columns |= debate_keep | single_keep
+
+    present_keep = [col for col in df.columns if col in keep_columns]
+    trimmed_df = df.loc[:, present_keep].copy()
+    return trimmed_df
 
 
 def main():
@@ -167,6 +344,22 @@ def main():
         default=None,
         help="Anannas API base URL (defaults to https://api.anannas.ai/v1)"
     )
+    parser.add_argument(
+        "--openai",
+        action="store_true",
+        help="Use OpenAI API instead of Anannas"
+    )
+    parser.add_argument(
+        "--modes",
+        type=str,
+        default="single,self_consistency,debate",
+        help="Comma-separated list of modes to run (single,self_consistency,debate)"
+    )
+    parser.add_argument(
+        "--single-only",
+        action="store_true",
+        help="Only run single-model mode"
+    )
     
     args = parser.parse_args()
     
@@ -179,10 +372,17 @@ def main():
             print(f"   Known models: {', '.join(WORKING_FREE_MODELS)}")
         models_to_test = [args.model]
     
+    modes = [mode.strip() for mode in args.modes.split(",") if mode.strip() in CONFIG_MODES]
+    if not modes:
+        print("No valid modes selected; defaulting to single.")
+        modes = ["single"]
+
     print(f"\nTesting {len(models_to_test)} model(s) on {args.num_puzzles} puzzle(s) each")
-    print("Using Anannas API for free models")
+    provider_label = "OpenAI" if args.openai else "Anannas"
+    print(f"Using {provider_label} API")
+    print(f"Modes: {', '.join(modes)}")
     print(f"Delay between models: {args.delay}s, Delay between API calls: {args.api_delay}s\n")
-    
+
     results = {}
     api_issues = []
     
@@ -192,19 +392,23 @@ def main():
             print(f"\nWaiting {args.delay} seconds before next model...")
             time.sleep(args.delay)
         
-        result = test_model(model, args.num_puzzles, args.csv_file, args.anannas_base_url, delay=args.api_delay)
+        result = test_model(
+            model,
+            num_puzzles=args.num_puzzles,
+            csv_file=args.csv_file or os.path.join(parent_dir, "data", "lichess_puzzles_with_pgn_1000.csv"),
+            base_url=args.anannas_base_url,
+            api_delay=args.api_delay,
+            use_openai=args.openai,
+            modes=modes,
+            single_model_only=args.single_only,
+        )
         results[model] = result
         
         # Track API issues
-        if result is None:
+        if not result:
             api_issues.append({
                 "model": model,
                 "issue": "Failed to initialize or run",
-            })
-        elif len(result) == 0:
-            api_issues.append({
-                "model": model,
-                "issue": "No results returned",
             })
     
     # Summary
@@ -215,14 +419,16 @@ def main():
     successful = []
     failed = []
     
-    for model, result in results.items():
-        if result is not None and len(result) > 0:
-            solved = result['puzzle_solved'].sum() if 'puzzle_solved' in result.columns else 0
-            total = len(result)
+    for model, model_results in results.items():
+        if model_results:
+            # Aggregate summary per model across modes
+            combined_df = pd.concat(model_results, ignore_index=True)
+            solved = combined_df["puzzle_solved"].sum() if "puzzle_solved" in combined_df.columns else 0
+            total = len(combined_df)
             status = "✅" if solved > 0 else "⚠️"
-            print(f"{status} {model}: {solved}/{total} solved ({100*solved/total:.1f}%)")
+            print(f"{status} {model}: {solved}/{total} solved ({100 * solved / total:.1f}%) across modes {', '.join(modes)}")
             successful.append(model)
-        else:
+        elif model in models_to_test:
             print(f"❌ {model}: Failed")
             failed.append(model)
             if model not in [issue["model"] for issue in api_issues]:

@@ -144,7 +144,7 @@ class ChessSelfConsistency:
             "You will be given a partially completed game.\n"
             f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
             "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
-            "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
+            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
             "NO other explanations. Just complete the algebraic notation."
         )
@@ -575,10 +575,8 @@ def _is_open_source_model(model_interface: Optional[ChessModelInterface] = None,
         return hasattr(debate_v2, 'base_url') and debate_v2.base_url and "anannas" in debate_v2.base_url.lower()
     return False
 
-def _get_system_prompt_for_model(num_future_moves: int, is_open_source: bool) -> str:
-    """Get the appropriate system prompt based on model type."""
-    # Use the same prompt for both OpenAI and open source models
-    # (Open source models were getting confused by "*" in the PGN, which we'll remove separately)
+def _get_system_prompt_for_model(num_future_moves: int) -> str:
+    """Get the system prompt (same for all models)."""
     return (
         "You are a chess grandmaster.\n"
         "You will be given a partially completed game.\n"
@@ -869,18 +867,12 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
 
                     num_future_moves = planning_plies + 1 if planning_plies > 0 else 3
 
-                    # Detect if using open source model and use appropriate prompt
-                    is_open_source = _is_open_source_model(model_interface, debate, debate_v2)
-                    system_prompt = _get_system_prompt_for_model(num_future_moves, is_open_source)
+                    # Use the same prompt for all models (OpenAI and open-source)
+                    system_prompt = _get_system_prompt_for_model(num_future_moves)
 
                     exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
                     current_game = chess.pgn.Game.from_board(current_board)
                     user_prompt = current_game.accept(exporter)
-                    
-                    # Remove "*" (checkmate symbol) from user prompt for open source models
-                    # They get confused by this symbol
-                    if is_open_source:
-                        user_prompt = user_prompt.replace("*", "").strip()
 
                     print("\n--- Model Turn ---")
                     print("Board:")
@@ -1167,6 +1159,14 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         df_eval.loc[idx, "single_model_response"] = raw_response
                         df_eval.loc[idx, "single_model_move"] = predicted_san
                         
+                        # Save input information for single model
+                        df_eval.loc[idx, "board_fen"] = current_board.fen()
+                        df_eval.loc[idx, "played_plies"] = played_plies
+                        df_eval.loc[idx, "current_turn"] = played_plies // 2 + 1
+                        df_eval.loc[idx, "is_white_to_move"] = current_board.turn
+                        df_eval.loc[idx, "user_prompt"] = user_prompt
+                        df_eval.loc[idx, "system_prompt"] = system_prompt
+                        
                         # Save token information for single model
                         if token_info:
                             df_eval.loc[idx, "single_model_prompt_tokens"] = token_info.get("prompt_tokens", 0)
@@ -1312,7 +1312,7 @@ def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="Chess Puzzle Evaluator")
     
-    parser.add_argument("--csv-file", default="lichess_puzzles_with_pgn_1000.csv",
+    parser.add_argument("--csv-file", default="data/input/lichess_puzzles_with_pgn_1000.csv",
                        help="Path to CSV file with puzzle data")
     parser.add_argument("--max-puzzles", type=int, default=10,
                        help="Maximum number of puzzles to evaluate")

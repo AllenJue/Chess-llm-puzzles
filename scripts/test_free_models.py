@@ -41,6 +41,7 @@ def _select_output_file(model_name: str, mode: str, num_puzzles: int) -> str:
     return os.path.join(
         parent_dir,
         "data",
+        "test_results",
         f"test_results_{safe_model}_{mode}_{num_puzzles}.csv",
     )
 
@@ -100,7 +101,7 @@ def test_model(
     
     # Default CSV file
     if csv_file is None:
-        csv_file = os.path.join(parent_dir, "data", "lichess_puzzles_with_pgn_1000.csv")
+        csv_file = os.path.join(parent_dir, "data", "input", "lichess_puzzles_with_pgn_1000.csv")
     
     if not os.path.exists(csv_file):
         print(f"Error: CSV file not found: {csv_file}")
@@ -395,7 +396,7 @@ def main():
         result = test_model(
             model,
             num_puzzles=args.num_puzzles,
-            csv_file=args.csv_file or os.path.join(parent_dir, "data", "lichess_puzzles_with_pgn_1000.csv"),
+            csv_file=args.csv_file or os.path.join(parent_dir, "data", "input", "lichess_puzzles_with_pgn_1000.csv"),
             base_url=args.anannas_base_url,
             api_delay=args.api_delay,
             use_openai=args.openai,

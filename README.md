@@ -1,6 +1,6 @@
 # Chess Puzzle Evaluator
 
-A Python project for evaluating chess puzzles using OpenAI models and the Glicko-2 rating system. Using GPT-3.5-Turbo-Instruct, the model performs surprisingly well for complete Lichess puzzles with an accuracy of about 55%. This is likely lower than expected, as the prompt results in inconsistently-formatted outputs, which requires a robust parser to find the expected move.
+A Python project for evaluating chess puzzles using multiple LLM paradigms (single model, self-consistency, and debate) across various models including OpenAI GPT-3.5-turbo-instruct and open-source models via Anannas API. The system evaluates models on Lichess puzzles and tracks accuracy, token usage, and error rates across different evaluation paradigms.
 
 ## Quick Setup
 
@@ -63,11 +63,45 @@ model = ChessModelInterface(api_key="your-api-key")
 
 ## Results and Analysis
 
-### Performance by Puzzle Theme
-![Accuracy by Puzzle Theme](graphs/accuracy_by_puzzle_theme.png)
+### Paradigm Comparison (First 50 Puzzles)
 
-### Performance by Puzzle Rating
-![Accuracy by Puzzle Rating](graphs/accuracy_puzzle_bin.png)
+The system evaluates three paradigms:
+- **Single Model**: Direct query to a single model
+- **Self-Consistency**: Three independent queries (Aggressive, Positional, Neutral GMs) with consensus voting
+- **Debate**: Two-agent debate (Affirmative vs Negative) with moderator/judge, with early consensus when both agree
+
+#### Puzzle Accuracy Comparison
+![Paradigm Comparison - Puzzle Accuracy](data/graphs/paradigm_comparison_puzzle_accuracy.png)
+
+#### Move Accuracy Comparison
+![Paradigm Comparison - Move Accuracy](data/graphs/paradigm_comparison_move_accuracy.png)
+
+#### Token Usage Comparison
+![Paradigm Comparison - Token Usage](data/graphs/paradigm_comparison_tokens.png)
+
+### Single Model Performance
+
+#### Puzzle and Move Accuracy
+![Single Model - Puzzle Accuracy](data/graphs/single_model_puzzle_accuracy.png)
+![Single Model - Move Accuracy](data/graphs/single_model_move_accuracy.png)
+
+#### Token Usage
+![Single Model - Token Usage](data/graphs/single_model_token_usage.png)
+
+#### Error Analysis
+![Single Model - Error Rate](data/graphs/single_model_error_rate.png)
+![Single Model - Error Count](data/graphs/single_model_error_count.png)
+![Single Model - Error Types](data/graphs/single_model_error_types.png)
+
+### Key Findings
+
+1. **Debate Efficiency**: The debate system achieves early consensus 81.8% of the time for GPT-3.5-turbo-instruct, using only 2 queries instead of 3, resulting in 0.58x the tokens of self-consistency.
+
+2. **Self-Consistency Token Usage**: Self-consistency uses approximately 3x the prompt tokens of single model (as expected with 3 queries), but completion tokens vary based on response length.
+
+3. **Model Performance**: Different models show varying accuracy across paradigms, with some models performing better in single model mode while others benefit from multi-agent approaches.
+
+4. **Token Tracking**: The system now properly tracks tokens for all paradigms, even when queries fail to extract moves, ensuring accurate cost analysis.
 
 ## Data Source and Citations
 
@@ -77,8 +111,18 @@ The evaluation methodology follows established approaches for LLM chess evaluati
 - [Chess LLM Evaluation](https://nicholas.carlini.com/writing/2023/chess-llm.html) by Nicholas Carlini
 - [More Chess Analysis](https://dynomight.net/more-chess/) by Dynomight
 
-**Current Model**: GPT-3.5-turbo-instruct  
-**Future Plans**: Evaluation of additional models including GPT-4, Claude, and other chess-specialized models
+**Current Models Evaluated**:
+- GPT-3.5-turbo-instruct (OpenAI)
+- arcee-ai/afm-4.5b
+- deepseek-ai/deepseek-v3
+- meta-llama/llama-3.1-8b-instruct
+- meta-llama/llama-3.3-70b-instruct
+- mistralai/mistral-small-24b-instruct-2501
+- qwen/qwen3-235b-a22b-instruct-2507
+
+**Evaluation Paradigms**: Single Model, Self-Consistency, Debate V2
+
+**Results Location**: `data/test_results/` (organized by paradigm: `single_50/`, `self_consistency_50/`, `debate_50/`)
 
 ## Documentation
 

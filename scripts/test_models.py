@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Test script to run each free model on a small set of puzzles.
-This helps verify that each model works correctly with the chess framework.
+Test script to run models on chess puzzles.
+Supports testing any model via Anannas or OpenAI API.
 """
 
 import os

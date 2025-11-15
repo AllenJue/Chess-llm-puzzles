@@ -137,16 +137,25 @@ class ChessSelfConsistency:
 
     def setup_personas(self):
         """Set up the grandmaster personas"""
-        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 1
+        
+        if num_future_moves == 1:
+            move_instruction = "give ONE new move."
+        else:
+            move_instruction = f"give the next {num_future_moves} moves."
 
         base_prompt = (
             "You are a chess grandmaster.\n"
+            "\n"
             "You will be given a partially completed game.\n"
-            f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
-            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
-            "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+            "\n"
+            f"After seeing it, you should repeat the ENTIRE GAME and then {move_instruction}\n"
+            "\n"
+            "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
+            "\n"
             "ALWAYS repeat the entire representation of the game so far.\n"
-            "NO other explanations. Just complete the algebraic notation."
+            "\n"
+            "NEVER explain your choice.\n"
         )
 
         aggressive_prompt = base_prompt
@@ -577,14 +586,23 @@ def _is_open_source_model(model_interface: Optional[ChessModelInterface] = None,
 
 def _get_system_prompt_for_model(num_future_moves: int) -> str:
     """Get the system prompt (same for all models)."""
+    if num_future_moves == 1:
+        move_instruction = "give ONE new move."
+    else:
+        move_instruction = f"give the next {num_future_moves} moves."
+    
     return (
         "You are a chess grandmaster.\n"
+        "\n"
         "You will be given a partially completed game.\n"
-        f"Complete the algebraic notation by repeating the ENTIRE GAME and then giving the next {num_future_moves} moves.\n"
-        "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
-        "Use standard algebraic notation, e.g. 'e4' or 'Rdf8'.\n"
+        "\n"
+        f"After seeing it, you should repeat the ENTIRE GAME and then {move_instruction}\n"
+        "\n"
+        "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
+        "\n"
         "ALWAYS repeat the entire representation of the game so far.\n"
-        "NO other explanations. Just complete the algebraic notation."
+        "\n"
+        "NEVER explain your choice.\n"
     )
 
 def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = None, 
@@ -865,7 +883,7 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                     move_response_text: Optional[str] = None
                     move_selected_san: Optional[str] = None
 
-                    num_future_moves = planning_plies + 1 if planning_plies > 0 else 3
+                    num_future_moves = planning_plies + 1 if planning_plies > 0 else 1
 
                     # Use the same prompt for all models (OpenAI and open-source)
                     system_prompt = _get_system_prompt_for_model(num_future_moves)

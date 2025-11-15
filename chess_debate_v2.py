@@ -176,13 +176,36 @@ class ChessDebateV2:
         self.moderator.memory_lst = []
 
     def _apply_plan_instruction(self, prompt: str) -> str:
-        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 3
-        pattern = re.compile(r"(the next) ([^\s]+) (moves)", flags=re.IGNORECASE)
-
-        def _repl(match: re.Match) -> str:
-            return f"{match.group(1)} {num_future_moves} {match.group(3)}"
-
-        updated_prompt, count = pattern.subn(_repl, prompt, count=1)
+        """Apply plan instruction based on plan_plies.
+        - If plan_plies == 0: use "ONE new move"
+        - If plan_plies > 0: use "the next {num_future_moves} moves"
+        """
+        num_future_moves = self.plan_plies + 1 if self.plan_plies > 0 else 1
+        
+        if num_future_moves == 1:
+            # Replace "the next ... moves" with "ONE new move"
+            pattern = re.compile(r"(give )the next [^\s]+ moves", flags=re.IGNORECASE)
+            def _repl_one(match: re.Match) -> str:
+                return f"{match.group(1)}ONE new move"
+            updated_prompt, count = pattern.subn(_repl_one, prompt, count=1)
+            # If no match, check if "ONE new move" is already there
+            if count == 0 and "ONE new move" not in prompt:
+                # Try to replace any "the next ... moves" pattern
+                pattern2 = re.compile(r"the next [^\s]+ moves", flags=re.IGNORECASE)
+                updated_prompt, count = pattern2.subn("ONE new move", prompt, count=1)
+        else:
+            # Replace "ONE new move" with "the next {num_future_moves} moves"
+            pattern = re.compile(r"ONE new move", flags=re.IGNORECASE)
+            def _repl_multi(match: re.Match) -> str:
+                return f"the next {num_future_moves} moves"
+            updated_prompt, count = pattern.subn(_repl_multi, prompt, count=1)
+            # Also handle existing "the next ... moves" pattern
+            if count == 0:
+                pattern2 = re.compile(r"(the next) ([^\s]+) (moves)", flags=re.IGNORECASE)
+                def _repl_existing(match: re.Match) -> str:
+                    return f"{match.group(1)} {num_future_moves} {match.group(3)}"
+                updated_prompt, count = pattern2.subn(_repl_existing, prompt, count=1)
+        
         return updated_prompt if count > 0 else prompt
 
 

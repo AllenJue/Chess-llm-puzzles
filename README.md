@@ -111,10 +111,12 @@ The evaluation methodology follows established approaches for LLM chess evaluati
 - GPT-3.5-turbo-instruct (OpenAI)
 - arcee-ai/afm-4.5b
 - deepseek-ai/deepseek-v3
+- google/gemma-2-2b-it
 - meta-llama/llama-3.1-8b-instruct
 - meta-llama/llama-3.3-70b-instruct
 - mistralai/mistral-small-24b-instruct-2501
 - qwen/qwen3-235b-a22b-instruct-2507
+- together/google-gemma-3n-E4B-it
 
 **Evaluation Paradigms**: Single Model, Self-Consistency, Debate V2
 

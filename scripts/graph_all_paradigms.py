@@ -21,10 +21,16 @@ sys.path.insert(0, str(parent_dir))
 sns.set_style("whitegrid")
 plt.rcParams['font.size'] = 10
 
-# Models to exclude (failed models)
+# Models to exclude (failed models or API issues)
 EXCLUDED_MODELS = [
     "google/gemma-3-4b-it (free)",
     "google/gemma-3-12b-it (free)",
+    "google/gemma-3-4b-it:free",
+    "google/gemma-3-12b-it:free",
+    "google/gemma-3-27b-it:free",
+    "google/gemma-3-4b-it",
+    "google/gemma-3-12b-it",
+    "google/gemma-3-27b-it",
     "meta-llama/llama-3.3-8b-instruct (free)",
 ]
 

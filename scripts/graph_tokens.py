@@ -126,6 +126,12 @@ def create_token_graphs(results_dir: str = "data/test_results", output_dir: str 
     excluded_models = [
         "google/gemma-3-4b-it (free)",
         "google/gemma-3-12b-it (free)",
+        "google/gemma-3-4b-it:free",
+        "google/gemma-3-12b-it:free",
+        "google/gemma-3-27b-it:free",
+        "google/gemma-3-4b-it",
+        "google/gemma-3-12b-it",
+        "google/gemma-3-27b-it",
         "meta-llama/llama-3.3-8b-instruct (free)",
     ]
     

@@ -79,20 +79,6 @@ The system evaluates three paradigms:
 #### Token Usage Comparison
 ![Paradigm Comparison - Token Usage](data/graphs/paradigm_comparison_tokens.png)
 
-### Single Model Performance
-
-#### Puzzle and Move Accuracy
-![Single Model - Puzzle Accuracy](data/graphs/single_model_puzzle_accuracy.png)
-![Single Model - Move Accuracy](data/graphs/single_model_move_accuracy.png)
-
-#### Token Usage
-![Single Model - Token Usage](data/graphs/single_model_token_usage.png)
-
-#### Error Analysis
-![Single Model - Error Rate](data/graphs/single_model_error_rate.png)
-![Single Model - Error Count](data/graphs/single_model_error_count.png)
-![Single Model - Error Types](data/graphs/single_model_error_types.png)
-
 ### Key Findings
 
 1. **Debate Efficiency**: The debate system achieves early consensus 81.8% of the time for GPT-3.5-turbo-instruct, using only 2 queries instead of 3, resulting in 0.58x the tokens of self-consistency.

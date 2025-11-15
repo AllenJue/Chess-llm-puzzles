@@ -205,7 +205,16 @@ class ChessModelInterface:
             }
             return text_output, response, finish_reason
 
-        combined_prompt = system_prompt + "\n" + user_prompt
+        # For completion API (instruct models), combine system and user prompts
+        # Format: system prompt, blank line, then user prompt
+        if system_prompt:
+            combined_prompt = f"{system_prompt}\n\n{user_prompt}"
+        else:
+            combined_prompt = user_prompt
+        
+        print(f"<debug> : Using completions API (instruct model)")
+        print(f"<debug> : Combined prompt preview: {combined_prompt[:200]}...")
+        
         response = self.client.completions.create(
             model=self.model_name,
             prompt=combined_prompt,

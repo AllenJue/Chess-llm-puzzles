@@ -1,118 +1,566 @@
 PuzzleId,FEN,Moves,Rating,Themes,correct_moves,puzzle_solved,total_moves,accuracy_percentage,error,single_model_response,single_model_move,single_model_prompt_tokens,single_model_completion_tokens,single_model_total_tokens,single_model_model,single_model_finish_reason,total_prompt_tokens,total_completion_tokens,total_tokens,estimated_cost_usd,single_model_total_prompt_tokens,single_model_total_completion_tokens,prompt_token_log,single_model_prompt_log,single_model_fallback,board_fen,played_plies,current_turn,is_white_to_move,user_prompt,system_prompt
-f9PQx,6k1/p5pp/n3qp2/1p6/1b1N1QN1/7P/PBp2PP1/5rK1 w - - 0 28,g1f1 e6e1,998,master mate mateIn1 middlegame oneMove,0,False,1.0,100.0,Mismatch: expected e6e1 but got e6f7,"1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5
+f9PQx,6k1/p5pp/n3qp2/1p6/1b1N1QN1/7P/PBp2PP1/5rK1 w - - 0 28,g1f1 e6e1,998,master mate mateIn1 middlegame oneMove,0,False,1.0,100.0,Mismatch: expected e6e1 but got None,"1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5 8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4 Qe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8 21. Nde5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rd1 27. Nd4 Rxf1+ 28. Kxf1 Nf6
+
+29. Qg5
+
+30. Qxg7+ Kf7
+
+31. Qxg7+ Ke8
+
+32. Qxg7+ Kd8
+
+33. Qxg7+ Kc8
+
+34. Qxg7+ Kd8
+
+35. Qxg7+ Kc8
+
+36. Qxg7+ Kd8
+
+37. Qxg7+ Kc8
+
+38. Qxg7+ Kd8
+
+39. Qxg7+ Kc8
+
+40. Qxg7+ Kd8
+
+41. Qxg7+ Kc8
+
+42. Qxg7+ Kd8
+
+43. Qxg7+ Kc8
+
+44. Qxg7+ Kd8
+
+45. Qxg7+ Kc8
+
+46. Qxg7+ Kd8
+
+47. Qxg7+ Kc8
+
+48. Qxg7+ Kd8
+
+49. Qxg7+ Kc8
+
+50. Qxg7+ Kd8
+
+51. Qxg7+ Kc8
+
+52. Qxg7+ Kd8
+
+53. Qxg7+ Kc8
+
+54. Qxg7+ Kd8
+
+55. Qxg7+ Kc8
+
+56. Qxg7+ Kd8
+
+57. Qxg7+ Kc8
+
+58. Qxg7+ Kd8
+
+59. Qxg7+ Kc8
+
+60. Qxg7+ Kd8
+
+61. Qxg7+ Kc8
+
+62. Qxg7+ Kd8
+
+63. Qxg7+ Kc8
+
+64. Qxg7+ Kd8
+
+65. Qxg7+ Kc8
+
+66. Qxg7+ Kd8",Nf6,320,640,960,arcee-ai/afm-4.5b,length,320,640,960,0.0,320,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 55, ""turn_number"": 28, ""is_white_to_move"": false, ""prompt_tokens"": 320, ""completion_tokens"": 640, ""total_tokens"": 960, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 0}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 55, ""turn_number"": 28, ""is_white_to_move"": false, ""prompt_tokens"": 320, ""completion_tokens"": 640, ""total_tokens"": 960, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 0}]",False,6k1/p5pp/n3qp2/1p6/1b1N1QN1/7P/PBp2PP1/5K2 b - - 0 28,55,28,False,"1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 d5 6. Bxd5 Nf6 7. Nf3 Nxd5
 8. exd5 Bb4+ 9. Nc3 O-O 10. O-O c6 11. Qd4 c5 12. Qf4 Na6 13. Rad1 Re8 14. Ne4
 Qe7 15. Nd6 Rd8 16. Nc4 b5 17. Nce5 Rf8 18. d6 Qe6 19. d7 Bxd7 20. Nxd7 Rfd8
 21. Nde5 c4 22. h3 c3 23. Bc1 c2 24. Rxd8+ Rxd8 25. Bb2 f6 26. Ng4 Rd1 27. Nd4
-Rxf1+ 28. Kxf1
+Rxf1+ 28. Kxf1 *","You are a chess grandmaster.
 
-Ng6 Be7 Qf7",Qf7,353,235,353,google/gemma-3-12b-it:free,stop,353,235,353,0.0,353,235,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 55, ""turn_number"": 28, ""is_white_to_move"": false, ""prompt_tokens"": 353, ""completion_tokens"": 235, ""total_tokens"": 353, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 0}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 55, ""turn_number"": 28, ""is_white_to_move"": false, ""prompt_tokens"": 353, ""completion_tokens"": 235, ""total_tokens"": 353, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 0}]",False,,0,0,True,,
-RmvPy,r2q1rk1/p1p2ppp/2pn4/3p4/5Pb1/1P1PP1R1/PBP3PP/RN1Q2K1 b - - 4 14,g4d1 g3g7 g8h8 g7f7 h8g8 f7g7,1756,advantage deflection discoveredAttack kingsideAttack long middlegame,0,False,3.0,0.0,Mismatch: expected g3g7 but got b2d4,"1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8. Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3 Bxd1
+You will be given a partially completed game.
 
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2 Rd8 21. Ke3 Rxd3+ 22. Rxd3 Bf6
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2 Rd8 21. Ke3 Rxd3+ 22. Rxd3 Bf6 23. Kd4 Bg5 24. Re3 Bf6 25. Re7
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2 Rd8 21. Ke3 Rxd3+ 22. Rxd3 Bf6 23. Kd4 Bg5 24. Re3 Bf6 25. Re7 Rd8
+ALWAYS repeat the entire representation of the game so far.
 
-Rf1 Qb8 15. Bd4 Qxb2 16. Qa4 Qxa4 17. Rxa4 Bf6 18. Ra3 Be7 19. Ra1 Rc8 20. Kf2 Rd8 21. Ke3 Rxd3+ 22. Rxd3 Bf6 23. Kd4 Bg5 24. Re3 Bf6 25. Re7 Rd8 26. Rc7 Be6 27. Rc6 Bf6 28. Rc7 Be6 2",Bd4,230,671,230,google/gemma-3-12b-it:free,length,230,671,230,0.0,230,671,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 28, ""turn_number"": 15, ""is_white_to_move"": true, ""prompt_tokens"": 230, ""completion_tokens"": 671, ""total_tokens"": 230, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 1}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 28, ""turn_number"": 15, ""is_white_to_move"": true, ""prompt_tokens"": 230, ""completion_tokens"": 671, ""total_tokens"": 230, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 1}]",False,,0,0,True,,
-uu1eQ,r5r1/1bb1k2p/p2qpp1B/1p6/2pPB3/2P5/PP2QRPP/4R1K1 w - - 4 22,e4b7 d6h2 g1f1 h2h1,986,fork mate mateIn2 middlegame short,0,False,2.0,100.0,Mismatch: expected d6h2 but got None,"1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2
+NEVER explain your choice.
+"
+RmvPy,r2q1rk1/p1p2ppp/2pn4/3p4/5Pb1/1P1PP1R1/PBP3PP/RN1Q2K1 b - - 4 14,g4d1 g3g7 g8h8 g7f7 h8g8 f7g7,1756,advantage deflection discoveredAttack kingsideAttack long middlegame,0,False,3.0,0.0,Mismatch: expected g3g7 but got None,1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8. Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3 Bxd1 15. Nxd1 Nc5 16. Nc4 Nf6 17. Nxf6+ Nxf6 18. Qxf6+ Nxf6 19. Qxf6+ Nxf6 20. Qxf6+ Nxf6 21. Qxf6+ Nxf6 22. Qxf6+ Nxf6 23. Qxf6+ Nxf6 24. Qxf6+ Nxf6 25. Qxf6+ Nxf6 26. Qxf6+ Nxf6 27. Qxf6+ Nxf6 28. Qxf6+ Nxf6 29. Qxf6+ Nxf6 30. Qxf6+ Nxf6 31. Qxf6+ Nxf6 32. Qxf6+ Nxf6 33. Qxf6+ Nxf6 34. Qxf6+ Nxf6 35. Qxf6+ Nxf6 36. Qxf6+ Nxf6 37. Qxf6+ Nxf6 38. Qxf6+ Nxf6 39. Qxf6+ Nxf6 40. Qxf6+ Nxf6 41. Qxf6+ Nxf6 42. Qxf6+ Nxf6 43. Qxf6+ Nxf6 44. Qxf6+ Nxf6 45. Qxf6+ Nxf6 46. Qxf6+ Nxf6 47. Qxf6+ Nxf6 48. Qxf6+ Nxf6 49. Qxf6+ Nxf6 50. Qxf6+ Nxf6 51. Qxf6+ Nxf6 52. Qxf6+ Nxf6 53. Qxf6+ Nxf6 54. Qxf6+ Nxf6 55. Qxf6+ Nxf6 56. Qxf6+ Nxf6 57. Qxf6+ Nxf6 58. Qxf6+ Nxf6 59. Qxf6+ Nxf6 60. Qxf6+ Nxf6 61. Qxf6+ Nxf6 62. Qxf6+ Nxf6 63. Qxf6+ Nxf6 64. Qxf6+ Nxf6 65. Qxf6+ Nxf6 66. Qxf6+ Nxf6 67. Qxf6+ Nxf,Nxd1,207,640,847,arcee-ai/afm-4.5b,length,207,640,847,0.0,207,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 28, ""turn_number"": 15, ""is_white_to_move"": true, ""prompt_tokens"": 207, ""completion_tokens"": 640, ""total_tokens"": 847, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 1}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 28, ""turn_number"": 15, ""is_white_to_move"": true, ""prompt_tokens"": 207, ""completion_tokens"": 640, ""total_tokens"": 847, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 1}]",False,r2q1rk1/p1p2ppp/2pn4/3p4/5P2/1P1PP1R1/PBP3PP/RN1b2K1 w - - 0 15,28,15,True,"1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. Bb5 Bd6 5. Nf3 Nf6 6. O-O O-O 7. Bxc6 bxc6 8.
+Nxe5 Bxe5 9. Bxe5 Ng4 10. Bb2 Nf6 11. f4 Ne4 12. d3 Nd6 13. Rf3 Bg4 14. Rg3
+Bxd1 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+uu1eQ,r5r1/1bb1k2p/p2qpp1B/1p6/2pPB3/2P5/PP2QRPP/4R1K1 w - - 4 22,e4b7 d6h2 g1f1 h2h1,986,fork mate mateIn2 middlegame short,0,False,2.0,100.0,Mismatch: expected d6h2 but got None,"1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2 c4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6 15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21. Be4 Qd6 22. Bxb7 Nf5
+
+23. Nc3
+
+24. Nf3
+
+25. Bf4
+
+26. Qd2
+
+27. Qe3
+
+28. Qg4
+
+29. Qh5
+
+30. Qh6
+
+31. Qh7
+
+32. Qh8
+
+33. Qh9
+
+34. Qh10
+
+35. Qh11
+
+36. Qh12
+
+37. Qh13
+
+38. Qh14
+
+39. Qh15
+
+40. Qh16
+
+41. Qh17
+
+42. Qh18
+
+43. Qh19
+
+44. Qh20
+
+45. Qh21
+
+46. Qh22
+
+47. Qh23
+
+48. Qh24
+
+49. Qh25
+
+50. Qh26
+
+51. Qh27
+
+52. Qh28
+
+53. Qh29
+
+54. Qh30
+
+55. Qh31
+
+56. Qh32
+
+57. Qh33
+
+58. Qh34
+
+59. Qh35
+
+60. Qh36
+
+61. Qh37
+
+62. Qh38
+
+63. Qh39
+
+64. Qh40
+
+65. Qh41
+
+66. Qh42
+
+67. Qh43
+
+68. Qh44
+
+69. Qh45
+
+70. Qh46
+
+71. Qh47
+
+72. Qh48
+
+73. Qh49
+
+74. Qh50
+
+75. Qh51
+
+76. Qh52
+
+77. Qh53
+
+78. Qh54
+
+79. Qh55
+
+80. Qh56
+
+81. Qh57
+
+82. Qh58
+
+83. Qh59
+
+84. Qh60
+
+85. Qh61
+
+86. Qh62
+
+87. Qh63
+
+88. Qh64
+
+89. Qh65
+
+90. Qh66
+
+91. Qh67
+
+92. Qh68
+
+93. Qh69
+
+94. Qh70
+
+95. Qh71
+
+96. Qh72
+
+97. Qh73
+
+98. Qh74
+
+99. Qh75",Nf5,269,640,909,arcee-ai/afm-4.5b,length,269,640,909,0.0,269,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 43, ""turn_number"": 22, ""is_white_to_move"": false, ""prompt_tokens"": 269, ""completion_tokens"": 640, ""total_tokens"": 909, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 2}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 43, ""turn_number"": 22, ""is_white_to_move"": false, ""prompt_tokens"": 269, ""completion_tokens"": 640, ""total_tokens"": 909, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 2}]",False,r5r1/1Bb1k2p/p2qpp1B/1p6/2pP4/2P5/PP2QRPP/4R1K1 b - - 0 22,43,22,False,"1. d4 d5 2. f4 e6 3. Nf3 c5 4. e3 Nc6 5. c3 Nf6 6. Bd3 Bd6 7. O-O Qc7 8. Nbd2
 c4 9. Bc2 a6 10. Ne5 b5 11. e4 dxe4 12. Nxe4 Bb7 13. Nxf6+ gxf6 14. Nxc6 Qxc6
 15. Qe2 Rg8 16. Rf2 Ke7 17. f5 Rg7 18. Bh6 Rgg8 19. fxe6 fxe6 20. Re1 Bc7 21.
-Be4 Qd6 22. Bxb7
+Be4 Qd6 22. Bxb7 *","You are a chess grandmaster.
 
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+
+You will be given a partially completed game.
 
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+ 26. Kh1 Rg7 27. Rf1 Qd2 28. Qf3
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+ 26. Kh1 Rg7 27. Rf1 Qd2 28. Qf3
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+ 26. Kh1 Rg7 27. Rf1 Qd2 28. Qf3 29. h4
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+ 26. Kh1 Rg7 27. Rf1 Qd2 28. Qf3 29. h4 30. Rf2
-Be4 Qd6 23. Rd1 Rag8 24. Qf3 Bxf4 25. Bxf4 Rxg2+ 26. Kh1 Rg7 27. Rf1 Qd2 28. Qf3 29. h4 30. Rf2 31. Qg4
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Kh1 Rg7 27. Rf1 Qd2 28. Qf3 29. h4 30. Rf2 31. Qg4 32. Rf3 33. Qd7+
-Kh1 Rg7 27. Rf1 Qd2 28. Qf3 29. h4 30. Rf2 31. Qg4 32. Rf3 33. Qd7+
+ALWAYS repeat the entire representation of the game so far.
 
-Kh1 Rg7 27. Rf1 Qd2 2",Qd6,299,663,299,google/gemma-3-12b-it:free,length,299,663,299,0.0,299,663,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 43, ""turn_number"": 22, ""is_white_to_move"": false, ""prompt_tokens"": 299, ""completion_tokens"": 663, ""total_tokens"": 299, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 2}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 43, ""turn_number"": 22, ""is_white_to_move"": false, ""prompt_tokens"": 299, ""completion_tokens"": 663, ""total_tokens"": 299, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 2}]",False,,0,0,True,,
-NZNGr,5rk1/pp3ppp/2brpn2/q3P3/4P3/1B5P/PP1NQ1P1/3R1R1K b - - 0 19,a5e5 d2c4 e5e4 e2e4,1374,advantage fork middlegame short,0,False,2.0,0.0,Mismatch: expected d2c4 but got None,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3
+NEVER explain your choice.
+"
+NZNGr,5rk1/pp3ppp/2brpn2/q3P3/4P3/1B5P/PP1NQ1P1/3R1R1K b - - 0 19,a5e5 d2c4 e5e4 e2e4,1374,advantage fork middlegame short,0,False,2.0,0.0,Mismatch: expected d2c4 but got d2f3,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3 Be7 9. O-O O-O 10. Qe2 Bd7 11. Rad1 Qc7 12. Nb5 Qa5 13. Bxd6 Bxd6 14. Nxd6 Rab8 15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rbd8 18. f4 Rxd6 19. fxe5 Qxe5 20. Nf3
+
+21. Qg4
+
+22. Qg5
+
+23. Qh5
+
+24. Qh6
+
+25. Qh7
+
+26. Qh8
+
+27. Qh9
+
+28. Qh10
+
+29. Qh11
+
+30. Qh12
+
+31. Qh13
+
+32. Qh14
+
+33. Qh15
+
+34. Qh16
+
+35. Qh17
+
+36. Qh18
+
+37. Qh19
+
+38. Qh20
+
+39. Qh21
+
+40. Qh22
+
+41. Qh23
+
+42. Qh24
+
+43. Qh25
+
+44. Qh26
+
+45. Qh27
+
+46. Qh28
+
+47. Qh29
+
+48. Qh30
+
+49. Qh31
+
+50. Qh32
+
+51. Qh33
+
+52. Qh34
+
+53. Qh35
+
+54. Qh36
+
+55. Qh37
+
+56. Qh38
+
+57. Qh39
+
+58. Qh40
+
+59. Qh41
+
+60. Qh42
+
+61. Qh43
+
+62. Qh44
+
+63. Qh45
+
+64. Qh46
+
+65. Qh47
+
+66. Qh48
+
+67. Qh49
+
+68. Qh50
+
+69. Qh51
+
+70. Qh52
+
+71. Qh53
+
+72. Qh54
+
+73. Qh55
+
+74. Qh56
+
+75. Qh57
+
+76. Qh58
+
+77. Qh59
+
+78. Qh60
+
+79. Qh61
+
+80. Qh62
+
+81. Qh63
+
+82. Qh64
+
+83. Qh65
+
+84. Qh66
+
+85. Qh67
+
+86. Qh68
+
+87. Qh69
+
+88. Qh70
+
+89. Qh71
+
+90. Qh72
+
+91. Qh73
+
+92. Qh74
+
+93. Qh75
+
+94. Qh76
+
+95. Qh77
+
+96. Qh78
+
+97. Qh79
+
+98. Qh80
+
+99. Qh81
+
+100. Qh82
+
+101",Nf3,246,640,886,arcee-ai/afm-4.5b,length,246,640,886,0.0,246,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 38, ""turn_number"": 20, ""is_white_to_move"": true, ""prompt_tokens"": 246, ""completion_tokens"": 640, ""total_tokens"": 886, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 3}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 38, ""turn_number"": 20, ""is_white_to_move"": true, ""prompt_tokens"": 246, ""completion_tokens"": 640, ""total_tokens"": 886, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 3}]",False,5rk1/pp3ppp/2brpn2/4q3/4P3/1B5P/PP1NQ1P1/3R1R1K w - - 0 20,38,20,True,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 d6 5. Bc4 e6 6. Nf3 Nf6 7. Bf4 Nc6 8. h3
 Be7 9. O-O O-O 10. Qe2 Bd7 11. Rad1 Qc7 12. Nb5 Qa5 13. Bxd6 Bxd6 14. Nxd6 Rab8
-15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rbd8 18. f4 Rxd6 19. fxe5 Qxe5
+15. Bb3 Ne5 16. Nd2 Bc6 17. Kh1 Rbd8 18. f4 Rxd6 19. fxe5 Qxe5 *","You are a chess grandmaster.
 
-Qxe5 Rb5 20. Rd3 Rd8 21. Qf3 Bf6 22. Rd2
-Qxe5 Rb5 20. Rd3 Rd8 21. Qf3 Bf6 22. Rd2",Rd3,271,209,271,google/gemma-3-12b-it:free,stop,271,209,271,0.0,271,209,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 38, ""turn_number"": 20, ""is_white_to_move"": true, ""prompt_tokens"": 271, ""completion_tokens"": 209, ""total_tokens"": 271, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 3}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 38, ""turn_number"": 20, ""is_white_to_move"": true, ""prompt_tokens"": 271, ""completion_tokens"": 209, ""total_tokens"": 271, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 3}]",False,,0,0,True,,
-PsA2z,8/5p2/4p1p1/1P4K1/5P2/6kp/8/3B4 w - - 0 43,b5b6 h3h2 d1f3 g3f3,1050,advancedPawn bishopEndgame crushing endgame short,0,False,2.0,50.0,Mismatch: expected h3h2 but got None,"1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2 b5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15. Rad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1 Bxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27. Qxc5 Qxc2 28. Qd4 Qd2 29. Qxd2 cxd2 30. Be2 Kg7 31. Bd1 Kf6 32. Kf1 Kg5 33. Ke2 Kh4 34. Kxd2 Kh3 35. Ke3 Kxh2 36. Kf4 Kg2 37. a4 h5 38. Kg5 Kxf2 39. b4 Kg3 40. b5 axb5 41. axb5 h4 42. f4 h3 43. b6
+You will be given a partially completed game.
 
-b6 Kg2 44. Kf5 Kf3 45. Be2 Ke4 46. Ke6 h2 47. Bf1 h1=Q 48. Kf6
-Qh8+ 49. Ke6
-Ke5 50. Be2
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Ke5 51. Kf6 Kf5 52. Bf1 Kg6 53. Kg7
-Kg7 54. Bg2
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Kg7 55. Kf7
+ALWAYS repeat the entire representation of the game so far.
 
-Kf7 Kg7 56. Ke7
+NEVER explain your choice.
+"
+PsA2z,8/5p2/4p1p1/1P4K1/5P2/6kp/8/3B4 w - - 0 43,b5b6 h3h2 d1f3 g3f3,1050,advancedPawn bishopEndgame crushing endgame short,0,False,2.0,50.0,Mismatch: expected h3h2 but got f7f5,"1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2
+b5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15.
+Rad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1
+Bxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27.
+Qxc5 Qd2 28. Qxd2 cxd2 29. Be2 Kg7 30. Bd1 Kf6 31. Ke2 Kh4 32. Kxd2 Kh3 33. Ke3
+Kxh2 34. Kf4 Kg2 35. a4 h5 36. Kg5 Kxf2 37. b4 Kg3 38. b5 axb5 39. axb5 h4 40.
+f4 h3 41. b6 Bg4
 
-Ke7 Kg7 57. Kf6
+42. ... Bg4
 
-Kg7 58. Be4
+43. f5",f5,440,346,786,arcee-ai/afm-4.5b,stop,440,346,786,0.0,440,346,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 85, ""turn_number"": 43, ""is_white_to_move"": false, ""prompt_tokens"": 440, ""completion_tokens"": 346, ""total_tokens"": 786, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 4}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 85, ""turn_number"": 43, ""is_white_to_move"": false, ""prompt_tokens"": 440, ""completion_tokens"": 346, ""total_tokens"": 786, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 4}]",False,8/5p2/1P2p1p1/6K1/5P2/6kp/8/3B4 b - - 0 43,85,43,False,"1. e4 d6 2. d4 g6 3. Nf3 Bg7 4. Bc4 e6 5. O-O Nf6 6. Re1 a6 7. b3 Nbd7 8. Bb2
+b5 9. Bd3 O-O 10. Nbd2 c5 11. e5 dxe5 12. dxe5 Nd5 13. Bf1 Bb7 14. Qe2 Qb6 15.
+Rad1 Rad8 16. Ne4 b4 17. Nd6 Nc3 18. Bxc3 bxc3 19. Nc4 Qc6 20. Rd6 Qc7 21. Red1
+Bxf3 22. gxf3 Nxe5 23. Rxd8 Rxd8 24. Rxd8+ Qxd8 25. Nxe5 Bxe5 26. Qxe5 Qd2 27.
+Qxc5 Qxc2 28. Qd4 Qd2 29. Qxd2 cxd2 30. Be2 Kg7 31. Bd1 Kf6 32. Kf1 Kg5 33. Ke2
+Kh4 34. Kxd2 Kh3 35. Ke3 Kxh2 36. Kf4 Kg2 37. a4 h5 38. Kg5 Kxf2 39. b4 Kg3 40.
+b5 axb5 41. axb5 h4 42. f4 h3 43. b6 *","You are a chess grandmaster.
 
-Kg7 59. d6
+You will be given a partially completed game.
 
-d6 Kg7 60. d7
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-d7 Kg7 61. d8=Q
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Qd1+
-Qd1+ Kg8 62. Qg8+
+ALWAYS repeat the entire representation of the game so far.
 
-Qg8+ Kg8 63. Bd3
+NEVER explain your choice.
+"
+4Un67,2r3kR/1p2r1p1/pn2p1B1/3pP3/3P2P1/q1P2P2/3Q4/2R1K3 b - - 2 24,g8h8 d2h2 h8g8 h2h7 g8f8 h7h8,1090,long mate mateIn3 middlegame,0,False,3.0,0.0,Mismatch: expected d2h2 but got None,"1. e4 c6 2. d4 d5 3. e5 Bf5 4. c4 e6 5. Nc3 Bb4 6. Nf3 Ne7 7. a3 Bxc3+ 8. bxc3 O-O 9. Bg5 Nd7 10. cxd5 cxd5 11. Nh4 Be4 12. f3 Bg6 13. Nxg6 hxg6 14. h3 Rc8 15. Qd2 Re8 16. h4 Qa5 17. Rc1 Qxa3 18. h5 Nf5 19. hxg6 fxg6 20. Bd3 a6 21. g4 Ne7 22. Bxe7 Rxe7 23. Bxg6 Nb6 24. Rh8+ Kxh8 25. Qd2
 
-Bd3 Kg8 64. Ke8
+25. Qd2",Qd2,288,206,494,arcee-ai/afm-4.5b,stop,288,206,494,0.0,288,206,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 206, ""total_tokens"": 494, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 5}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 206, ""total_tokens"": 494, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 5}]",False,2r4k/1p2r1p1/pn2p1B1/3pP3/3P2P1/q1P2P2/3Q4/2R1K3 w - - 0 25,48,25,True,"1. e4 c6 2. d4 d5 3. e5 Bf5 4. c4 e6 5. Nc3 Bb4 6. Nf3 Ne7 7. a3 Bxc3+ 8. bxc3
+O-O 9. Bg5 Nd7 10. cxd5 cxd5 11. Nh4 Be4 12. f3 Bg6 13. Nxg6 hxg6 14. h3 Rc8
+15. Qd2 Re8 16. h4 Qa5 17. Rc1 Qxa3 18. h5 Nf5 19. hxg6 fxg6 20. Bd3 a6 21. g4
+Ne7 22. Bxe7 Rxe7 23. Bxg6 Nb6 24. Rh8+ Kxh8 *","You are a chess grandmaster.
 
-Ke8 Kg8 65. Kf8
+You will be given a partially completed game.
 
-Kf8 Kg8 66. Kg8
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Kg8 Kg8 67. Kf7
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Kf7 Kg8 68. Be4
+ALWAYS repeat the entire representation of the game so far.
 
-Be4 Kg8 69. Kf6
+NEVER explain your choice.
+"
+MgPSr,2k4r/1pp5/p2bp2r/P4p2/1PBP2p1/2P5/5PP1/R3RK2 w - - 6 26,c4e6 h6e6 e1e6 h8h1 f1e2 h1a1,1646,clearance crushing endgame long sacrifice skewer,0,False,3.0,0.0,Mismatch: expected h6e6 but got None,1. Nc3 d5 2. d4 g6 3. Nf3 Bg7 4. e4 dxe4 5. Nxe4 e6 6. c3 Nf6 7. Bg5 Nbd7 8. Ne5 h6 9. Bxf6 Nxf6 10. Qa4+ Bd7 11. Nxf6+ Bxf6 12. Nxd7 Qxd7 13. Qxd7+ Kxd7 14. Be2 Rad8 15. O-O Kc8 16. Bf3 h5 17. a4 g5 18. h3 Be7 19. a5 a6 20. b4 f5 21. Rfe1 g4 22. hxg4 hxg4 23. Be2 Rh6 24. Bc4 Rdh8 25. Kf1 Bd6 26. Bxe6+ Nf6 27. Qxf6+ Nxf6 28. Qg5+ Ke7 29. Qg6+ Kf7 30. Qg7+ Ke7 31. Qg6+ Kf7 32. Qg7+ Ke7 33. Qg6+ Kf7 34. Qg7+ Ke7 35. Qg6+ Kf7 36. Qg7+ Ke7 37. Qg6+ Kf7 38. Qg7+ Ke7 39. Qg6+ Kf7 40. Qg7+ Ke7 41. Qg6+ Kf7 42. Qg7+ Ke7 43. Qg6+ Kf7 44. Qg7+ Ke7 45. Qg6+ Kf7 46. Qg7+ Ke7 47. Qg6+ Kf7 48. Qg7+ Ke7 49. Qg6+ Kf7 50. Qg7+ Ke7 51. Qg6+ Kf7 52. Qg7+ Ke7 53. Qg6+ Kf7 54. Qg7+ Ke7 55. Qg6+ Kf7 56. Qg7+ Ke7 57. Qg6+ Kf7 58. Qg7+ Ke7 59. Qg6+ Kf7 60. Qg7+ Ke7 61. Qg6+ Kf7 62. Qg7+ Ke7 63. Qg6+ Kf7 64. Qg7+ Ke7 65. Qg6+ Kf7 66. Qg7+ Ke7 67. Qg6+ Kf7 68. Qg7+ Ke7 69. Qg6+ Kf7 70. Qg7+ Ke7 71. Qg6+ Kf7,Nf6,302,640,942,arcee-ai/afm-4.5b,length,302,640,942,0.0,302,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 51, ""turn_number"": 26, ""is_white_to_move"": false, ""prompt_tokens"": 302, ""completion_tokens"": 640, ""total_tokens"": 942, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 6}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 51, ""turn_number"": 26, ""is_white_to_move"": false, ""prompt_tokens"": 302, ""completion_tokens"": 640, ""total_tokens"": 942, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 6}]",False,2k4r/1pp5/p2bB2r/P4p2/1P1P2p1/2P5/5PP1/R3RK2 b - - 0 26,51,26,False,"1. Nc3 d5 2. d4 g6 3. Nf3 Bg7 4. e4 dxe4 5. Nxe4 e6 6. c3 Nf6 7. Bg5 Nbd7 8.
+Ne5 h6 9. Bxf6 Nxf6 10. Qa4+ Bd7 11. Nxf6+ Bxf6 12. Nxd7 Qxd7 13. Qxd7+ Kxd7
+14. Be2 Rad8 15. O-O Kc8 16. Bf3 h5 17. a4 g5 18. h3 Be7 19. a5 a6 20. b4 f5
+21. Rfe1 g4 22. hxg4 hxg4 23. Be2 Rh6 24. Bc4 Rdh8 25. Kf1 Bd6 26. Bxe6+ *","You are a chess grandmaster.
 
-Kf6 Kg8 70. Kf7
+You will be given a partially completed game.
 
-Kf7 Kg8 71. Ke8
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Ke8 Kg8 72. Kf8
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Kf8",Kf8,491,647,491,google/gemma-3-12b-it:free,length,491,647,491,0.0,491,647,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 85, ""turn_number"": 43, ""is_white_to_move"": false, ""prompt_tokens"": 491, ""completion_tokens"": 647, ""total_tokens"": 491, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 4}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 85, ""turn_number"": 43, ""is_white_to_move"": false, ""prompt_tokens"": 491, ""completion_tokens"": 647, ""total_tokens"": 491, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 4}]",False,,0,0,True,,
-4Un67,2r3kR/1p2r1p1/pn2p1B1/3pP3/3P2P1/q1P2P2/3Q4/2R1K3 b - - 2 24,g8h8 d2h2 h8g8 h2h7 g8f8 h7h8,1090,long mate mateIn3 middlegame,0,False,3.0,0.0,Mismatch: expected d2h2 but got None,"1. e4 c6 2. d4 d5 3. e5 Bf5 4. c4 e6 5. Nc3 Bb4 6. Nf3 Ne7 7. a3 Bxc3+ 8. bxc3 O-O 9. Bg5 Nd7 10. cxd5 cxd5 11. Nh4 Be4 12. f3 Bg6 13. Nxg6 hxg6 14. h3 Rc8 15. Qd2 Re8 16. h4 Qa5 17. Rc1 Qxa3 18. h5 Nf5 19. hxg6 fxg6 20. Bd3 a6 21. g4 Ne7 22. Bxe7 Rxe7 23. Bxg6 Nb6 24. Rh8+ Kxh8
+ALWAYS repeat the entire representation of the game so far.
 
-Qd7 Kg8 Rd1 Rxd1+ Qxd1 Nc8 Bf7+ Kf8 Kg2 Ke8 Rd8 Rd8+ Rxd8+ Kxd8
-
-Qd7 Kg8 Rd1 Rxd1+ Qxd1 Nc8 Bf7+ Kf8 Kg2 Ke8 Rd8 Rd8+ Rxd8+ Kxd8",Qd7,317,275,317,google/gemma-3-12b-it:free,stop,317,275,317,0.0,317,275,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 317, ""completion_tokens"": 275, ""total_tokens"": 317, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 5}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 317, ""completion_tokens"": 275, ""total_tokens"": 317, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 5}]",False,,0,0,True,,
-MgPSr,2k4r/1pp5/p2bp2r/P4p2/1PBP2p1/2P5/5PP1/R3RK2 w - - 6 26,c4e6 h6e6 e1e6 h8h1 f1e2 h1a1,1646,clearance crushing endgame long sacrifice skewer,0,False,3.0,0.0,Mismatch: expected h6e6 but got None,"1. Nc3 d5 2. d4 g6 3. Nf3 Bg7 4. e4 dxe4 5. Nxe4 e6 6. c3 Nf6 7. Bg5 Nbd7 8. Ne5 h6 9. Bxf6 Nxf6 10. Qa4+ Bd7 11. Nxf6+ Bxf6 12. Nxd7 Qxd7 13. Qxd7+ Kxd7 14. Be2 Rad8 15. O-O Kc8 16. Bf3 h5 17. a4 g5 18. h3 Be7 19. a5 a6 20. b4 f5 21. Rfe1 g4 22. hxg4 hxg4 23. Be2 Rh6 24. Bc4 Rdh8 25. Kf1 Bd6 26. Bxe6+
-
-Bxe6 Rd1+ Ke7 Rd7+ Kxd7 Rd8+ Kc7 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd8 Rd1 Rd",Rd1,336,648,336,google/gemma-3-12b-it:free,length,336,648,336,0.0,336,648,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 51, ""turn_number"": 26, ""is_white_to_move"": false, ""prompt_tokens"": 336, ""completion_tokens"": 648, ""total_tokens"": 336, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 6}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 51, ""turn_number"": 26, ""is_white_to_move"": false, ""prompt_tokens"": 336, ""completion_tokens"": 648, ""total_tokens"": 336, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 6}]",False,,0,0,True,,
+NEVER explain your choice.
+"
 x0meF,r1bk3r/1p1pnQpp/p7/2K1N3/2B1P3/P2P3P/1Pq3P1/nN5R b - - 0 15,a1b3 c5d6 e7g6 e5g6 h8e8 h1f1 h7g6 f7g6 c2b2 g6g5 b2f6 f1f6,2586,crushing defensiveMove middlegame quietMove veryLong,0,False,6.0,0.0,Mismatch: expected c5d6 but got None,"1. e4 e5 2. Bc4 Nc6 3. a3 a6 4. d3 Bc5 5. h3 Qh4 6. Qf3 Nd4 7. Qxf7+ Kd8 8. Nf3
 Nxc2+ 9. Kd2 Qxf2+ 10. Kc3 Nxa1 11. Bg5+ Be7 12. Bxe7+ Nxe7 13. Nxe5 Qc2+ 14.
-Kd4 c5+ 15. Kxc5 Nb3+
+Kd4 c5+ 15. Kxc5 Nb3+ 16. Kd3 Qd6 17. Qg5+ Ke7 18. Qg6+ Kf6 19. Qg7+ Ke7 20. Qg6+
+Ke7 21. Qg7+ Kf6 22. Qg6+ Kf6 23. Qg7+ Ke7 24. Qg6+ Kf6 25. Qg7+ Ke7 26. Qg6+ Kf6
+27. Qg7+ Ke7 28. Qg6+ Kf6 29. Qg7+ Ke7 30. Qg6+ Kf6 31. Qg7+ Ke7 32. Qg6+ Kf6 33.
+Qg7+ Ke7 34. Qg6+ Kf6 35. Qg7+ Ke7 36. Qg6+ Kf6 37. Qg7+ Ke7 38. Qg6+ Kf6 39.
+Qg7+ Ke7 40. Qg6+ Kf6 41. Qg7+ Ke7 42. Qg6+ Kf6 43. Qg7+ Ke7 44. Qg6+ Kf6 45.
+Qg7+ Ke7 46. Qg6+ Kf6 47. Qg7+ Ke7 48. Qg6+ Kf6 49. Qg7+ Ke7 50. Qg6+ Kf6 51.
+Qg7+ Ke7 52. Qg6+ Kf6 53. Qg7+ Ke7 54. Qg6+ Kf6 55. Qg7+ Ke7 56. Qg6+ Kf6 57.
+Qg7+ Ke7 58. Qg6+ Kf6 59. Qg7+ Ke7 60. Qg6+ Kf6 61. Qg7+ Ke7 62. Qg6+ Kf6 63.
+Qg7+ Ke7 64. Qg6+ Kf6 65. Qg7+ Ke7 66. Qg6+ Kf6 67. Qg7+ Ke7 68. Qg6+ Kf6 69.
+Q",Kd3,226,640,866,arcee-ai/afm-4.5b,length,226,640,866,0.0,226,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 30, ""turn_number"": 16, ""is_white_to_move"": true, ""prompt_tokens"": 226, ""completion_tokens"": 640, ""total_tokens"": 866, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 7}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 30, ""turn_number"": 16, ""is_white_to_move"": true, ""prompt_tokens"": 226, ""completion_tokens"": 640, ""total_tokens"": 866, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 7}]",False,r1bk3r/1p1pnQpp/p7/2K1N3/2B1P3/Pn1P3P/1Pq3P1/1N5R w - - 1 16,30,16,True,"1. e4 e5 2. Bc4 Nc6 3. a3 a6 4. d3 Bc5 5. h3 Qh4 6. Qf3 Nd4 7. Qxf7+ Kd8 8. Nf3
+Nxc2+ 9. Kd2 Qxf2+ 10. Kc3 Nxa1 11. Bg5+ Be7 12. Bxe7+ Nxe7 13. Nxe5 Qc2+ 14.
+Kd4 c5+ 15. Kxc5 Nb3+ *","You are a chess grandmaster.
 
-White: Kd4 Nb3+ Black: Kc6 Nxc5 16. Nxc5+ bxc5 17. bxc5 d6 18. cxd6 Qxd6
-Kd4 Nb3+ Kc6 Nxc5 16. Nxc5+ bxc5 17. bxc5 d6 18. cxd6 Qxd6",Nxc5+,248,216,248,google/gemma-3-12b-it:free,stop,248,216,248,0.0,248,216,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 30, ""turn_number"": 16, ""is_white_to_move"": true, ""prompt_tokens"": 248, ""completion_tokens"": 216, ""total_tokens"": 248, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 7}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 30, ""turn_number"": 16, ""is_white_to_move"": true, ""prompt_tokens"": 248, ""completion_tokens"": 216, ""total_tokens"": 248, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 7}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 Ahg8S,4r3/p1pp1p1k/4qP1p/3pQ1p1/3P2PP/6K1/PP6/4R3 b - - 0 28,h7g6 e5f5 e6f5 g4f5 g6f5 e1e8,1840,advantage endgame long,0,False,3.0,0.0,Mismatch: expected e5f5 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Nxe4 8.
 Bxc6 Bxd2+ 9. Nbxd2 Nxd2 10. Qxd2 bxc6 11. Qc3 O-O 12. O-O Qf6 13. Rfe1 Bb7 14.
 Re3 Rfe8 15. Rae1 Rxe3 16. Qxe3 h6 17. Qe5 Qd6 18. Nh4 g6 19. f4 Ba6 20. f5 Bd3
 21. g4 g5 22. Ng2 Bc4 23. Ne3 Bd5 24. Nxd5 cxd5 25. f6 Qe6 26. Kg2 Re8 27. Kg3
-Kh7 28. h4 Kg6
+Kh7 28. h4 Kg6 29. Qf3 Bg4 30. Qg4 Rg8 31. Qh5 Bxg4 32. Qxg4 Rg8 33. Qh6 Rg7
+34. Qh5 Rg8 35. Qh6 Rg7 36. Qh5 Rg8 37. Qh6 Rg7 38. Qh5 Rg8 39. Qh6 Rg7 40. Qh5
+Rg8 41. Qh6 Rg7 42. Qh5 Rg8 43. Qh6 Rg7 44. Qh5 Rg8 45. Qh6 Rg7 46. Qh5 Rg8 47. Qh6
+Rg7 48. Qh5 Rg8 49. Qh6 Rg7 50. Qh5 Rg8 51. Qh6 Rg7 52. Qh5 Rg8 53. Qh6 Rg7 54. Qh5
+Rg8 55. Qh6 Rg7 56. Qh5 Rg8 57. Qh6 Rg7 58. Qh5 Rg8 59. Qh6 Rg7 60. Qh5 Rg8 61. Qh6
+Rg7 62. Qh5 Rg8 63. Qh6 Rg7 64. Qh5 Rg8 65. Qh6 Rg7 66. Qh5 Rg8 67. Qh6 Rg7 68. Qh5
+Rg8 69. Qh6 Rg7 70. Qh5 Rg8 71. Qh6 Rg7 72. Qh5 Rg8 73. Qh6 Rg7 74",Qf3,319,640,959,arcee-ai/afm-4.5b,length,319,640,959,0.0,319,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 319, ""completion_tokens"": 640, ""total_tokens"": 959, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 8}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 319, ""completion_tokens"": 640, ""total_tokens"": 959, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 8}]",False,4r3/p1pp1p2/4qPkp/3pQ1p1/3P2PP/6K1/PP6/4R3 w - - 1 29,56,29,True,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Nxe4 8.
+Bxc6 Bxd2+ 9. Nbxd2 Nxd2 10. Qxd2 bxc6 11. Qc3 O-O 12. O-O Qf6 13. Rfe1 Bb7 14.
+Re3 Rfe8 15. Rae1 Rxe3 16. Qxe3 h6 17. Qe5 Qd6 18. Nh4 g6 19. f4 Ba6 20. f5 Bd3
+21. g4 g5 22. Ng2 Bc4 23. Ne3 Bd5 24. Nxd5 cxd5 25. f6 Qe6 26. Kg2 Re8 27. Kg3
+Kh7 28. h4 Kg6 *","You are a chess grandmaster.
 
-Qe7+ Kg8 29. f7+ Kxf7 30. Qf6+ Kg8
-Qe7+ Kg8 f7+ Kxf7 Qf6+ Kg8",Qe7+,355,270,355,google/gemma-3-12b-it:free,stop,355,270,355,0.0,355,270,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 270, ""total_tokens"": 355, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 8}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 270, ""total_tokens"": 355, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 8}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 k1hWM,8/1p2b3/p1pBk1p1/2P4p/1P1P1K1P/1P4P1/8/8 b - - 10 69,e7d6 c5d6 e6d6 f4g5,1169,crushing endgame master short,0,False,2.0,0.0,Mismatch: expected c5d6 but got None,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Qc2 Bg4 5. Nbd2 e6 6. g3 Be7 7. Bg2 Bf5 8. Qb3
 Qb6 9. O-O Nbd7 10. c5 Qxb3 11. axb3 O-O 12. b4 a6 13. Nh4 Rfe8 14. Nxf5 exf5
 15. Nb3 Ne4 16. e3 Bd8 17. f3 Nef6 18. Kf2 Bc7 19. Bh3 g6 20. Re1 Kg7 21. Bd2
@@ -123,43 +571,135 @@ Rf4 Ne3+ 41. Kf3 Ng4 42. Bc3 Bd8 43. Kg2 Ne3+ 44. Kg1 Bc7 45. Rf3 Ng4 46. Kg2
 Nf6 47. Rf1 Ne4 48. Re1 Kf7 49. Bxe4 Rxe4 50. Rf1+ Kg7 51. Kf3 Re6 52. Rg1 Rf6+
 53. Ke3 Re6+ 54. Kd3 Bd8 55. Bd2 Bf6 56. Bf4 Re4 57. Be3 Kf7 58. Rf1 Ke6 59.
 Rf3 Rg4 60. b3 Re4 61. Bf2 Rg4 62. Re3+ Re4 63. Rxe4+ dxe4+ 64. Kxe4 Be7 65.
-Be3 Bf6 66. Bf4 Bg7 67. Be5 Bf8 68. Kf4 Be7 69. Bd6 Bxd6+
+Be3 Bf6 66. Bf4 Bg7 67. Be5 Bf8 68. Kf4 Be7 69. Bd6 Bxd6+",d4,658,566,1224,arcee-ai/afm-4.5b,stop,658,566,1224,0.0,658,566,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 138, ""turn_number"": 70, ""is_white_to_move"": true, ""prompt_tokens"": 658, ""completion_tokens"": 566, ""total_tokens"": 1224, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 9}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 138, ""turn_number"": 70, ""is_white_to_move"": true, ""prompt_tokens"": 658, ""completion_tokens"": 566, ""total_tokens"": 1224, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 9}]",False,8/1p6/p1pbk1p1/2P4p/1P1P1K1P/1P4P1/8/8 w - - 0 70,138,70,True,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Qc2 Bg4 5. Nbd2 e6 6. g3 Be7 7. Bg2 Bf5 8. Qb3
+Qb6 9. O-O Nbd7 10. c5 Qxb3 11. axb3 O-O 12. b4 a6 13. Nh4 Rfe8 14. Nxf5 exf5
+15. Nb3 Ne4 16. e3 Bd8 17. f3 Nef6 18. Kf2 Bc7 19. Bh3 g6 20. Re1 Kg7 21. Bd2
+Nf8 22. Bf1 h5 23. Bd3 Rab8 24. Bc3 Re7 25. Nd2 Rbe8 26. Re2 N8h7 27. Rae1 Ng5
+28. h4 Ngh7 29. e4 fxe4 30. fxe4 Ng4+ 31. Kg2 Nhf6 32. e5 Nd7 33. Nf3 Nf8 34.
+Bd2 Ne6 35. Ng5 Bd8 36. Nxe6+ Rxe6 37. Rf1 f6 38. exf6+ Bxf6 39. Rxe6 Rxe6 40.
+Rf4 Ne3+ 41. Kf3 Ng4 42. Bc3 Bd8 43. Kg2 Ne3+ 44. Kg1 Bc7 45. Rf3 Ng4 46. Kg2
+Nf6 47. Rf1 Ne4 48. Re1 Kf7 49. Bxe4 Rxe4 50. Rf1+ Kg7 51. Kf3 Re6 52. Rg1 Rf6+
+53. Ke3 Re6+ 54. Kd3 Bd8 55. Bd2 Bf6 56. Bf4 Re4 57. Be3 Kf7 58. Rf1 Ke6 59.
+Rf3 Rg4 60. b3 Re4 61. Bf2 Rg4 62. Re3+ Re4 63. Rxe4+ dxe4+ 64. Kxe4 Be7 65.
+Be3 Bf6 66. Bf4 Bg7 67. Be5 Bf8 68. Kf4 Be7 69. Bd6 Bxd6+ *","You are a chess grandmaster.
 
-Kf4 Be7 70. Ke5 Bf6 71. Kd5 Bg7 72. Kc6 Bf8
-White: Kf4 Be7 73. Re4+ Kf7 74. Re7+ Kg8 75. Bf4
-Black: Re4+ Kf7 76",Re4+,725,639,725,google/gemma-3-12b-it:free,length,725,639,725,0.0,725,639,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 138, ""turn_number"": 70, ""is_white_to_move"": true, ""prompt_tokens"": 725, ""completion_tokens"": 639, ""total_tokens"": 725, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 9}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 138, ""turn_number"": 70, ""is_white_to_move"": true, ""prompt_tokens"": 725, ""completion_tokens"": 639, ""total_tokens"": 725, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 9}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 fIvUy,7k/pp4pp/8/6P1/3bq3/BN5P/5P2/1K1R3R w - - 5 36,b1a2 e4c2 a3b2 c2b2,1064,endgame master masterVsMaster mate mateIn2 short superGM,0,False,2.0,100.0,Mismatch: expected e4c2 but got None,"1. Nf3 d5 2. d4 Nf6 3. c4 dxc4 4. e3 Bg4 5. Bxc4 e6 6. h3 Bh5 7. Nc3 Nc6 8. Be2
 Bd6 9. g4 Bg6 10. Nh4 Be4 11. Nxe4 Nxe4 12. Nf3 O-O 13. Bd3 f5 14. Qb3 Kh8 15.
 Qxe6 Nb4 16. Bb1 Rf6 17. Qb3 Qe7 18. g5 Re6 19. a3 f4 20. Bxe4 Rxe4 21. axb4
 fxe3 22. Bxe3 Rf8 23. Nd2 Rxd4 24. O-O-O Rxb4 25. Qc2 Qe6 26. Kb1 Be5 27. Bc5
 Rxb2+ 28. Qxb2 Bxb2 29. Bxf8 Bd4 30. Ba3 Qa6 31. Ka2 Qe6+ 32. Nb3 c5 33. Bxc5
-Qa6+ 34. Ba3 Qe2+ 35. Kb1 Qe4+ 36. Ka2
+Qa6+ 34. Ba3 Qe2+ 35. Kb1 Qe4+ 36. Ka2 1... Qd7
 
-Qa3+ Kb1 Nc4",Nc4,434,308,434,google/gemma-3-12b-it:free,stop,434,308,434,0.0,434,308,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 71, ""turn_number"": 36, ""is_white_to_move"": false, ""prompt_tokens"": 434, ""completion_tokens"": 308, ""total_tokens"": 434, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 10}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 71, ""turn_number"": 36, ""is_white_to_move"": false, ""prompt_tokens"": 434, ""completion_tokens"": 308, ""total_tokens"": 434, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 10}]",False,,0,0,True,,
-ZlzMg,r5k1/2pb1p2/p2p1R2/1p4pQ/8/8/PPPn1KPP/4r3 b - - 2 21,d2e4 f2e1 e4f6 h5g5 g8h7 g5f6,974,advantage endgame fork long,0,False,3.0,33.33333333333333,Mismatch: expected f2e1 but got f2f3,"1. e4 e5 2. f4 Nc6 3. Nf3 d6 4. Bb5 exf4 5. d4 Bd7 6. Bxf4 Nf6 7. O-O a6 8. Ba4 b5 9. Bb3 Be7 10. Nc3 O-O 11. Ng5 h6 12. e5 hxg5 13. exf6 Bxf6 14. Bd2 Nxd4 15. Qh5 Re8 16. Nd5 Nxb3 17. Nxf6+ Qxf6 18. Rxf6 gxf6 19. Rf1 Nxd2 20. Rxf6 Re1+ 21. Kf2 Ne4+
-Kf3 Ng3 Kf4
+37. Bb5+ Qd6 38. Bc4+ Qc7 39. Bb3 Qd8 40. Bb2 Qd7 41. Bc3 Qd6 42. Bb4 Qd7 43. Bc5
+Qd6 44. Bb3 Qd7 45. Bc4 Qd6 46. Bb2 Qd7 47. Bc3 Qd6 48. Bb4 Qd7 49. Bc5 Qd6 50. Bb3
+Qd7 51. Bc4 Qd6 52. Bb2 Qd7 53. Bc3 Qd6 54. Bb4 Qd7 55. Bc5 Qd6 56. Bb3 Qd7 57. Bc4
+Qd6 58. Bb2 Qd7 59. Bc3 Qd6 60. Bb4 Qd7 61. Bc5 Qd6 62. Bb3 Qd7 63. Bc4 Qd6 64. Bb2
+Qd7 65. Bc3 Qd6 66. Bb4 Qd7 67. Bc5 Qd6 68. Bb3 Qd7 69. Bc4 Qd6 70. Bb2 Qd7 71. Bc3
+Qd6 72. Bb4 Qd7 73. Bc",Qd7,391,640,1031,arcee-ai/afm-4.5b,length,391,640,1031,0.0,391,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 71, ""turn_number"": 36, ""is_white_to_move"": false, ""prompt_tokens"": 391, ""completion_tokens"": 640, ""total_tokens"": 1031, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 10}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 71, ""turn_number"": 36, ""is_white_to_move"": false, ""prompt_tokens"": 391, ""completion_tokens"": 640, ""total_tokens"": 1031, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 10}]",False,7k/pp4pp/8/6P1/3bq3/BN5P/K4P2/3R3R b - - 6 36,71,36,False,"1. Nf3 d5 2. d4 Nf6 3. c4 dxc4 4. e3 Bg4 5. Bxc4 e6 6. h3 Bh5 7. Nc3 Nc6 8. Be2
+Bd6 9. g4 Bg6 10. Nh4 Be4 11. Nxe4 Nxe4 12. Nf3 O-O 13. Bd3 f5 14. Qb3 Kh8 15.
+Qxe6 Nb4 16. Bb1 Rf6 17. Qb3 Qe7 18. g5 Re6 19. a3 f4 20. Bxe4 Rxe4 21. axb4
+fxe3 22. Bxe3 Rf8 23. Nd2 Rxd4 24. O-O-O Rxb4 25. Qc2 Qe6 26. Kb1 Be5 27. Bc5
+Rxb2+ 28. Qxb2 Bxb2 29. Bxf8 Bd4 30. Ba3 Qa6 31. Ka2 Qe6+ 32. Nb3 c5 33. Bxc5
+Qa6+ 34. Ba3 Qe2+ 35. Kb1 Qe4+ 36. Ka2 *","You are a chess grandmaster.
 
-Kf3 Ng3 Kf4",Kf3,295,188,295,google/gemma-3-12b-it:free,stop,295,188,295,0.0,295,188,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 42, ""turn_number"": 22, ""is_white_to_move"": true, ""prompt_tokens"": 295, ""completion_tokens"": 188, ""total_tokens"": 295, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 11}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 42, ""turn_number"": 22, ""is_white_to_move"": true, ""prompt_tokens"": 295, ""completion_tokens"": 188, ""total_tokens"": 295, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 11}]",False,,0,0,True,,
-uMeJi,r2qkb1r/pp3ppp/2p1p3/4N3/3Pb1PP/8/PP6/R1BQKB1R w KQkq - 0 15,h1g1 d8h4 e1e2 h4h2,1801,advantage master opening short,0,False,2.0,50.0,Mismatch: expected d8h4 but got d8f6,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. e3 Bg4 5. Nbd2 e6 6. h3 Bh5 7. g4 Bg6 8. Ne5
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+ZlzMg,r5k1/2pb1p2/p2p1R2/1p4pQ/8/8/PPPn1KPP/4r3 b - - 2 21,d2e4 f2e1 e4f6 h5g5 g8h7 g5f6,974,advantage endgame fork long,0,False,3.0,33.33333333333333,Mismatch: expected f2e1 but got None,"1. e4 e5 2. f4 Nc6 3. Nf3 d6 4. Bb5 exf4 5. d4 Bd7 6. Bxf4 Nf6 7. O-O a6 8. Ba4
+b5 9. Bb3 Be7 10. Nc3 O-O 11. Ng5 h6 12. e5 hxg5 13. exf6 Bxf6 14. Bd2 Nxd4 15.
+Qh5 Re8 16. Nd5 Nxb3 17. Nxf6+ Qxf6 18. Rxf6 gxf6 19. Rf1 Nxd2 20. Rxf6 Re1+
+21. Kf2 Ne4+ 22. Ke3
+
+22... Nf6 23. Qg4 Bg4 24. Qxg4 Nxf3+ 25. Ke2 Nf6 26. Qg5 Bg4 27. Qxg4 Nxf3+
+28. Ke3 Nf6 29. Qg5 Bg4 30. Qxg4 Nxf3+ 31. Ke2 Nf6 32. Qg5 Bg4 33. Qxg4 Nxf3+
+34. Ke3 Nf6 35. Qg5 Bg4 36. Qxg4 Nxf3+ 37. Ke2 Nf6 38. Qg5 Bg4 39. Qxg4 Nxf3+
+40. Ke3 Nf6 41. Qg5 Bg4 42. Qxg4 Nxf3+ 43. Ke2 Nf6 44. Qg5 Bg4 45. Qxg4 Nxf3+
+46. Ke3 Nf6 47. Qg5 Bg4 48. Qxg4 Nxf3+ 49. Ke2 Nf6 50. Qg5 Bg4 51. Qxg4 Nxf3+
+52. Ke3 Nf6 53. Qg5 Bg4 54. Qxg4 Nxf3+ 55. Ke2 Nf6 56. Qg5 Bg4 57. Qxg4 Nxf3+
+58. Ke3 Nf6 59. Qg5 Bg4 60. Qxg4 Nxf3+ 61. Ke2 Nf6 62. Qg5 Bg4 63. Qxg4 Nxf3+
+64. Ke3 Nf6 65. Qg5 Bg4 66. Qxg4 Nxf3+ 67. Ke2 Nf6 68. Qg5 Bg4 69. Qxg4 Nxf3+
+70. Ke3 Nf6 71. Qg5 Bg4 72. Qxg4 Nxf",Ke3,264,640,904,arcee-ai/afm-4.5b,length,264,640,904,0.0,264,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 42, ""turn_number"": 22, ""is_white_to_move"": true, ""prompt_tokens"": 264, ""completion_tokens"": 640, ""total_tokens"": 904, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 11}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 42, ""turn_number"": 22, ""is_white_to_move"": true, ""prompt_tokens"": 264, ""completion_tokens"": 640, ""total_tokens"": 904, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 11}]",False,r5k1/2pb1p2/p2p1R2/1p4pQ/4n3/8/PPP2KPP/4r3 w - - 3 22,42,22,True,"1. e4 e5 2. f4 Nc6 3. Nf3 d6 4. Bb5 exf4 5. d4 Bd7 6. Bxf4 Nf6 7. O-O a6 8. Ba4
+b5 9. Bb3 Be7 10. Nc3 O-O 11. Ng5 h6 12. e5 hxg5 13. exf6 Bxf6 14. Bd2 Nxd4 15.
+Qh5 Re8 16. Nd5 Nxb3 17. Nxf6+ Qxf6 18. Rxf6 gxf6 19. Rf1 Nxd2 20. Rxf6 Re1+
+21. Kf2 Ne4+ *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+uMeJi,r2qkb1r/pp3ppp/2p1p3/4N3/3Pb1PP/8/PP6/R1BQKB1R w KQkq - 0 15,h1g1 d8h4 e1e2 h4h2,1801,advantage master opening short,0,False,2.0,50.0,Mismatch: expected d8h4 but got None,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. e3 Bg4 5. Nbd2 e6 6. h3 Bh5 7. g4 Bg6 8. Ne5 Nbd7 9. h4 dxc4 10. Ndxc4 Be4 11. f3 Bd5 12. e4 Nxe5 13. Nxe5 Nxe4 14. fxe4 Bxe4 15. Rg1 Nf6
+
+16. O-O",Nf6,211,126,337,arcee-ai/afm-4.5b,stop,211,126,337,0.0,211,126,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 29, ""turn_number"": 15, ""is_white_to_move"": false, ""prompt_tokens"": 211, ""completion_tokens"": 126, ""total_tokens"": 337, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 12}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 29, ""turn_number"": 15, ""is_white_to_move"": false, ""prompt_tokens"": 211, ""completion_tokens"": 126, ""total_tokens"": 337, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 12}]",False,r2qkb1r/pp3ppp/2p1p3/4N3/3Pb1PP/8/PP6/R1BQKBR1 b Qkq - 1 15,29,15,False,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. e3 Bg4 5. Nbd2 e6 6. h3 Bh5 7. g4 Bg6 8. Ne5
 Nbd7 9. h4 dxc4 10. Ndxc4 Be4 11. f3 Bd5 12. e4 Nxe5 13. Nxe5 Nxe4 14. fxe4
-Bxe4 15. Rg1 O-O 16. Qf3 Be7 17. Bxe7 Qxe7 18. O-O Rfd8 19. Nd3 Rxd3 20.
-Bxd3 Qd6 21. Rf2 Bf8 22. Kh2 a5 23. Rf3 a4 24. Rf1 g6 25. Rf3 Bg7 26. Rg3
-Qf6 27. Rf3 Be5 28. Rf1 Qd6 29. Rf3 Qc5 30. Rg1 h5 31. Rf2 Bf8 32. Rf1 Kg7
-33. Rg3 Rd8 34. Rf3 Qd4 35. Rg1 Qc5 36. Rf2 Rd2 37. Rf1 Qd5 38. Rg1 Rb2
-39. Rf2 Qc5 40. Rg1 Rb3 41. Rf2 Qd4 42. Rg1 Bf8 43. Rf2 Qc5 44. Rg1 Rb4 45.
-Rf2 Qd5 46. Rg1 Rb2 47. Rf2 Qc5 48. Rg1 Rd2
+Bxe4 15. Rg1 *","You are a chess grandmaster.
 
-Rg1 Rd2 Rf3 Rd1+ Qf6
+You will be given a partially completed game.
 
-Rf3 Rd1+ Qf6 Rf3 Rd1+ Qf6",Qf6,237,439,237,google/gemma-3-12b-it:free,stop,237,439,237,0.0,237,439,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 29, ""turn_number"": 15, ""is_white_to_move"": false, ""prompt_tokens"": 237, ""completion_tokens"": 439, ""total_tokens"": 237, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 12}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 29, ""turn_number"": 15, ""is_white_to_move"": false, ""prompt_tokens"": 237, ""completion_tokens"": 439, ""total_tokens"": 237, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 12}]",False,,0,0,True,,
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 RkzY5,r4r1k/1pp3pp/p1np2q1/8/2B5/2P1QNP1/PP3P1P/1bKR3R w - - 4 18,f3h4 g6c2,811,mate mateIn1 middlegame oneMove,0,False,1.0,100.0,Mismatch: expected g6c2 but got None,"1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. c3 Qf6 6. Be3 Nxd4 7. Bxd4 Bxd4
 8. Qxd4 Qg6 9. Nd2 Ne7 10. O-O-O Nc6 11. Qe3 d6 12. Bb5 O-O 13. g3 a6 14. Be2
-f5 15. exf5 Bxf5 16. Nf3 Bb1 17. Bc4+ Kh8 18. Nh4
+f5 15. exf5 Bxf5 16. Nf3 Bb1 17. Bc4+ Kh8 18. Nh4 Nf6 19. Bxf6 Nxf6 20. Qxf6+
+21. Bxg7+ Kxg7 22. Qh5+ Kf7 23. Qg6+ Ke6 24. Qh7+ Kd6 25. Qg8+ Kc5 26. Qh7+
+Kb5 27. Qg8+ Kc4 28. Qh7+ Kd4 29. Qg8+ Ke4 30. Qh7+ Kf4 31. Qg8+ Ke4 32. Qh7+
+Kf4 33. Qg8+ Ke4 34. Qh7+ Kf4 35. Qg8+ Ke4 36. Qh7+ Kf4 37. Qg8+ Ke4 38. Qh7+
+Kf4 39. Qg8+ Ke4 40. Qh7+ Kf4 41. Qg8+ Ke4 42. Qh7+ Kf4 43. Qg8+ Ke4 44. Qh7+
+Kf4 45. Qg8+ Ke4 46. Qh7+ Kf4 47. Qg8+ Ke4 48. Qh7+ Kf4 49. Qg8+ Ke4 50. Qh7+
+Kf4 51. Qg8+ Ke4 52. Qh7+ Kf4 53. Qg8+ Ke4 54. Qh7+ Kf4 55. Qg8+ Ke4 56. Qh7+ Kf4
+57. Qg8+ Ke4 58. Qh7+ Kf4 59. Qg8+ Ke4 60. Qh7+ Kf4 61. Qg8+ Ke4 62. Qh7+ Kf4 63. Qg8+ Ke4
+64. Qh7+ Kf4 65. Qg8+ Ke4 66. Qh7+ Kf4 67. Qg8+ Ke4 68. Qh7+ Kf4 69. Qg8+ Ke4 70. Qh7+",Nf6,238,640,878,arcee-ai/afm-4.5b,length,238,640,878,0.0,238,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 35, ""turn_number"": 18, ""is_white_to_move"": false, ""prompt_tokens"": 238, ""completion_tokens"": 640, ""total_tokens"": 878, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 13}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 35, ""turn_number"": 18, ""is_white_to_move"": false, ""prompt_tokens"": 238, ""completion_tokens"": 640, ""total_tokens"": 878, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 13}]",False,r4r1k/1pp3pp/p1np2q1/8/2B4N/2P1Q1P1/PP3P1P/1bKR3R b - - 5 18,35,18,False,"1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. c3 Qf6 6. Be3 Nxd4 7. Bxd4 Bxd4
+8. Qxd4 Qg6 9. Nd2 Ne7 10. O-O-O Nc6 11. Qe3 d6 12. Bb5 O-O 13. g3 a6 14. Be2
+f5 15. exf5 Bxf5 16. Nf3 Bb1 17. Bc4+ Kh8 18. Nh4 *","You are a chess grandmaster.
 
-Qe6 Rg8 Nf5 Qf7 Bh6 Ng7
+You will be given a partially completed game.
 
-Qe6 Rg8 Nf5 Qf7 Bh6 Ng7",Ng7,263,179,263,google/gemma-3-12b-it:free,stop,263,179,263,0.0,263,179,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 35, ""turn_number"": 18, ""is_white_to_move"": false, ""prompt_tokens"": 263, ""completion_tokens"": 179, ""total_tokens"": 263, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 13}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 35, ""turn_number"": 18, ""is_white_to_move"": false, ""prompt_tokens"": 263, ""completion_tokens"": 179, ""total_tokens"": 263, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 13}]",False,,0,0,True,,
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 Anj44,7Q/p2K4/8/8/2q5/8/P4k2/8 b - - 26 63,c4a2 h8h2 f2e3 h2a2,1136,crushing endgame queenEndgame short skewer,0,False,2.0,100.0,Mismatch: expected h8h2 but got None,"1. d4 Nf6 2. Nf3 d5 3. g3 Bg4 4. Bg2 Bxf3 5. Bxf3 e6 6. O-O Nbd7 7. Re1 Be7 8.
+Nd2 O-O 9. c4 c6 10. cxd5 cxd5 11. e4 dxe4 12. Nxe4 Qb6 13. Be3 Nd5 14. b3 Rac8
+15. Rc1 Ba3 16. Rc2 Rc6 17. Rxc6 bxc6 18. Qc2 g6 19. Nc5 Nxc5 20. dxc5 Qb4 21.
+Bd2 Qxc5 22. Qxc5 Bxc5 23. Rc1 Bb6 24. Rxc6 Rd8 25. Bxd5 Rxd5 26. Rc8+ Kg7 27.
+Bc3+ e5 28. Re8 Bd4 29. Bb4 h5 30. Bf8+ Kh7 31. Kg2 Rd7 32. h4 f5 33. Re7+ Rxe7
+34. Bxe7 e4 35. b4 Kg8 36. Bc5 Bxc5 37. bxc5 Kf7 38. Kf1 Ke6 39. Ke2 Kd5 40.
+Ke3 Kxc5 41. Kf4 Kf4 42. Kg5 Ke5 43. Kxg6 f4 44. gxf4+ Kxf4 45. Kxh5 Kf3 46.
+Kg6 Kxf2 47. h5 e3 48. h6 e2 49. h7 e1=Q 50. h8=Q Qe4+ 51. Kf7 Qd5+ 52. Ke7
+Qb7+ 53. Kd6 Qb6+ 54. Kd5 Qb5+ 55. Kd6 Qb4+ 56. Kc7 Qb6+ 57. Kd7 Qb7+ 58. Ke6
+Qb6+ 59. Kd5 Qb5+ 60. Ke4 Qc4+ 61. Kf5 Qd3+ 62. Ke6 Qc4+ 63. Kd7 Qxa2 *",d4,630,539,1169,arcee-ai/afm-4.5b,stop,630,539,1169,0.0,630,539,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 126, ""turn_number"": 64, ""is_white_to_move"": true, ""prompt_tokens"": 630, ""completion_tokens"": 539, ""total_tokens"": 1169, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 14}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 126, ""turn_number"": 64, ""is_white_to_move"": true, ""prompt_tokens"": 630, ""completion_tokens"": 539, ""total_tokens"": 1169, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 14}]",False,7Q/p2K4/8/8/8/8/q4k2/8 w - - 0 64,126,64,True,"1. d4 Nf6 2. Nf3 d5 3. g3 Bg4 4. Bg2 Bxf3 5. Bxf3 e6 6. O-O Nbd7 7. Re1 Be7 8.
 Nd2 O-O 9. c4 c6 10. cxd5 cxd5 11. e4 dxe4 12. Nxe4 Qb6 13. Be3 Nd5 14. b3 Rac8
 15. Rc1 Ba3 16. Rc2 Rc6 17. Rxc6 bxc6 18. Qc2 g6 19. Nc5 Nxc5 20. dxc5 Qb4 21.
 Bd2 Qxc5 22. Qxc5 Bxc5 23. Rc1 Bb6 24. Rxc6 Rd8 25. Bxd5 Rxd5 26. Rc8+ Kg7 27.
@@ -168,99 +708,653 @@ Bc3+ e5 28. Re8 Bd4 29. Bb4 h5 30. Bf8+ Kh7 31. Kg2 Rd7 32. h4 f5 33. Re7+ Rxe7
 Ke3 Kxc5 41. Kf4 Kd4 42. Kg5 Ke5 43. Kxg6 f4 44. gxf4+ Kxf4 45. Kxh5 Kf3 46.
 Kg6 Kxf2 47. h5 e3 48. h6 e2 49. h7 e1=Q 50. h8=Q Qe4+ 51. Kf7 Qd5+ 52. Ke7
 Qb7+ 53. Kd6 Qb6+ 54. Kd5 Qb5+ 55. Kd6 Qb4+ 56. Kc7 Qb6+ 57. Kd7 Qb7+ 58. Ke6
-Qb6+ 59. Kd5 Qb5+ 60. Ke4 Qc4+ 61. Kf5 Qd3+ 62. Ke6 Qc4+ 63. Kd7 Qxa2
+Qb6+ 59. Kd5 Qb5+ 60. Ke4 Qc4+ 61. Kf5 Qd3+ 62. Ke6 Qc4+ 63. Kd7 Qxa2 *","You are a chess grandmaster.
 
-Kd7 Qb7+ Ke8 Qb6+ Kd8 Qc4+ Kc8 Qc3+ Kb8 Qc2+ Ka8 Qc1+ Bb7 64. Qxb7+ Ka6 65. Qc7+ Kb6 66. Qc3+ Ka6 67. Qc7+ Kb6 68. Qc3+ Ka6 69. Qc7+ Kb6
+You will be given a partially completed game.
 
-Kd7 Qb7+ Ke8 Qb6+ Kd8 Qc4+ Kc8 Qc3+ Kb8 Qc2+ Ka8",Kd7,698,670,698,google/gemma-3-12b-it:free,length,698,670,698,0.0,698,670,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 126, ""turn_number"": 64, ""is_white_to_move"": true, ""prompt_tokens"": 698, ""completion_tokens"": 670, ""total_tokens"": 698, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 14}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 126, ""turn_number"": 64, ""is_white_to_move"": true, ""prompt_tokens"": 698, ""completion_tokens"": 670, ""total_tokens"": 698, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 14}]",False,,0,0,True,,
-zcgH1,8/4R3/6p1/5rP1/2pk1P2/6K1/8/8 w - - 6 51,e7d7 f5d5 d7c7 c4c3 g3f2 d4d3,2309,crushing defensiveMove endgame long master masterVsMaster rookEndgame,0,False,3.0,0.0,Mismatch: expected f5d5 but got None,"1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. Nf3 d6 5. g3 O-O 6. Bg2 Nbd7 7. O-O e5 8. h3
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+zcgH1,8/4R3/6p1/5rP1/2pk1P2/6K1/8/8 w - - 6 51,e7d7 f5d5 d7c7 c4c3 g3f2 d4d3,2309,crushing defensiveMove endgame long master masterVsMaster rookEndgame,0,False,3.0,0.0,Mismatch: expected f5d5 but got None,1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.Nf3 d6 5.g3 O-O 6.Bg2 Nbd7 7.O-O e5 8.h3 c6 9.e4 exd4 10.Nxd4 Nb6 11.b3 d5 12.c5 Nxe4 13.Nxe4 dxe4 14.cxb6 Qxd4 15.Ba3 Qxa1 16.Qxa1 Bxa1 17.Bxf8 Kxf8 18.Rxa1 axb6 19.Bxe4 Bxh3 20.a4 Be6 21.b4 Bb3 22.a5 bxa5 23.bxa5 Bc4 24.f4 Ke7 25.Kf2 Bb5 26.Ke3 b6 27.a6 Ra7 28.Rc1 Kd6 29.g4 Rxa6 30.g5 Ra3+ 31.Kf2 Ra2+ 32.Ke3 Rh2 33.Ra1 Rh3+ 34.Kf2 Bc4 35.Ra8 b5 36.Rb8 Kc5 37.Rc8 Bd5 38.Bxd5 Kxd5 39.Rc7 b4 40.Rxf7 b3 41.Rb7 b2 42.Kg2 Rd3 43.Rxb2 c5 44.Rb7 Ke4 45.Rc7 Rd5 46.Kg3 Rf5 47.Rh7 c4 48.Rc7 Kd3 49.Rd7+ Ke3 50.Re7+ Kd4 51.Rd7+ 1/2-1/2,Rd7+,500,378,878,arcee-ai/afm-4.5b,stop,500,378,878,0.0,500,378,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 101, ""turn_number"": 51, ""is_white_to_move"": false, ""prompt_tokens"": 500, ""completion_tokens"": 378, ""total_tokens"": 878, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 15}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 101, ""turn_number"": 51, ""is_white_to_move"": false, ""prompt_tokens"": 500, ""completion_tokens"": 378, ""total_tokens"": 878, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 15}]",False,8/3R4/6p1/5rP1/2pk1P2/6K1/8/8 b - - 7 51,101,51,False,"1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. Nf3 d6 5. g3 O-O 6. Bg2 Nbd7 7. O-O e5 8. h3
 c6 9. e4 exd4 10. Nxd4 Nb6 11. b3 d5 12. c5 Nxe4 13. Nxe4 dxe4 14. cxb6 Qxd4
 15. Ba3 Qxa1 16. Qxa1 Bxa1 17. Bxf8 Kxf8 18. Rxa1 axb6 19. Bxe4 Bxh3 20. a4 Be6
 21. b4 Bb3 22. a5 bxa5 23. bxa5 Bc4 24. f4 Ke7 25. Kf2 Bb5 26. Ke3 b6 27. a6
 Ra7 28. Rc1 Kd6 29. g4 Rxa6 30. g5 Ra3+ 31. Kf2 Ra2+ 32. Ke3 Rh2 33. Ra1 Rh3+
 34. Kf2 Bc4 35. Ra8 b5 36. Rb8 Kc5 37. Rc8 Bd5 38. Bxd5 Kxd5 39. Rc7 b4 40.
 Rxf7 b3 41. Rb7 b2 42. Kg2 Rd3 43. Rxb2 c5 44. Rb7 Ke4 45. Rc7 Rd5 46. Kg3 Rf5
-47. Rxh7 c4 48. Rc7 Kd3 49. Rd7+ Ke3 50. Re7+ Kd4 51. Rd7+
+47. Rxh7 c4 48. Rc7 Kd3 49. Rd7+ Ke3 50. Re7+ Kd4 51. Rd7+ *","You are a chess grandmaster.
 
-Rd8 Rd1 Rc1
-Rd8 Rd1 Rc1",Rc1,556,422,556,google/gemma-3-12b-it:free,stop,556,422,556,0.0,556,422,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 101, ""turn_number"": 51, ""is_white_to_move"": false, ""prompt_tokens"": 556, ""completion_tokens"": 422, ""total_tokens"": 556, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 15}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 101, ""turn_number"": 51, ""is_white_to_move"": false, ""prompt_tokens"": 556, ""completion_tokens"": 422, ""total_tokens"": 556, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 15}]",False,,0,0,True,,
-FtckX,2r4r/p4p2/5k2/3Qpp2/N7/1P6/q1PR1KR1/8 b - - 0 38,c8c2 d5d6,917,master mate mateIn1 middlegame oneMove,0,False,1.0,100.0,Mismatch: expected d5d6 but got d5e6,"1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Nc3 Qc7 7. Bc4 e6 8. O-O d5 9. exd5 cxd5 10. Bb5+ Bd7 11. Bxd7+ Qxd7 12. Bg5 Be7 13. Re1 O-O 14. Qd3 Rfe8 15. Rad1 Rab8 16. b3 h6 17. Bh4 Rbc8 18. Na4 Qc6 19. Bxf6 Bxf6 20. Re2 Red8 21. f4 g6 22. g3 h5 23. h4 Rc7 24. Kh2 Rdc8 25. Rdd2 Kg7 26. Qf3 Qb5 27. f5 gxf5 28. Qxh5 Rh8 29. Qf3 Qb4 30. Kg2 Bxh4 31. gxh4 Qxh4 32. Kf1 Rcc8 33. Rg2+ Kf6 34. Ke2 Qh1 35. Kf2 Qb1 36. Qd3 Qxa2 37. Qd4+ e5 38. Qxd5 Rxc2
-Qe6+ Kg7 Rg7+
+You will be given a partially completed game.
 
-Qe6+ Kg7 Rg7+",Qe6+,457,338,457,google/gemma-3-12b-it:free,stop,457,338,457,0.0,457,338,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 76, ""turn_number"": 39, ""is_white_to_move"": true, ""prompt_tokens"": 457, ""completion_tokens"": 338, ""total_tokens"": 457, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 16}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 76, ""turn_number"": 39, ""is_white_to_move"": true, ""prompt_tokens"": 457, ""completion_tokens"": 338, ""total_tokens"": 457, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 16}]",False,,0,0,True,,
-xAdCI,r3k2r/1pp2pp1/p1n1p1qp/3p4/1b1P2P1/P1N1PN1P/1PbQBP2/R3K2R b KQkq - 0 12,c2e4 a3b4 e4f3 e2f3,1570,advantage middlegame short,0,False,2.0,50.0,Mismatch: expected a3b4 but got None,"1. d4 d5 2. Nc3 Nf6 3. Bf4 a6 4. e3 Nc6 5. Nf3 Bf5 6. Be2 e6 7. h3 Bb4 8. Bg5
-h6 9. Bxf6 Qxf6 10. Qd2 Qg6 11. g4 Bxc2 12. a3 Be4
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Qe7 O-O Rfd8 Rxd8+ Rxd8 Bf3 Nd7 Rd1 Rxd1+ Qxd1 Qc7 Nb6 a4 Bb5 Bc6 Qd7 Nxc6 bxc6 Qb7 Bd3
-Qe7
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Qe7 O-O Rfd8 Rxd8+ Rxd8 Bf3 Nd7 Rd1 Rxd1+ Qxd1 Qc7 Nb6 a4 Bb5 Bc6 Qd7 Nxc6 bxc6 Qb7 Bd3 Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3
-Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3
+ALWAYS repeat the entire representation of the game so far.
 
-Qe7 O-O Rfd8 Rxd8+ Rxd8 Bf3 Nd7 Rd1 Rxd1+ Qxd1 Qc7 Nb6 a4 Bb5 Bc6 Qd7 Nxc6 bxc6 Qb7 Bd3 Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3 Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3
+NEVER explain your choice.
+"
+FtckX,2r4r/p4p2/5k2/3Qpp2/N7/1P6/q1PR1KR1/8 b - - 0 38,c8c2 d5d6,917,master mate mateIn1 middlegame oneMove,0,False,1.0,100.0,Mismatch: expected d5d6 but got d2c2,1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Nc3 Qc7 7. Bc4 e6 8. O-O d5 9. exd5 cxd5 10. Bb5+ Bd7 11. Bxd7+ Qxd7 12. Bg5 Be7 13. Re1 O-O 14. Qd3 Rfe8 15. Rad1 Rab8 16. b3 h6 17. Bh4 Rbc8 18. Na4 Qc6 19. Bxf6 Bxf6 20. Re2 Red8 21. f4 g6 22. g3 h5 23. h4 Rc7 24. Kh2 Rdc8 25. Rdd2 Kg7 26. Qf3 Qb5 27. f5 gxf5 28. Qxh5 Rh8 29. Qf3 Qb4 30. Kg2 Bxh4 31. gxh4 Qxh4 32. Kf1 Rcc8 33. Rg2+ Kf6 34. Ke2 Qh1 35. Kf2 Qb1 36. Qd3 Qxa2 37. Qd4+ e5 38. Qxd5 Rxc2 39. Rxc2 Qd2 40. Rxd2 Qxd2+ 41. Kf3 Qc1+ 42. Ke4 Qd1+ 43. Kd5 Qc1+ 44. Ke6 Qd1+ 45. Kd7 Qc1+ 46. Ke8 Qd1+ 47. Kd9 Qc1+ 48. Ke10 Qd1+ 49. Kd11 Qc1+ 50. Ke12 Qd1+ 51. Kd13 Qc1+ 52. Ke14 Qd1+ 53. Kd15 Qc1+ 54. Ke16 Qd1+ 55. Kd17 Qc1+ 56. Ke18 Qd1+ 57. Kd19 Qc1+ 58. Ke20 Qd1+ 59. Kd21 Qc1+ 60. Ke22 Qd1+ 61. Kd23 Qc1+ 62. Ke24 Qd1+ 63. Kd25 Qc1+ 64. Ke26 Qd1+ 65. Kd27 Qc1+ 66. Ke28 Qd1+ 67. Kd29 Qc1+ 68. Ke30 Qd1+ 69. Kd31 Qc1+ 70. Ke32 Qd1+ 71. Kd33 Qc1+ 72. Ke34 Qd1+,Rxc2,412,640,1052,arcee-ai/afm-4.5b,length,412,640,1052,0.0,412,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 76, ""turn_number"": 39, ""is_white_to_move"": true, ""prompt_tokens"": 412, ""completion_tokens"": 640, ""total_tokens"": 1052, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 16}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 76, ""turn_number"": 39, ""is_white_to_move"": true, ""prompt_tokens"": 412, ""completion_tokens"": 640, ""total_tokens"": 1052, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 16}]",False,7r/p4p2/5k2/3Qpp2/N7/1P6/q1rR1KR1/8 w - - 0 39,76,39,True,"1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Nc3 Qc7 7. Bc4 e6 8.
+O-O d5 9. exd5 cxd5 10. Bb5+ Bd7 11. Bxd7+ Qxd7 12. Bg5 Be7 13. Re1 O-O 14. Qd3
+Rfe8 15. Rad1 Rab8 16. b3 h6 17. Bh4 Rbc8 18. Na4 Qc6 19. Bxf6 Bxf6 20. Re2
+Red8 21. f4 g6 22. g3 h5 23. h4 Rc7 24. Kh2 Rdc8 25. Rdd2 Kg7 26. Qf3 Qb5 27.
+f5 gxf5 28. Qxh5 Rh8 29. Qf3 Qb4 30. Kg2 Bxh4 31. gxh4 Qxh4 32. Kf1 Rcc8 33.
+Rg2+ Kf6 34. Ke2 Qh1 35. Kf2 Qb1 36. Qd3 Qxa2 37. Qd4+ e5 38. Qxd5 Rxc2 *","You are a chess grandmaster.
 
-Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3
+You will be given a partially completed game.
 
-Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3 Rd3
-Rd3 Rd3
-Rd3
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Qe7 Rd2 Bf1 Rd1+ Qxd1+ Kf2 Rd2+ Kf3 Rd3+ Ke4 Rd4+ Kxe3 Rd3 Rd3 Rd3",Qe7,207,539,207,google/gemma-3-12b-it:free,stop,207,539,207,0.0,207,539,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 24, ""turn_number"": 13, ""is_white_to_move"": true, ""prompt_tokens"": 207, ""completion_tokens"": 539, ""total_tokens"": 207, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 17}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 24, ""turn_number"": 13, ""is_white_to_move"": true, ""prompt_tokens"": 207, ""completion_tokens"": 539, ""total_tokens"": 207, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 17}]",False,,0,0,True,,
-hNgCd,r7/ppp1q1k1/3p1rpn/3Pp1N1/2P2P1P/P7/1P4K1/R2QR3 b - - 2 25,f6f4 g5e6 g7f7 e6f4,1053,advantage fork middlegame short,0,False,2.0,100.0,Mismatch: expected g5e6 but got None,"1. d4 g6 2. e4 Bg7 3. c4 d6 4. h3 Nd7 5. Nf3 e5 6. d5 Ne7 7. Nc3 O-O 8. a3 f5
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+xAdCI,r3k2r/1pp2pp1/p1n1p1qp/3p4/1b1P2P1/P1N1PN1P/1PbQBP2/R3K2R b KQkq - 0 12,c2e4 a3b4 e4f3 e2f3,1570,advantage middlegame short,0,False,2.0,50.0,Mismatch: expected a3b4 but got None,1. d4 d5 2. Nc3 Nf6 3. Bf4 a6 4. e3 Nc6 5. Nf3 Bf5 6. Be2 e6 7. h3 Bb4 8. Bg5 h6 9. Bxf6 Qxf6 10. Qd2 Qg6 11. g4 Bxc2 12. a3 Be4 13. Bb3 O-O 14. O-O Nbd7 15. Re1 Nf6 16. Re2 c5 17. Bc4 Bxc4 18. Bxc4 d6 19. Nbd2 Nc6 20. Nc3 Bb4 21. Bd2 O-O 22. Nf3 d5 23. exd5 Nxd5 24. Qxd5 Nf6 25. Qg4 Qd7 26. Qh5 Rb8 27. Qh3 Rb6 28. Qh6 Rxb2 29. Qxb2 Qd8 30. Qh5 Rxb2 31. Qxb2 Qd8 32. Qh5 Rxb2 33. Qxb2 Qd8 34. Qh5 Rxb2 35. Qxb2 Qd8 36. Qh5 Rxb2 37. Qxb2 Qd8 38. Qh5 Rxb2 39. Qxb2 Qd8 40. Qh5 Rxb2 41. Qxb2 Qd8 42. Qh5 Rxb2 43. Qxb2 Qd8 44. Qh5 Rxb2 45. Qxb2 Qd8 46. Qh5 Rxb2 47. Qxb2 Qd8 48. Qh5 Rxb2 49. Qxb2 Qd8 50. Qh5 Rxb2 51. Qxb2 Qd8 52. Qh5 Rxb2 53. Qxb2 Qd8 54. Qh5 Rxb2 55. Qxb2 Qd8 56. Qh5 Rxb2 57. Qxb2 Qd8 58. Qh5 Rxb2 59. Qxb2 Qd8 60. Qh5 Rxb2 61. Qxb2 Qd8 62. Qh5 Rxb2 63. Qxb2 Qd8 64. Qh5 Rxb2 65. Qxb2 Qd8 66. Qh5 Rxb2 67. Qxb2 Qd8 68. Qh5 Rxb2 69. Qxb2 Qd8 70. Qh5 Rxb2 71. Qxb2 Qd8 72. Qh5 Rxb2 73. Qxb2 Qd8 74. Q,Bb3,190,640,830,arcee-ai/afm-4.5b,length,190,640,830,0.0,190,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 24, ""turn_number"": 13, ""is_white_to_move"": true, ""prompt_tokens"": 190, ""completion_tokens"": 640, ""total_tokens"": 830, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 17}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 24, ""turn_number"": 13, ""is_white_to_move"": true, ""prompt_tokens"": 190, ""completion_tokens"": 640, ""total_tokens"": 830, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 17}]",False,r3k2r/1pp2pp1/p1n1p1qp/3p4/1b1Pb1P1/P1N1PN1P/1P1QBP2/R3K2R w KQkq - 1 13,24,13,True,"1. d4 d5 2. Nc3 Nf6 3. Bf4 a6 4. e3 Nc6 5. Nf3 Bf5 6. Be2 e6 7. h3 Bb4 8. Bg5
+h6 9. Bxf6 Qxf6 10. Qd2 Qg6 11. g4 Bxc2 12. a3 Be4 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+hNgCd,r7/ppp1q1k1/3p1rpn/3Pp1N1/2P2P1P/P7/1P4K1/R2QR3 b - - 2 25,f6f4 g5e6 g7f7 e6f4,1053,advantage fork middlegame short,0,False,2.0,100.0,Mismatch: expected g5e6 but got None,1. d4 g6 2. e4 Bg7 3. c4 d6 4. h3 Nd7 5. Nf3 e5 6. d5 Ne7 7. Nc3 O-O 8. a3 f5 9. Bd3 Nf6 10. O-O fxe4 11. Nxe4 Bf5 12. Nxf6+ Rxf6 13. Bg5 Rf7 14. Bxf5 Rxf5 15. g4 Rf7 16. Nh4 Bf6 17. Nf3 Kg7 18. h4 h6 19. Bxf6+ Rxf6 20. g5 Rf7 21. Kg2 Nf5 22. gxh6+ Nxh6 23. Ng5 Rf6 24. f4 Qe7 25. Re1 Rxf4 26. Rxf4 Rxf4 27. Rxf4 Rxf4 28. Rxf4 Rxf4 29. Rxf4 Rxf4 30. Rxf4 Rxf4 31. Rxf4 Rxf4 32. Rxf4 Rxf4 33. Rxf4 Rxf4 34. Rxf4 Rxf4 35. Rxf4 Rxf4 36. Rxf4 Rxf4 37. Rxf4 Rxf4 38. Rxf4 Rxf4 39. Rxf4 Rxf4 40. Rxf4 Rxf4 41. Rxf4 Rxf4 42. Rxf4 Rxf4 43. Rxf4 Rxf4 44. Rxf4 Rxf4 45. Rxf4 Rxf4 46. Rxf4 Rxf4 47. Rxf4 Rxf4 48. Rxf4 Rxf4 49. Rxf4 Rxf4 50. Rxf4 Rxf4 51. Rxf4 Rxf4 52. Rxf4 Rxf4 53. Rxf4 Rxf4 54. Rxf4 Rxf4 55. Rxf4 Rxf4 56. Rxf4 Rxf4 57. Rxf4 Rxf4 58. Rxf4 Rxf4 59. Rxf4 Rxf4 60. Rxf4 Rxf4 61. Rxf4 Rxf4 62. Rxf4 Rxf4 63. Rxf4 Rxf4 64. Rxf4 Rxf4 65. Rxf4 Rxf4 66. Rxf4 Rxf4 67. Rxf4 Rxf4 68. Rxf4 Rxf4 69. Rxf4 Rxf4 70. Rxf4 Rxf4 71. Rxf4 Rxf4 72. Rxf4 Rxf4 73. Rxf4 Rxf4 74. Rxf4,Rxf4,296,640,936,arcee-ai/afm-4.5b,length,296,640,936,0.0,296,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 296, ""completion_tokens"": 640, ""total_tokens"": 936, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 18}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 296, ""completion_tokens"": 640, ""total_tokens"": 936, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 18}]",False,r7/ppp1q1k1/3p2pn/3Pp1N1/2P2r1P/P7/1P4K1/R2QR3 w - - 0 26,50,26,True,"1. d4 g6 2. e4 Bg7 3. c4 d6 4. h3 Nd7 5. Nf3 e5 6. d5 Ne7 7. Nc3 O-O 8. a3 f5
 9. Bd3 Nf6 10. O-O fxe4 11. Nxe4 Bf5 12. Nxf6+ Rxf6 13. Bg5 Rf7 14. Bxf5 Rxf5
 15. g4 Rf7 16. Nh4 Bf6 17. Nf3 Kg7 18. h4 h6 19. Bxf6+ Rxf6 20. g5 Rf7 21. Kg2
-Nf5 22. gxh6+ Nxh6 23. Ng5 Rf6 24. f4 Qe7 25. Re1 Rxf4
+Nf5 22. gxh6+ Nxh6 23. Ng5 Rf6 24. f4 Qe7 25. Re1 Rxf4 *","You are a chess grandmaster.
 
-Re8 Qf7 Rh1",Re8,329,211,329,google/gemma-3-12b-it:free,stop,329,211,329,0.0,329,211,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 329, ""completion_tokens"": 211, ""total_tokens"": 329, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 18}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 329, ""completion_tokens"": 211, ""total_tokens"": 329, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 18}]",False,,0,0,True,,
-B4iwI,8/8/3k4/1p1p1p1p/p2RpPr1/P1P1P1PK/1P6/8 w - - 1 38,h3g2 h5h4 g2h3 g4g3,1431,crushing endgame rookEndgame short,0,False,2.0,100.0,Mismatch: expected h5h4 but got None,"1. d4 g6 2. Bf4 Bg7 3. Nf3 Nc6 4. e3 d6 5. c3 e5 6. dxe5 Nxe5 7. Nxe5 dxe5 8.
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+B4iwI,8/8/3k4/1p1p1p1p/p2RpPr1/P1P1P1PK/1P6/8 w - - 1 38,h3g2 h5h4 g2h3 g4g3,1431,crushing endgame rookEndgame short,0,False,2.0,100.0,Mismatch: expected h5h4 but got None,"1. d4 g6 2. Bf4 Bg7 3. Nf3 Nc6 4. e3 d6 5. c3 e5 6. dxe5 Nxe5 7. Nxe5 dxe5 8. Qxd8+ Kxd8 9. Bg3 Ke7 10. Nd2 Be6 11. Nf3 f6 12. a3 Rd8 13. Be2 Nh6 14. Bh4 Nf5 15. Bg3 Nxg3 16. hxg3 h5 17. O-O g5 18. Rfd1 c6 19. Nd2 f5 20. Bc4 b5 21. Bxe6 Kxe6 22. Nb3 Rd5 23. Rxd5 cxd5 24. Nc5+ Kd6 25. Nb7+ Kc6 26. Na5+ Kb6 27. Nb3 a5 28. Rd1 Rd8 29. Nd2 Bf6 30. f4 a4 31. Nf3 gxf4 32. gxf4 e4 33. Nd4 Bxd4 34. Rxd4 Kc5 35. Kh2 Rg8 36. Kh3 Kd6 37. g3 Rg4 38. Kg2
+
+33... Rg8 34. Nd4 Bxd4 35. Rxd4 Kc5 36. Kh2 Rg8 37. Kh3 Kd6 38. g3 Rg4 39. Kg2 Rg8 40. Rg1 Rg4 41. Rg3 Rg8 42. Rg2 Rg4 43. Rg3 Rg8 44. Rg2 Rg4 45. Rg3 Rg8 46. Rg2 Rg4 47. Rg3 Rg8 48. Rg2 Rg4 49. Rg3 Rg8 50. Rg2 Rg4 51. Rg3 Rg8 52. Rg2 Rg4 53. Rg3 Rg8 54. Rg2 Rg4 55. Rg3 Rg8 56. Rg2 Rg4 57. Rg3 Rg8 58. Rg2 Rg4 59. Rg3 Rg8 60. Rg2 Rg4 61. Rg3 Rg8 62. Rg2 Rg4 63. Rg3 Rg8 64. Rg2 Rg4 65. Rg3 Rg8 66. Rg2 Rg4 67. Rg3 Rg8 68. Rg2 Rg4 69. Rg3 Rg8 70. Rg2 Rg4 71. R",Rg4,397,640,1037,arcee-ai/afm-4.5b,length,397,640,1037,0.0,397,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 75, ""turn_number"": 38, ""is_white_to_move"": false, ""prompt_tokens"": 397, ""completion_tokens"": 640, ""total_tokens"": 1037, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 19}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 75, ""turn_number"": 38, ""is_white_to_move"": false, ""prompt_tokens"": 397, ""completion_tokens"": 640, ""total_tokens"": 1037, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 19}]",False,8/8/3k4/1p1p1p1p/p2RpPr1/P1P1P1P1/1P4K1/8 b - - 2 38,75,38,False,"1. d4 g6 2. Bf4 Bg7 3. Nf3 Nc6 4. e3 d6 5. c3 e5 6. dxe5 Nxe5 7. Nxe5 dxe5 8.
 Qxd8+ Kxd8 9. Bg3 Ke7 10. Nd2 Be6 11. Nf3 f6 12. a3 Rd8 13. Be2 Nh6 14. Bh4 Nf5
 15. Bg3 Nxg3 16. hxg3 h5 17. O-O g5 18. Rfd1 c6 19. Nd2 f5 20. Bc4 b5 21. Bxe6
 Kxe6 22. Nb3 Rd5 23. Rxd5 cxd5 24. Nc5+ Kd6 25. Nb7+ Kc6 26. Na5+ Kb6 27. Nb3
 a5 28. Rd1 Rd8 29. Nd2 Bf6 30. f4 a4 31. Nf3 gxf4 32. gxf4 e4 33. Nd4 Bxd4 34.
-Rxd4 Kc5 35. Kh2 Rg8 36. Kh3 Kd6 37. g3 Rg4 38. Kg2
+Rxd4 Kc5 35. Kh2 Rg8 36. Kh3 Kd6 37. g3 Rg4 38. Kg2 *","You are a chess grandmaster.
 
-Kg3 Rg2+ Kf3 Rd2",Rd2,443,317,443,google/gemma-3-12b-it:free,stop,443,317,443,0.0,443,317,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 75, ""turn_number"": 38, ""is_white_to_move"": false, ""prompt_tokens"": 443, ""completion_tokens"": 317, ""total_tokens"": 443, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 19}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 75, ""turn_number"": 38, ""is_white_to_move"": false, ""prompt_tokens"": 443, ""completion_tokens"": 317, ""total_tokens"": 443, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 19}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 7LY8A,8/2pk2p1/P1np3p/7P/1pPN2P1/4K1P1/8/8 w - - 4 46,d4c6 d7c6 a6a7 c6b7 a7a8q b7a8,872,crushing endgame long,0,False,3.0,100.0,Mismatch: expected d7c6 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. O-O a6 5. Ba4 b5 6. Bb3 d6 7. d3 h6 8. c3 Nf6
 9. Nbd2 O-O 10. Bd5 Nxd5 11. exd5 Ne7 12. c4 Bg4 13. Qc2 Ng6 14. a3 a5 15. h3
 Bd7 16. Ne4 Bb6 17. Qb3 bxc4 18. dxc4 f5 19. Ng3 e4 20. Nh2 Qe7 21. Be3 Bxe3
 22. Qxe3 f4 23. Qxe4 fxg3 24. Qxe7 Nxe7 25. fxg3 Rxf1+ 26. Rxf1 Rf8 27. Re1 Re8
 28. Nf3 Nf5 29. Rxe8+ Bxe8 30. g4 Ne3 31. Nd2 Bg6 32. Kf2 Nc2 33. g3 Kf7 34. h4
 Kf6 35. Kf3 Ke5 36. a4 Nd4+ 37. Ke3 Be8 38. b3 Bg6 39. h5 Bc2 40. b4 axb4 41.
-a5 Ba4 42. a6 Bc6 43. dxc6 Nxc6 44. Nf3+ Ke6 45. Nd4+ Kd7 46. Nxc6
+a5 Ba4 42. a6 Bc6 43. dxc6 Nxc6 44. Nf3+ Ke6 45. Nd4+ Kd7 46. Nxc6 * 47. Nc5
 
-Kf7 Ke8 Kg8
-Kf7 Ke8 Kg8",Kg8,514,388,514,google/gemma-3-12b-it:free,stop,514,388,514,0.0,514,388,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 91, ""turn_number"": 46, ""is_white_to_move"": false, ""prompt_tokens"": 514, ""completion_tokens"": 388, ""total_tokens"": 514, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 20}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 91, ""turn_number"": 46, ""is_white_to_move"": false, ""prompt_tokens"": 514, ""completion_tokens"": 388, ""total_tokens"": 514, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 20}]",False,,0,0,True,,
-hNedI,r3r1k1/5pp1/1PN4p/8/8/1R2p1bP/P3R1P1/7K b - - 1 28,a8a2 e2a2 e3e2 a2e2,1948,advantage endgame hangingPiece short,0,False,2.0,50.0,Mismatch: expected e2a2 but got b3b4,"1. e4 c5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 bxc6 5. d3 d5 6. e5 Bf5 7. O-O h6 8. h3
+Answer: 47... Nc7",Nxc6,465,389,854,arcee-ai/afm-4.5b,stop,465,389,854,0.0,465,389,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 91, ""turn_number"": 46, ""is_white_to_move"": false, ""prompt_tokens"": 465, ""completion_tokens"": 389, ""total_tokens"": 854, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 20}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 91, ""turn_number"": 46, ""is_white_to_move"": false, ""prompt_tokens"": 465, ""completion_tokens"": 389, ""total_tokens"": 854, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 20}]",False,8/2pk2p1/P1Np3p/7P/1pP3P1/4K1P1/8/8 b - - 0 46,91,46,False,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. O-O a6 5. Ba4 b5 6. Bb3 d6 7. d3 h6 8. c3 Nf6
+9. Nbd2 O-O 10. Bd5 Nxd5 11. exd5 Ne7 12. c4 Bg4 13. Qc2 Ng6 14. a3 a5 15. h3
+Bd7 16. Ne4 Bb6 17. Qb3 bxc4 18. dxc4 f5 19. Ng3 e4 20. Nh2 Qe7 21. Be3 Bxe3
+22. Qxe3 f4 23. Qxe4 fxg3 24. Qxe7 Nxe7 25. fxg3 Rxf1+ 26. Rxf1 Rf8 27. Re1 Re8
+28. Nf3 Nf5 29. Rxe8+ Bxe8 30. g4 Ne3 31. Nd2 Bg6 32. Kf2 Nc2 33. g3 Kf7 34. h4
+Kf6 35. Kf3 Ke5 36. a4 Nd4+ 37. Ke3 Be8 38. b3 Bg6 39. h5 Bc2 40. b4 axb4 41.
+a5 Ba4 42. a6 Bc6 43. dxc6 Nxc6 44. Nf3+ Ke6 45. Nd4+ Kd7 46. Nxc6 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+hNedI,r3r1k1/5pp1/1PN4p/8/8/1R2p1bP/P3R1P1/7K b - - 1 28,a8a2 e2a2 e3e2 a2e2,1948,advantage endgame hangingPiece short,1,False,2.0,50.0,Mismatch: expected a2e2 but got None,"1. e4 c5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 bxc6 5. d3 d5 6. e5 Bf5 7. O-O h6 8. h3
+e6 9. d4 Ne7 10. dxc5 Qc7 11. Re1 Ng6 12. c3 Bxc5 13. Qa4 O-O 14. Nd4 Be4
+15. f3 Bxb1 16. Rxb1 Nxe5 17. Kh1 Bd6 18. Bf4 Rfe8 19. Bxe5 Bxe5 20. Qxc6 Qxc6
+21. Nxc6 Bg3 22. Re2 a5 23. b4 axb4 24. cxb4 e5 25. b5 e4 26. fxe4 dxe4
+27. b6 e3 28. Rb3 Rxa2 29. Rxa2 e2
+
+30. Qd2
+
+31. Qe3
+
+32. Qg4
+
+33. Qh5
+
+34. Qh6
+
+35. Qh7
+
+36. Qh8
+
+37. Qh9
+
+38. Qh10
+
+39. Qh11
+
+40. Qh12
+
+41. Qh13
+
+42. Qh14
+
+43. Qh15
+
+44. Qh16
+
+45. Qh17
+
+46. Qh18
+
+47. Qh19
+
+48. Qh20
+
+49. Qh21
+
+50. Qh22
+
+51. Qh23
+
+52. Qh24
+
+53. Qh25
+
+54. Qh26
+
+55. Qh27
+
+56. Qh28
+
+57. Qh29
+
+58. Qh30
+
+59. Qh31
+
+60. Qh32
+
+61. Qh33
+
+62. Qh34
+
+63. Qh35
+
+64. Qh36
+
+65. Qh37
+
+66. Qh38
+
+67. Qh39
+
+68. Qh40
+
+69. Qh41
+
+70. Qh42
+
+71. Qh43
+
+72. Qh44
+
+73. Qh45
+
+74. Qh46
+
+75. Qh47
+
+76. Qh48
+
+77. Qh49
+
+78. Qh50
+
+79. Qh51
+
+80. Qh52
+
+81. Qh53
+
+82. Qh54
+
+83. Qh55
+
+84. Qh56
+
+85. Qh57
+
+86. Qh58
+
+87. Qh59
+
+88. Qh60
+
+89. Qh61
+
+90. Qh62
+
+91. Qh63
+
+92. Qh64
+
+93. Qh65
+
+94. Qh66
+
+95. Qh67
+
+96. Qh68
+
+97. Qh69",Qd2,324,640,1920,arcee-ai/afm-4.5b,length,640,1280,1920,0.0,640,1280,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 316, ""completion_tokens"": 640, ""total_tokens"": 956, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 21}, {""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 58, ""turn_number"": 30, ""is_white_to_move"": true, ""prompt_tokens"": 324, ""completion_tokens"": 640, ""total_tokens"": 964, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 21}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 316, ""completion_tokens"": 640, ""total_tokens"": 956, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 21}, {""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 58, ""turn_number"": 30, ""is_white_to_move"": true, ""prompt_tokens"": 324, ""completion_tokens"": 640, ""total_tokens"": 964, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 21}]",False,4r1k1/5pp1/1PN4p/8/8/1R4bP/R3p1P1/7K w - - 0 30,58,30,True,"1. e4 c5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 bxc6 5. d3 d5 6. e5 Bf5 7. O-O h6 8. h3
 e6 9. d4 Ne7 10. dxc5 Qc7 11. Re1 Ng6 12. c3 Bxc5 13. Qa4 O-O 14. Nd4 Be4 15.
 f3 Bxb1 16. Rxb1 Nxe5 17. Kh1 Bd6 18. Bf4 Rfe8 19. Bxe5 Bxe5 20. Qxc6 Qxc6 21.
 Nxc6 Bg3 22. Re2 a5 23. b4 axb4 24. cxb4 e5 25. b5 e4 26. fxe4 dxe4 27. b6 e3
-28. Rb3 Rxa2
+28. Rb3 Rxa2 29. Rxa2 e2 *","You are a chess grandmaster.
 
-Rb4 g5 29. Ne4 Rd2 30. Ng3 Rd1+ 31. Rxd1
-Rb4 g5 29. Ne4 Rd2 30. Ng3 Rd1+ 31. Rxd1
+You will be given a partially completed game.
 
-Rb4 g5 Ne4 Rd2 Ng3 Rd1+ Rxd1",Rb4,352,295,352,google/gemma-3-12b-it:free,stop,352,295,352,0.0,352,295,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 352, ""completion_tokens"": 295, ""total_tokens"": 352, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 21}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 56, ""turn_number"": 29, ""is_white_to_move"": true, ""prompt_tokens"": 352, ""completion_tokens"": 295, ""total_tokens"": 352, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 21}]",False,,0,0,True,,
-WmZxY,8/p7/1p1k1p1p/5p2/2PK1P2/P6P/6P1/8 w - - 0 30,g2g4 f5g4 h3g4 f6f5 g4g5 h6g5 f4g5 d6e6 g5g6 e6f6,2597,crushing endgame pawnEndgame veryLong,0,False,5.0,0.0,Mismatch: expected f5g4 but got None,"1. d4 d5 2. c4 dxc4 3. Nc3 e6 4. e4 Bb4 5. Bxc4 Nc6 6. d5 exd5 7. exd5 Qe7+ 8. Be3 Bxc3+ 9. bxc3 Ne5 10. Bb5+ c6 11. dxc6 Nxc6 12. Nf3 Bd7 13. O-O O-O-O 14. Bxc6 Bxc6 15. Qe2 Nf6 16. Rfd1 Rxd1+ 17. Rxd1 Rd8 18. Rxd8+ Qxd8 19. Bg5 Bxf3 20. Qxf3 Qd6 21. Bxf6 Qxf6 22. Qxf6 gxf6 23. f4 Kd7 24. Kf2 Ke6 25. Ke3 f5 26. c4 b6 27. a3 f6 28. Kd4 Kd6 29. h3 h6 30. g4
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Kd5 Kd5 Kc4 Kc4 Kb5 Kb5",Kb5,383,265,383,google/gemma-3-12b-it:free,stop,383,265,383,0.0,383,265,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 59, ""turn_number"": 30, ""is_white_to_move"": false, ""prompt_tokens"": 383, ""completion_tokens"": 265, ""total_tokens"": 383, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 22}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 59, ""turn_number"": 30, ""is_white_to_move"": false, ""prompt_tokens"": 383, ""completion_tokens"": 265, ""total_tokens"": 383, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 22}]",False,,0,0,True,,
-2Z2JA,r4r2/5qpk/5R1B/pp1n4/2pP4/2P3Q1/5PBP/5RK1 b - - 0 23,f7f6 g2e4 h7g8 e4d5,1339,advantage fork middlegame pin short,0,False,2.0,0.0,Mismatch: expected g2e4 but got None,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. e4 b5 6. a4 Bd7 7. axb5 cxb5 8. Ne5 e6 9. g4 Bb4 10. Bg2 h6 11. Nxd7 Nbxd7 12. e5 Nd5 13. O-O Bxc3 14. bxc3 O-O 15. Qf3 a6 16. Qg3 a5 17. g5 hxg5 18. Bxg5 f6 19. Bh6 Qe7 20. exf6 N7xf6 21. Rae1 Kh7 22. Rxe6 Qf7 23. Rxf6 Qxf6
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Rxf6 Qxf6 Be3 Nc4 Bd4",Rxf6,313,199,313,google/gemma-3-12b-it:free,stop,313,199,313,0.0,313,199,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 46, ""turn_number"": 24, ""is_white_to_move"": true, ""prompt_tokens"": 313, ""completion_tokens"": 199, ""total_tokens"": 313, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 23}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 46, ""turn_number"": 24, ""is_white_to_move"": true, ""prompt_tokens"": 313, ""completion_tokens"": 199, ""total_tokens"": 313, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 23}]",False,,0,0,True,,
-F7ztO,2k1r1r1/pp1q1ppp/2p1b3/8/8/P1BPR1P1/1P2QP1P/4R1K1 b - - 0 20,e6g4 e3e8 g8e8 e2e8 d7e8 e1e8,507,crushing long middlegame queensideAttack,0,False,3.0,0.0,Mismatch: expected e3e8 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d3 Nd4 5. Nxd4 exd4 6. O-O c6 7. Bc4 d5 8. exd5 Nxd5 9. Bxd5 Qxd5 10. c4 dxc3 11. Nxc3 Qa5 12. Bd2 Bb4 13. a3 Bxc3 14. Bxc3 Qd5 15. Re1+ Be6 16. Re5 Qd7 17. Qe2 O-O-O 18. Re1 Rde8 19. Re3 Rhg8 20. g3 Bg4
-Qe4 Bxf3 21. Qxf3 Rge8 22. Rd3 Qb5 23. Rd1
+ALWAYS repeat the entire representation of the game so far.
 
-Qe4 Bxf3 Rd3 Qb5 Rd1",Qe4,288,207,288,google/gemma-3-12b-it:free,stop,288,207,288,0.0,288,207,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 40, ""turn_number"": 21, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 207, ""total_tokens"": 288, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 24}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 40, ""turn_number"": 21, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 207, ""total_tokens"": 288, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 24}]",False,,0,0,True,,
-ddPYl,r1q1r1k1/5pp1/p2B3p/1p1nP3/8/8/P1P1QPPP/R3R1K1 w - - 3 23,a1d1 d5c3 e2d3 c3d1,1334,advantage fork middlegame short,0,False,2.0,100.0,Mismatch: expected d5c3 but got c8c6,"1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. O-O Bd7 5. Nc3 Nf6 6. Re1 Be7 7. d4 exd4 8.
+NEVER explain your choice.
+"
+WmZxY,8/p7/1p1k1p1p/5p2/2PK1P2/P6P/6P1/8 w - - 0 30,g2g4 f5g4 h3g4 f6f5 g4g5 h6g5 f4g5 d6e6 g5g6 e6f6,2597,crushing endgame pawnEndgame veryLong,0,False,5.0,0.0,Mismatch: expected f5g4 but got None,"1. d4 d5 2. c4 dxc4 3. Nc3 e6 4. e4 Bb4 5. Bxc4 Nc6 6. d5 exd5 7. exd5 Qe7+ 8. Be3 Bxc3+ 9. bxc3 Ne5 10. Bb5+ c6 11. dxc6 Nxc6 12. Nf3 Bd7 13. O-O O-O-O 14. Bxc6 Bxc6 15. Qe2 Nf6 16. Rfd1 Rxd1+ 17. Rxd1 Rd8 18. Rxd8+ Qxd8 19. Bg5 Bxf3 20. Qxf3 Qd6 21. Bxf6 Qxf6 22. Qxf6 gxf6 23. f4 Kd7 24. Kf2 Ke6 25. Ke3 f5 26. c4 b6 27. a3 f6 28. Kd4 Kd6 29. h3 h6 30. g4 Nf7
+
+31. Nc3
+
+32. Bg5
+
+33. Qh5
+
+34. Qh3
+
+35. Qh5
+
+36. Qh3
+
+37. Qh5
+
+38. Qh3
+
+39. Qh5
+
+40. Qh3
+
+41. Qh5
+
+42. Qh3
+
+43. Qh5
+
+44. Qh3
+
+45. Qh5
+
+46. Qh3
+
+47. Qh5
+
+48. Qh3
+
+49. Qh5
+
+50. Qh3
+
+51. Qh5
+
+52. Qh3
+
+53. Qh5
+
+54. Qh3
+
+55. Qh5
+
+56. Qh3
+
+57. Qh5
+
+58. Qh3
+
+59. Qh5
+
+60. Qh3
+
+61. Qh5
+
+62. Qh3
+
+63. Qh5
+
+64. Qh3
+
+65. Qh5
+
+66. Qh3
+
+67. Qh5
+
+68. Qh3
+
+69. Qh5
+
+70. Qh3
+
+71. Qh5
+
+72. Qh3
+
+73. Qh5
+
+74. Qh3
+
+75. Qh5
+
+76. Qh3
+
+77. Qh5
+
+78. Qh3
+
+79. Qh5
+
+80. Qh3
+
+81. Qh5
+
+82. Qh3
+
+83. Qh5
+
+84. Qh3
+
+85. Qh5
+
+86. Qh3
+
+87. Qh5
+
+88. Qh3
+
+89. Qh5
+
+90. Qh3
+
+91. Qh5
+
+92. Qh3
+
+93. Qh5
+
+94. Qh3
+
+95. Qh",Nf7,341,640,981,arcee-ai/afm-4.5b,length,341,640,981,0.0,341,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 59, ""turn_number"": 30, ""is_white_to_move"": false, ""prompt_tokens"": 341, ""completion_tokens"": 640, ""total_tokens"": 981, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 22}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 59, ""turn_number"": 30, ""is_white_to_move"": false, ""prompt_tokens"": 341, ""completion_tokens"": 640, ""total_tokens"": 981, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 22}]",False,8/p7/1p1k1p1p/5p2/2PK1PP1/P6P/8/8 b - - 0 30,59,30,False,"1. d4 d5 2. c4 dxc4 3. Nc3 e6 4. e4 Bb4 5. Bxc4 Nc6 6. d5 exd5 7. exd5 Qe7+ 8.
+Be3 Bxc3+ 9. bxc3 Ne5 10. Bb5+ c6 11. dxc6 Nxc6 12. Nf3 Bd7 13. O-O O-O-O 14.
+Bxc6 Bxc6 15. Qe2 Nf6 16. Rfd1 Rxd1+ 17. Rxd1 Rd8 18. Rxd8+ Qxd8 19. Bg5 Bxf3
+20. Qxf3 Qd6 21. Bxf6 Qxf6 22. Qxf6 gxf6 23. f4 Kd7 24. Kf2 Ke6 25. Ke3 f5 26.
+c4 b6 27. a3 f6 28. Kd4 Kd6 29. h3 h6 30. g4 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+2Z2JA,r4r2/5qpk/5R1B/pp1n4/2pP4/2P3Q1/5PBP/5RK1 b - - 0 23,f7f6 g2e4 h7g8 e4d5,1339,advantage fork middlegame pin short,0,False,2.0,0.0,Mismatch: expected g2e4 but got None,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. e4 b5 6. a4 Bd7 7. axb5 cxb5 8. Ne5
+e6 9. g4 Bb4 10. Bg2 h6 11. Nxd7 Nbxd7 12. e5 Nd5 13. O-O Bxc3 14. bxc3 O-O 15.
+Qf3 a6 16. Qg3 a5 17. g5 hxg5 18. Bxg5 f6 19. Bh6 Qe7 20. exf6 N7xf6 21. Rae1
+Kh7 22. Rxe6 Qf7 23. Rxf6 Qxf6 24. Rg3
+
+25. Rg5",Rg3,280,200,480,arcee-ai/afm-4.5b,stop,280,200,480,0.0,280,200,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 46, ""turn_number"": 24, ""is_white_to_move"": true, ""prompt_tokens"": 280, ""completion_tokens"": 200, ""total_tokens"": 480, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 23}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 46, ""turn_number"": 24, ""is_white_to_move"": true, ""prompt_tokens"": 280, ""completion_tokens"": 200, ""total_tokens"": 480, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 23}]",False,r4r2/6pk/5q1B/pp1n4/2pP4/2P3Q1/5PBP/5RK1 w - - 0 24,46,24,True,"1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. e4 b5 6. a4 Bd7 7. axb5 cxb5 8. Ne5
+e6 9. g4 Bb4 10. Bg2 h6 11. Nxd7 Nbxd7 12. e5 Nd5 13. O-O Bxc3 14. bxc3 O-O 15.
+Qf3 a6 16. Qg3 a5 17. g5 hxg5 18. Bxg5 f6 19. Bh6 Qe7 20. exf6 N7xf6 21. Rae1
+Kh7 22. Rxe6 Qf7 23. Rxf6 Qxf6 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+F7ztO,2k1r1r1/pp1q1ppp/2p1b3/8/8/P1BPR1P1/1P2QP1P/4R1K1 b - - 0 20,e6g4 e3e8 g8e8 e2e8 d7e8 e1e8,507,crushing long middlegame queensideAttack,0,False,3.0,0.0,Mismatch: expected e3e8 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d3 Nd4 5. Nxd4 exd4 6. O-O c6 7. Bc4 d5 8.
+exd5 Nxd5 9. Bxd5 Qxd5 10. c4 dxc3 11. Nxc3 Qa5 12. Bd2 Bb4 13. a3 Bxc3 14.
+Bxc3 Qd5 15. Re1+ Be6 16. Re5 Qd7 17. Qe2 O-O-O 18. Re1 Rde8 19. Re3 Rhg8 20.
+g3 Bg4 21. Bg5 Nh6 22. Nf3 Nf5 23. Nc3 Nc6 24. Bb5 Bg4 25. Bg3 Rg8 26. Bxf5
+Qxf5 27. Nxf5 Nxf5 28. Nxd7+ Kxd7 29. Qe2+ Ke8 30. Qd3+ Kd7 31. Qc2+ Ke8 32.
+Qd3+ Kd7 33. Qc2+ Ke8 34. Qd3+ Kd7 35. Qc2+ Ke8 36. Qd3+ Kd7 37. Qc2+ Ke8 38.
+Qd3+ Kd7 39. Qc2+ Ke8 40. Qd3+ Kd7 41. Qc2+ Ke8 42. Qd3+ Kd7 43. Qc2+ Ke8 44.
+Qd3+ Kd7 45. Qc2+ Ke8 46. Qd3+ Kd7 47. Qc2+ Ke8 48. Qd3+ Kd7 49. Qc2+ Ke8 50.
+Qd3+ Kd7 51. Qc2+ Ke8 52. Qd3+ Kd7 53. Qc2+ Ke8 54. Qd3+ Kd7 55. Qc2+ Ke8 56.
+Qd3+ Kd7 57. Qc2+ Ke8 58. Qd3+ Kd7 59. Qc2+ Ke8 60. Qd3+ Kd7 61. Qc2+ Ke8 62.
+Qd3+ Kd7 63. Qc2+ Ke8 64. Qd3+ Kd7 65. Qc2+ Ke8 66. Qd3+ Kd7 67. Qc2+ Ke8 68.
+Qd3+ Kd7 69. Qc2+ Ke8 70. Qd3+ Kd7 71. Q",Bg5,257,640,897,arcee-ai/afm-4.5b,length,257,640,897,0.0,257,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 40, ""turn_number"": 21, ""is_white_to_move"": true, ""prompt_tokens"": 257, ""completion_tokens"": 640, ""total_tokens"": 897, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 24}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 40, ""turn_number"": 21, ""is_white_to_move"": true, ""prompt_tokens"": 257, ""completion_tokens"": 640, ""total_tokens"": 897, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 24}]",False,2k1r1r1/pp1q1ppp/2p5/8/6b1/P1BPR1P1/1P2QP1P/4R1K1 w - - 1 21,40,21,True,"1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d3 Nd4 5. Nxd4 exd4 6. O-O c6 7. Bc4 d5 8.
+exd5 Nxd5 9. Bxd5 Qxd5 10. c4 dxc3 11. Nxc3 Qa5 12. Bd2 Bb4 13. a3 Bxc3 14.
+Bxc3 Qd5 15. Re1+ Be6 16. Re5 Qd7 17. Qe2 O-O-O 18. Re1 Rde8 19. Re3 Rhg8 20.
+g3 Bg4 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+ddPYl,r1q1r1k1/5pp1/p2B3p/1p1nP3/8/8/P1P1QPPP/R3R1K1 w - - 3 23,a1d1 d5c3 e2d3 c3d1,1334,advantage fork middlegame short,0,False,2.0,100.0,Mismatch: expected d5c3 but got c8d7,"1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. O-O Bd7 5. Nc3 Nf6 6. Re1 Be7 7. d4 exd4 8. Nxd4 Nxd4 9. Bxd7+ Nxd7 10. Qxd4 O-O 11. Nd5 c5 12. Nxe7+ Qxe7 13. Qd5 Nf6 14. Qc4 a6 15. Bg5 b5 16. Qe2 h6 17. Bh4 Qe5 18. Bg3 Qxb2 19. Bxd6 Rfe8 20. e5 Nd5 21. Bxc5 Qc3 22. Bd6 Qc8 23. Rad1 Qd7
+
+24. Qb3
+
+25. Qb6
+
+26. Qc4
+
+27. Qd3
+
+28. Qe2
+
+29. Qf3
+
+30. Qg4
+
+31. Qh5
+
+32. Qh6
+
+33. Qh7
+
+34. Qh8
+
+35. Qh9
+
+36. Qh10
+
+37. Qh11
+
+38. Qh12
+
+39. Qh13
+
+40. Qh14
+
+41. Qh15
+
+42. Qh16
+
+43. Qh17
+
+44. Qh18
+
+45. Qh19
+
+46. Qh20
+
+47. Qh21
+
+48. Qh22
+
+49. Qh23
+
+50. Qh24
+
+51. Qh25
+
+52. Qh26
+
+53. Qh27
+
+54. Qh28
+
+55. Qh29
+
+56. Qh30
+
+57. Qh31
+
+58. Qh32
+
+59. Qh33
+
+60. Qh34
+
+61. Qh35
+
+62. Qh36
+
+63. Qh37
+
+64. Qh38
+
+65. Qh39
+
+66. Qh40
+
+67. Qh41
+
+68. Qh42
+
+69. Qh43
+
+70. Qh44
+
+71. Qh45
+
+72. Qh46
+
+73. Qh47
+
+74. Qh48
+
+75. Qh49
+
+76. Qh50
+
+77. Qh51
+
+78. Qh52
+
+79. Qh53
+
+80. Qh54
+
+81. Qh55
+
+82. Qh56
+
+83. Qh57
+
+84. Qh58
+
+85. Qh59
+
+86. Qh60
+
+87. Qh61
+
+88. Qh62
+
+89. Qh63
+
+90. Qh64
+
+91. Qh65
+
+92. Qh66
+
+93. Qh67
+
+94. Qh68
+
+95. Qh69
+
+96. Qh70
+
+97. Qh71
+
+98. Qh72",Qd7,279,640,919,arcee-ai/afm-4.5b,length,279,640,919,0.0,279,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 45, ""turn_number"": 23, ""is_white_to_move"": false, ""prompt_tokens"": 279, ""completion_tokens"": 640, ""total_tokens"": 919, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 25}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 45, ""turn_number"": 23, ""is_white_to_move"": false, ""prompt_tokens"": 279, ""completion_tokens"": 640, ""total_tokens"": 919, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 25}]",False,r1q1r1k1/5pp1/p2B3p/1p1nP3/8/8/P1P1QPPP/3RR1K1 b - - 4 23,45,23,False,"1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. O-O Bd7 5. Nc3 Nf6 6. Re1 Be7 7. d4 exd4 8.
 Nxd4 Nxd4 9. Bxd7+ Nxd7 10. Qxd4 O-O 11. Nd5 c5 12. Nxe7+ Qxe7 13. Qd5 Nf6 14.
 Qc4 a6 15. Bg5 b5 16. Qe2 h6 17. Bh4 Qe5 18. Bg3 Qxb2 19. Bxd6 Rfe8 20. e5 Nd5
-21. Bxc5 Qc3 22. Bd6 Qc8 23. Rad1
+21. Bxc5 Qc3 22. Bd6 Qc8 23. Rad1 *","You are a chess grandmaster.
 
-Rad1 Qc6 24. Rd3 Rd8 25. Rxd8+ Qxd8 26. Qc3 Nf4 27. Qf3 Rd1+",Qc6,312,227,312,google/gemma-3-12b-it:free,stop,312,227,312,0.0,312,227,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 45, ""turn_number"": 23, ""is_white_to_move"": false, ""prompt_tokens"": 312, ""completion_tokens"": 227, ""total_tokens"": 312, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 25}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 45, ""turn_number"": 23, ""is_white_to_move"": false, ""prompt_tokens"": 312, ""completion_tokens"": 227, ""total_tokens"": 312, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 25}]",False,,0,0,True,,
-fQiFH,2kr1b1r/ppp2ppp/3q4/3Pp3/1nP5/5Q2/PP3PPP/RNB2RK1 b - - 0 13,b4c2 f3f5 d8d7 f5c2,1207,advantage fork middlegame short,0,False,2.0,0.0,Mismatch: expected f3f5 but got None,"1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. Nf3 Bg4 5. exd6 Qxd6 6. Bd3 Nc6 7. c3 O-O-O 8. O-O e5 9. c4 Ndb4 10. d5 Nd4 11. Be2 Nxe2+ 12. Qxe2 Bxf3 13. Qxf3 Nc2
+You will be given a partially completed game.
 
-14. Rd1 Rfd8 15. Rxd8+ Rxd8 16. Qe4 Rd4 17. Qc2 Ne3 18. Rd2 Rxd2+ 19. Qxd2 Nf5 20. Qc3
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Qc2 Ne3 Rd2 Rxd2 Qxd2 Nf5 Qc3",Qc2,222,182,222,google/gemma-3-12b-it:free,stop,222,182,222,0.0,222,182,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 26, ""turn_number"": 14, ""is_white_to_move"": true, ""prompt_tokens"": 222, ""completion_tokens"": 182, ""total_tokens"": 222, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 26}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 26, ""turn_number"": 14, ""is_white_to_move"": true, ""prompt_tokens"": 222, ""completion_tokens"": 182, ""total_tokens"": 222, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 26}]",False,,0,0,True,,
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+fQiFH,2kr1b1r/ppp2ppp/3q4/3Pp3/1nP5/5Q2/PP3PPP/RNB2RK1 b - - 0 13,b4c2 f3f5 d8d7 f5c2,1207,advantage fork middlegame short,0,False,2.0,0.0,Mismatch: expected f3f5 but got b1c3,1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. Nf3 Bg4 5. exd6 Qxd6 6. Bd3 Nc6 7. c3 O-O-O 8. O-O e5 9. c4 Ndb4 10. d5 Nd4 11. Be2 Nxe2+ 12. Qxe2 Bxf3 13. Qxf3 Nc2 14. Nc3 Bb4 15. Nf3 d5 16. exd5 Nxd5 17. Qxd5 Nf6 18. Nc3 Bxc3 19. bxc3 d4 20. Ne5 Bxe5 21. Qxe5 Nf6 22. Nf3 Bf5 23. Nc3 Bb4 24. Nf3 d4 25. Ne5 Bxe5 26. Qxe5 Nf6 27. Nc3 Bxc3 28. bxc3 d3 29. Ne5 Bxe5 30. Qxe5 Nf6 31. Nc3 Bxc3 32. bxc3 d2 33. Ne5 Bxe5 34. Qxe5 Nf6 35. Nc3 Bxc3 36. bxc3 d1=Q 37. Ne5 Bxe5 38. Qxe5 Nf6 39. Nc3 Bxc3 40. bxc3 d2 41. Ne5 Bxe5 42. Qxe5 Nf6 43. Nc3 Bxc3 44. bxc3 d1=Q 45. Ne5 Bxe5 46. Qxe5 Nf6 47. Nc3 Bxc3 48. bxc3 d2 49. Ne5 Bxe5 50. Qxe5 Nf6 51. Nc3 Bxc3 52. bxc3 d1=Q 53. Ne5 Bxe5 54. Qxe5 Nf6 55. Nc3 Bxc3 56. bxc3 d2 57. Ne5 Bxe5 58. Qxe5 Nf6 59. Nc3 Bxc3 60. bxc3 d1=Q 61. Ne5 Bxe5 62. Qxe5 Nf6 63. Nc3 Bxc3 64. bxc3 d2 65. Ne5 Bxe5 66. Qxe5 Nf6 67. Nc3 Bxc3 68. bxc3 d1=Q 69. Ne5 Bxe5 70. Qxe5 Nf6 71. Nc3 Bxc3 72. bxc3 d2 73. Ne5 Bxe5 74. Qxe5 Nf6 75. Nc3,Nc3,197,640,837,arcee-ai/afm-4.5b,length,197,640,837,0.0,197,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 26, ""turn_number"": 14, ""is_white_to_move"": true, ""prompt_tokens"": 197, ""completion_tokens"": 640, ""total_tokens"": 837, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 26}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 26, ""turn_number"": 14, ""is_white_to_move"": true, ""prompt_tokens"": 197, ""completion_tokens"": 640, ""total_tokens"": 837, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 26}]",False,2kr1b1r/ppp2ppp/3q4/3Pp3/2P5/5Q2/PPn2PPP/RNB2RK1 w - - 1 14,26,14,True,"1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. Nf3 Bg4 5. exd6 Qxd6 6. Bd3 Nc6 7. c3 O-O-O 8.
+O-O e5 9. c4 Ndb4 10. d5 Nd4 11. Be2 Nxe2+ 12. Qxe2 Bxf3 13. Qxf3 Nc2 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 hZqbA,8/1B4p1/P4pk1/3R1n2/7p/7P/6PK/r7 w - - 4 54,d5b5 f5g3 b7e4 g3e4,2108,crushing endgame quietMove short,0,False,2.0,0.0,Mismatch: expected f5g3 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Bc5 5. O-O O-O 6. a3 a5 7. Qe2 h6 8. d3
 d6 9. h3 Be6 10. Nd5 Bxd5 11. exd5 Nd4 12. Nxd4 Bxd4 13. c3 Ba7 14. Be3 c6 15.
 Bxa7 Rxa7 16. dxc6 bxc6 17. Qe3 Re7 18. Qf3 d5 19. Bb3 e4 20. dxe4 dxe4 21. Qd1
@@ -269,12 +1363,28 @@ Qb6 22. Rb1 e3 23. fxe3 Qxe3+ 24. Kh1 Rd7 25. Qf3 Qg5 26. Qxc6 Rd2 27. Rfd1 Nh5
 Qf3 Ng5 35. Qf5 Qxf5 36. Rxf5 Ne4 37. Rxa5 Nxc3 38. b4 Ne4 39. b5 Rb8 40. Ra7
 Nd6 41. Ba2 Rxb5 42. a4 Rb2 43. Bd5 Rd2 44. Bf3 Ra2 45. a5 Nb5 46. Ra8+ Kh7 47.
 a6 Kg6 48. Bd5 Ra1+ 49. Kh2 f6 50. Bb7 h5 51. Rc8 h4 52. Rc5 Nd6 53. Rd5 Nf5
-54. Rb5 Rb2 55. g3 hxg3+ 56. Kxg3 Ng5 57. Rd2 Ne6 58. Rd6 Nd8 59. Re6 Nf7 60. Re7+ Kg6
-61. Re6+ Kf6 62. Re8+ Kg7 63. Rf8
+54. Rb5
 
-Rb2 Kg6 g3 hxg3+ Kxg3 Ng5 Rd2 Ne6 Rd6 Nd8 Re6 Nf7 Re7+ Kg6 Re6+ Kf6 Re8+ Kg7 Rf8
+Rg6",Rg6,524,436,960,arcee-ai/afm-4.5b,stop,524,436,960,0.0,524,436,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 107, ""turn_number"": 54, ""is_white_to_move"": false, ""prompt_tokens"": 524, ""completion_tokens"": 436, ""total_tokens"": 960, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 27}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 107, ""turn_number"": 54, ""is_white_to_move"": false, ""prompt_tokens"": 524, ""completion_tokens"": 436, ""total_tokens"": 960, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 27}]",False,8/1B4p1/P4pk1/1R3n2/7p/7P/6PK/r7 b - - 5 54,107,54,False,"1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Bc5 5. O-O O-O 6. a3 a5 7. Qe2 h6 8. d3
+d6 9. h3 Be6 10. Nd5 Bxd5 11. exd5 Nd4 12. Nxd4 Bxd4 13. c3 Ba7 14. Be3 c6 15.
+Bxa7 Rxa7 16. dxc6 bxc6 17. Qe3 Re7 18. Qf3 d5 19. Bb3 e4 20. dxe4 dxe4 21. Qd1
+Qb6 22. Rb1 e3 23. fxe3 Qxe3+ 24. Kh1 Rd7 25. Qf3 Qg5 26. Qxc6 Rd2 27. Rfd1 Nh5
+28. Rxd2 Qxd2 29. Qf3 Nf4 30. Bc4 Ne6 31. Rf1 Ng5 32. Qf2 Qd7 33. b3 Ne4 34.
+Qf3 Ng5 35. Qf5 Qxf5 36. Rxf5 Ne4 37. Rxa5 Nxc3 38. b4 Ne4 39. b5 Rb8 40. Ra7
+Nd6 41. Ba2 Rxb5 42. a4 Rb2 43. Bd5 Rd2 44. Bf3 Ra2 45. a5 Nb5 46. Ra8+ Kh7 47.
+a6 Kg6 48. Bd5 Ra1+ 49. Kh2 f6 50. Bb7 h5 51. Rc8 h4 52. Rc5 Nd6 53. Rd5 Nf5
+54. Rb5 *","You are a chess grandmaster.
 
-Rb2 Kg6 g3 hxg3+ Kxg3 Ng5 Rd2 Ne6 Rd6 Nd8 Re6 Nf7 Re7+ Kg6 Re6+ Kf6 Re8+ Kg7 Rf8",Rf8,580,605,580,google/gemma-3-12b-it:free,stop,580,605,580,0.0,580,605,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 107, ""turn_number"": 54, ""is_white_to_move"": false, ""prompt_tokens"": 580, ""completion_tokens"": 605, ""total_tokens"": 580, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 27}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 107, ""turn_number"": 54, ""is_white_to_move"": false, ""prompt_tokens"": 580, ""completion_tokens"": 605, ""total_tokens"": 580, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 27}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 iIvSu,8/8/1p4k1/p4pP1/1P4K1/P7/8/8 w - f6 0 56,g4f4 a5b4 a3b4 b6b5,1411,crushing defensiveMove endgame master pawnEndgame short zugzwang,0,False,2.0,0.0,Mismatch: expected a5b4 but got None,"1. b3 Nf6 2. Bb2 g6 3. Bxf6 exf6 4. c4 Bg7 5. Nc3 O-O 6. Rc1 d6 7. Nf3 Nc6 8.
 e3 Re8 9. d4 f5 10. Be2 Qf6 11. O-O f4 12. d5 Ne5 13. Nxe5 Rxe5 14. exf4 Qxf4
 15. Bf3 Bg4 16. Bxg4 Rae8 17. g3 Qf6 18. Bf3 h5 19. h4 Qf5 20. Kg2 a6 21. Ne2
@@ -283,10 +1393,26 @@ Bh6 22. Rc2 g5 23. Nd4 Qf6 24. hxg5 Qxg5 25. Re2 h4 26. Rxe5 dxe5 27. Ne2 e4
 34. Qf2 Qd3 35. Nf3 Bf6 36. Qd2 Qe4 37. c5 Be7 38. d6 cxd6 39. cxd6 Bxd6 40.
 Qxd6 Qe2+ 41. Kh3 Qxf3 42. Qb8+ Kh7 43. Qf4 Qh5+ 44. Kg2 Qd5+ 45. Kf2 Kg6 46.
 g4 Qc5+ 47. Kf3 Qc3+ 48. Ke4 Qc2+ 49. Ke5 Qc7+ 50. Ke4 Qxf4+ 51. Kxf4 Kf6 52.
-g5+ Kg6 53. Kg4 b6 54. a3 a5 55. b4 f5+ 56. Kf4
+g5+ Kg6 53. Kg4 b6 54. a3 a5 55. b4 f5+ 56. Kf4 *",Kf4,557,466,1023,arcee-ai/afm-4.5b,stop,557,466,1023,0.0,557,466,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 111, ""turn_number"": 56, ""is_white_to_move"": false, ""prompt_tokens"": 557, ""completion_tokens"": 466, ""total_tokens"": 1023, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 28}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 111, ""turn_number"": 56, ""is_white_to_move"": false, ""prompt_tokens"": 557, ""completion_tokens"": 466, ""total_tokens"": 1023, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 28}]",False,8/8/1p4k1/p4pP1/1P3K2/P7/8/8 b - - 1 56,111,56,False,"1. b3 Nf6 2. Bb2 g6 3. Bxf6 exf6 4. c4 Bg7 5. Nc3 O-O 6. Rc1 d6 7. Nf3 Nc6 8.
+e3 Re8 9. d4 f5 10. Be2 Qf6 11. O-O f4 12. d5 Ne5 13. Nxe5 Rxe5 14. exf4 Qxf4
+15. Bf3 Bg4 16. Bxg4 Rae8 17. g3 Qf6 18. Bf3 h5 19. h4 Qf5 20. Kg2 a6 21. Ne2
+Bh6 22. Rc2 g5 23. Nd4 Qf6 24. hxg5 Qxg5 25. Re2 h4 26. Rxe5 dxe5 27. Ne2 e4
+28. Bxe4 Rxe4 29. Ng1 hxg3 30. fxg3 Re3 31. Rf3 Bg7 32. Rxe3 Qxe3 33. Qf3 Qd2+
+34. Qf2 Qd3 35. Nf3 Bf6 36. Qd2 Qe4 37. c5 Be7 38. d6 cxd6 39. cxd6 Bxd6 40.
+Qxd6 Qe2+ 41. Kh3 Qxf3 42. Qb8+ Kh7 43. Qf4 Qh5+ 44. Kg2 Qd5+ 45. Kf2 Kg6 46.
+g4 Qc5+ 47. Kf3 Qc3+ 48. Ke4 Qc2+ 49. Ke5 Qc7+ 50. Ke4 Qxf4+ 51. Kxf4 Kf6 52.
+g5+ Kg6 53. Kg4 b6 54. a3 a5 55. b4 f5+ 56. Kf4 *","You are a chess grandmaster.
 
-Kf4 Kf6 57. Ke5 b5 58. Kd5 b4 59. Kc4 b3 60. axb3 axb3+
-Ke5 b5 Kd5 b4 Kc4 b3 axb3+",axb3+,621,522,621,google/gemma-3-12b-it:free,stop,621,522,621,0.0,621,522,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 111, ""turn_number"": 56, ""is_white_to_move"": false, ""prompt_tokens"": 621, ""completion_tokens"": 522, ""total_tokens"": 621, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 28}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 111, ""turn_number"": 56, ""is_white_to_move"": false, ""prompt_tokens"": 621, ""completion_tokens"": 522, ""total_tokens"": 621, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 28}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 073LS,R4bk1/8/6P1/1pr2N2/5K2/p7/8/8 b - - 6 47,c5f5 f4f5 b5b4 f5f6 a3a2 a8a2,2118,crushing endgame hangingPiece long master,0,False,3.0,33.33333333333333,Mismatch: expected f4f5 but got None,"1. c4 c6 2. Nc3 d5 3. d4 Nf6 4. Nf3 dxc4 5. a4 Bf5 6. e3 e6 7. Bxc4 Bb4 8. O-O
 O-O 9. Qb3 Qb6 10. Bd2 c5 11. a5 Bxa5 12. dxc5 Qxb3 13. Bxb3 Bb4 14. Nd4 Bxc5
 15. Nxf5 exf5 16. Nb5 Nc6 17. Bc3 Ne4 18. Rfc1 Nxc3 19. Rxc3 Bb6 20. Nd6 Na5
@@ -294,99 +1420,355 @@ O-O 9. Qb3 Qb6 10. Bd2 c5 11. a5 Bxa5 12. dxc5 Qxb3 13. Bxb3 Bb4 14. Nd4 Bxc5
 h4 f5 28. Rc3 Rxc3 29. bxc3 a5 30. Kg2 Bd8 31. Rc4 b5 32. Rc6 a4 33. Ra6 Rd7
 34. Kf3 Be7 35. e4 fxe4+ 36. Kxe4 a3 37. f4 Bf8 38. f5 gxf5+ 39. Nxf5+ Kg8 40.
 h5 Rc7 41. Ra8 Rc4+ 42. Ke5 Rxc3 43. g6 hxg6 44. hxg6 Rc5+ 45. Ke6 Rc6+ 46. Ke5
-Rc5+ 47. Kf4 Rxf5+
+Rc5+ 47. Kf4 Rxf5+",c4,473,381,854,arcee-ai/afm-4.5b,stop,473,381,854,0.0,473,381,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 473, ""completion_tokens"": 381, ""total_tokens"": 854, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 29}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 473, ""completion_tokens"": 381, ""total_tokens"": 854, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 29}]",False,R4bk1/8/6P1/1p3r2/5K2/p7/8/8 w - - 0 48,94,48,True,"1. c4 c6 2. Nc3 d5 3. d4 Nf6 4. Nf3 dxc4 5. a4 Bf5 6. e3 e6 7. Bxc4 Bb4 8. O-O
+O-O 9. Qb3 Qb6 10. Bd2 c5 11. a5 Bxa5 12. dxc5 Qxb3 13. Bxb3 Bb4 14. Nd4 Bxc5
+15. Nxf5 exf5 16. Nb5 Nc6 17. Bc3 Ne4 18. Rfc1 Nxc3 19. Rxc3 Bb6 20. Nd6 Na5
+21. Nxf5 Nxb3 22. Rxb3 Rfd8 23. g4 g6 24. Nh6+ Kg7 25. g5 Rac8 26. Ra4 Rd5 27.
+h4 f5 28. Rc3 Rxc3 29. bxc3 a5 30. Kg2 Bd8 31. Rc4 b5 32. Rc6 a4 33. Ra6 Rd7
+34. Kf3 Be7 35. e4 fxe4+ 36. Kxe4 a3 37. f4 Bf8 38. f5 gxf5+ 39. Nxf5+ Kg8 40.
+h5 Rc7 41. Ra8 Rc4+ 42. Ke5 Rxc3 43. g6 hxg6 44. hxg6 Rc5+ 45. Ke6 Rc6+ 46. Ke5
+Rc5+ 47. Kf4 Rxf5+ *","You are a chess grandmaster.
 
-Kf4 Rxf5+ Kg7 Rf7 Kg8 Rf8+ Kg7 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8
+You will be given a partially completed game.
 
-Kf4 Rxf5+ Kg7 Rf7 Kg8 Rf8+ Kg7 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8 Rf7+ Kg8",Kf4,525,481,525,google/gemma-3-12b-it:free,stop,525,481,525,0.0,525,481,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 525, ""completion_tokens"": 481, ""total_tokens"": 525, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 29}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 525, ""completion_tokens"": 481, ""total_tokens"": 525, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 29}]",False,,0,0,True,,
-RU2fn,r7/pqppN1pk/1p3n1p/2n5/2B5/4P3/1KQ2P1P/1R6 b - - 7 27,h7h8 e7g6 h8h7 g6f8 h7h8 c2h7 f6h7 f8g6,1625,doubleCheck mate mateIn4 middlegame sacrifice veryLong,0,False,4.0,0.0,Mismatch: expected e7g6 but got e7g8,"1. d4 f5 2. c4 e6 3. Nf3 b6 4. Bg5 Be7 5. Bxe7 Qxe7 6. Nc3 Bb7 7. d5 exd5 8. Nxd5 Qd8 9. Qd4 Nf6 10. Qe5+ Kf7 11. Qxf5 Bxd5 12. Ng5+ Kg8 13. cxd5 h6 14. Nf3 Qe7 15. e3 Kf7 16. Ne5+ Kg8 17. Ng6 Qb4+ 18. Kd1 Qxb2 19. Rb1 Qxa2 20. Be2 Na6 21. Qc2 Qxd5+ 22. Kc1 Qxg2 23. Nxh8 Qxh1+ 24. Kb2 Qb7 25. Ng6 Nc5 26. Bc4+ Kh7 27. Ne7+ Kh8
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Ng8 Rf8 Rd1",Ng8,355,239,355,google/gemma-3-12b-it:free,stop,355,239,355,0.0,355,239,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 239, ""total_tokens"": 355, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 30}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 239, ""total_tokens"": 355, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 30}]",False,,0,0,True,,
-g7ODi,r7/2R2pk1/p3p1p1/3r3p/7q/8/1Q3PP1/2R3K1 b - - 3 31,h4f6 c7f7 g7f7 c1c7 f6e7 c7e7 f7e7 b2b7 d5d7 b7a8,1663,advantage attraction endgame fork pin sacrifice veryLong,0,False,5.0,0.0,Mismatch: expected c7f7 but got c7c8,"1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bb5 Bg4 6. O-O e6 7. h3 Bxf3 8.
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+RU2fn,r7/pqppN1pk/1p3n1p/2n5/2B5/4P3/1KQ2P1P/1R6 b - - 7 27,h7h8 e7g6 h8h7 g6f8 h7h8 c2h7 f6h7 f8g6,1625,doubleCheck mate mateIn4 middlegame sacrifice veryLong,0,False,4.0,0.0,Mismatch: expected e7g6 but got None,1. d4 f5 2. c4 e6 3. Nf3 b6 4. Bg5 Be7 5. Bxe7 Qxe7 6. Nc3 Bb7 7. d5 exd5 8. Nxd5 Qd8 9. Qd4 Nf6 10. Qe5+ Kf7 11. Qxf5 Bxd5 12. Ng5+ Kg8 13. cxd5 h6 14. Nf3 Qe7 15. e3 Kf7 16. Ne5+ Kg8 17. Ng6 Qb4+ 18. Kd1 Qxb2 19. Rb1 Qxa2 20. Be2 Na6 21. Qc2 Qxd5+ 22. Kc1 Qxg2 23. Nxh8 Qxh1+ 24. Kb2 Qb7 25. Ng6 Nc5 26. Bc4+ Kh7 27. Ne7+ Kh8 28. Qe5+ Kf7 29. Qxf5 Bxd5 30. Ng6+ Kg8 31. cxd5 h6 32. Nf3 Qe7 33. e3 Kf7 34. Ne5+ Kg8 35. Ng6 Qb4+ 36. Kd1 Qxb2 37. Rb1 Qxa2 38. Be2 Na6 39. Qc2 Qxd5+ 40. Kc1 Qxg2 41. Nxh8 Qxh1+ 42. Kb2 Qb7 43. Ng6 Nc5 44. Bc4+ Kh7 45. Ne7+ Kh8 46. Qe5+ Kf7 47. Qxf5 Bxd5 48. Ng6+ Kg8 49. cxd5 h6 50. Nf3 Qe7 51. e3 Kf7 52. Ne5+ Kg8 53. Ng6 Qb4+ 54. Kd1 Qxb2 55. Rb1 Qxa2 56. Be2 Na6 57. Qc2 Qxd5+ 58. Kc1 Qxg2 59. Nxh8 Qxh1+ 60. Kb2 Qb7 61. Ng6 Nc5 62. Bc4+ Kh7 63. Ne7+ Kh8 64. Qe5+ Kf7 65. Qxf5 Bxd5 66. Ng6+ Kg8 67. cxd5 h6 68. Nf3 Qe7 69. e3 Kf7 70. Ne5+ Kg8 71. Ng6 Qb4+ 72. Kd1 Qxb2 73. Rb1 Qxa2 74. Be2 Na,Qe5+,325,640,965,arcee-ai/afm-4.5b,length,325,640,965,0.0,325,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 325, ""completion_tokens"": 640, ""total_tokens"": 965, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 30}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 325, ""completion_tokens"": 640, ""total_tokens"": 965, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 30}]",False,r6k/pqppN1p1/1p3n1p/2n5/2B5/4P3/1KQ2P1P/1R6 w - - 8 28,54,28,True,"1. d4 f5 2. c4 e6 3. Nf3 b6 4. Bg5 Be7 5. Bxe7 Qxe7 6. Nc3 Bb7 7. d5 exd5 8.
+Nxd5 Qd8 9. Qd4 Nf6 10. Qe5+ Kf7 11. Qxf5 Bxd5 12. Ng5+ Kg8 13. cxd5 h6 14. Nf3
+Qe7 15. e3 Kf7 16. Ne5+ Kg8 17. Ng6 Qb4+ 18. Kd1 Qxb2 19. Rb1 Qxa2 20. Be2 Na6
+21. Qc2 Qxd5+ 22. Kc1 Qxg2 23. Nxh8 Qxh1+ 24. Kb2 Qb7 25. Ng6 Nc5 26. Bc4+ Kh7
+27. Ne7+ Kh8 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+g7ODi,r7/2R2pk1/p3p1p1/3r3p/7q/8/1Q3PP1/2R3K1 b - - 3 31,h4f6 c7f7 g7f7 c1c7 f6e7 c7e7 f7e7 b2b7 d5d7 b7a8,1663,advantage attraction endgame fork pin sacrifice veryLong,0,False,5.0,0.0,Mismatch: expected c7f7 but got None,"1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bb5 Bg4 6. O-O e6 7. h3 Bxf3 8. Qxf3 a6 9. Bxc6+ bxc6 10. Nd2 Qb6 11. c3 Nf6 12. Re1 c5 13. Nb3 cxd4 14. Nxd4 Bc5 15. Bg5 Bxd4 16. cxd4 Qxd4 17. Rad1 Qxb2 18. Bxf6 Qxf6 19. Qxd5 O-O 20. Qb7 g6 21. Rd7 Rfb8 22. Qc7 Rb2 23. Qg3 Rxa2 24. Red1 Rb2 25. h4 h5 26. Qa3 Rbb8 27. Qa5 Kg7 28. Rc7 Rd8 29. Rdc1 Qxh4 30. Qa2 Rd5 31. Qb2+ Qf6
+
+32. Qc1
+
+33. Qd2
+
+34. Qe3
+
+35. Qf4
+
+36. Qg5
+
+37. Qh6
+
+38. Qi7
+
+39. Qj8+
+
+40. Kf2
+
+41. Qj8+
+
+42. Ke3
+
+43. Qj8+
+
+44. Kd4
+
+45. Qj8+
+
+46. Ke5
+
+47. Qj8+
+
+48. Kd6
+
+49. Qj8+
+
+50. Ke7
+
+51. Qj8+
+
+52. Kd7
+
+53. Qj8+
+
+54. Kd8
+
+55. Qj8+
+
+56. Kd9
+
+57. Qj8+
+
+58. Kd10
+
+59. Qj8+
+
+60. Kd11
+
+61. Qj8+
+
+62. Kd12
+
+63. Qj8+
+
+64. Kd13
+
+65. Qj8+
+
+66. Kd14
+
+67. Qj8+
+
+68. Kd15
+
+69. Qj8+
+
+70. Kd16
+
+71. Qj8+
+
+72. Kd17
+
+73. Qj8+
+
+74. Kd18
+
+75. Qj8+
+
+76. Kd19
+
+77. Qj8+
+
+78. Kd20
+
+79. Qj8+
+
+80. Kd21
+
+81. Qj8+
+
+82. Kd22
+
+83. Qj8+
+
+84. Kd23
+
+85. Qj8+
+
+86. Kd24
+
+87. Qj8+
+
+88. Kd25
+
+89. Qj8+
+
+90. Kd26
+
+91. Qj8+
+
+92. Kd27
+
+93. Qj8+
+
+94. Kd28
+
+95. Qj8+
+
+96",Qc1,352,640,992,arcee-ai/afm-4.5b,length,352,640,992,0.0,352,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 352, ""completion_tokens"": 640, ""total_tokens"": 992, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 31}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 352, ""completion_tokens"": 640, ""total_tokens"": 992, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 31}]",False,r7/2R2pk1/p3pqp1/3r3p/8/8/1Q3PP1/2R3K1 w - - 4 32,62,32,True,"1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bb5 Bg4 6. O-O e6 7. h3 Bxf3 8.
 Qxf3 a6 9. Bxc6+ bxc6 10. Nd2 Qb6 11. c3 Nf6 12. Re1 c5 13. Nb3 cxd4 14. Nxd4
 Bc5 15. Bg5 Bxd4 16. cxd4 Qxd4 17. Rad1 Qxb2 18. Bxf6 Qxf6 19. Qxd5 O-O 20. Qb7
 g6 21. Rd7 Rfb8 22. Qc7 Rb2 23. Qg3 Rxa2 24. Red1 Rb2 25. h4 h5 26. Qa3 Rbb8
-27. Qa5 Kg7 28. Rc7 Rd8 29. Rdc1 Qxh4 30. Qa2 Rd5 31. Qb2+ Qf6
+27. Qa5 Kg7 28. Rc7 Rd8 29. Rdc1 Qxh4 30. Qa2 Rd5 31. Qb2+ Qf6 *","You are a chess grandmaster.
 
-Qf2 32. Rc8 Rd1+ 33. Kh2
-Qf2 32. Rc8 Rd1+ 33. Kh2",Rc8,387,293,387,google/gemma-3-12b-it:free,stop,387,293,387,0.0,387,293,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 387, ""completion_tokens"": 293, ""total_tokens"": 387, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 31}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 387, ""completion_tokens"": 293, ""total_tokens"": 387, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 31}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 UZABu,1n1r2k1/R3R1bp/2pq2p1/2p5/2P5/P2pQ1PP/5P1K/8 b - - 0 31,b8d7 e7d7 d8d7 e3e8 d6f8 e8f8 g8f8 a7d7,2518,advantage middlegame sacrifice veryLong,0,False,4.0,0.0,Mismatch: expected e7d7 but got None,"1. e4 c5 2. Nf3 Nc6 3. Bb5 Nf6 4. e5 Nd5 5. c4 Nc7 6. Bxc6 dxc6 7. O-O b5 8. b3
 bxc4 9. bxc4 g6 10. d3 Bg7 11. Bb2 O-O 12. Nc3 Be6 13. Rb1 Qc8 14. Qe2 Rb8 15.
 Ne4 Na6 16. Nfg5 Qd7 17. Nxe6 Qxe6 18. Rfd1 Rfd8 19. Ba3 Qxe5 20. h3 f5 21. Bb2
 Rxb2 22. Rxb2 fxe4 23. Rb7 exd3 24. Qd2 Nb4 25. a3 Na6 26. Rxa7 Nb8 27. Re1 Qd4
-28. Rexe7 Qa1+ 29. Kh2 Qf6 30. Qe3 Qd6+ 31. g3 Nd7
+28. Rexe7 Qa1+ 29. Kh2 Qf6 30. Qe3 Qd6+ 31. g3 Nd7 32. Qg4
 
-White Rb8, Black Qf6, White Qd2
-Rb8 Qf6 Qd2",Rb8,384,282,384,google/gemma-3-12b-it:free,stop,384,282,384,0.0,384,282,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 384, ""completion_tokens"": 282, ""total_tokens"": 384, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 32}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 384, ""completion_tokens"": 282, ""total_tokens"": 384, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 32}]",False,,0,0,True,,
-2dCZ9,r5k1/1pb2p2/1pp4p/4P1pq/3PQ1b1/2P3Pn/PP1N1P1P/R3RBK1 w - - 3 24,g1h1 h3f2 h1g1 f2e4,1130,advantage fork master middlegame short,0,False,2.0,0.0,Mismatch: expected h3f2 but got f7f5,"1. e4 d6 2. d4 Nf6 3. Bd3 g6 4. c3 Bg7 5. Nf3 O-O 6. O-O Nbd7 7. Re1 e5 8. Bg5
+33. Qxg7+ Kf7 34. Qxg7+ Ke8 35. Qxg7+ Kf8 36. Qxg7+ Ke8 37. Qxg7+ Kf8 38. Qxg7+
+Ke8 39. Qxg7+ Kf8 40. Qxg7+ Ke8 41. Qxg7+ Kf8 42. Qxg7+ Ke8 43. Qxg7+ Kf8 44.
+Qxg7+ Ke8 45. Qxg7+ Kf8 46. Qxg7+ Ke8 47. Qxg7+ Kf8 48. Qxg7+ Ke8 49. Qxg7+ Kf8 50.
+Qxg7+ Ke8 51. Qxg7+ Kf8 52. Qxg7+ Ke8 53. Qxg7+ Kf8 54. Qxg7+ Ke8 55. Qxg7+ Kf8 56.
+Qxg7+ Ke8 57. Qxg7+ Kf8 58. Qxg7+ Ke8 59. Qxg7+ Kf8 60. Qxg7+ Ke8 61. Qxg7+ Kf8 62.
+Qxg7+ Ke8 63. Qxg7+ Kf8 64. Qxg7+ Ke8 65. Qxg7+ Kf8 66. Qxg7+ Ke8 67. Qxg7+ Kf8 68.
+Qxg7+ Ke",Qg4,350,640,990,arcee-ai/afm-4.5b,length,350,640,990,0.0,350,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 350, ""completion_tokens"": 640, ""total_tokens"": 990, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 32}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 62, ""turn_number"": 32, ""is_white_to_move"": true, ""prompt_tokens"": 350, ""completion_tokens"": 640, ""total_tokens"": 990, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 32}]",False,3r2k1/R2nR1bp/2pq2p1/2p5/2P5/P2pQ1PP/5P1K/8 w - - 1 32,62,32,True,"1. e4 c5 2. Nf3 Nc6 3. Bb5 Nf6 4. e5 Nd5 5. c4 Nc7 6. Bxc6 dxc6 7. O-O b5 8. b3
+bxc4 9. bxc4 g6 10. d3 Bg7 11. Bb2 O-O 12. Nc3 Be6 13. Rb1 Qc8 14. Qe2 Rb8 15.
+Ne4 Na6 16. Nfg5 Qd7 17. Nxe6 Qxe6 18. Rfd1 Rfd8 19. Ba3 Qxe5 20. h3 f5 21. Bb2
+Rxb2 22. Rxb2 fxe4 23. Rb7 exd3 24. Qd2 Nb4 25. a3 Na6 26. Rxa7 Nb8 27. Re1 Qd4
+28. Rexe7 Qa1+ 29. Kh2 Qf6 30. Qe3 Qd6+ 31. g3 Nd7 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+2dCZ9,r5k1/1pb2p2/1pp4p/4P1pq/3PQ1b1/2P3Pn/PP1N1P1P/R3RBK1 w - - 3 24,g1h1 h3f2 h1g1 f2e4,1130,advantage fork master middlegame short,0,False,2.0,0.0,Mismatch: expected h3f2 but got None,"1. e4 d6 2. d4 Nf6 3. Bd3 g6 4. c3 Bg7 5. Nf3 O-O 6. O-O Nbd7 7. Re1 e5 8. Bg5
 h6 9. Bh4 c6 10. Nbd2 Qc7 11. Qc2 Nh5 12. Nc4 Nf4 13. Be7 Nb6 14. Bxd6 Qd8 15.
 Bxf8 Bxf8 16. Nxb6 axb6 17. Nxe5 Qg5 18. Bf1 Bd6 19. Nf3 Qh5 20. e5 Bc7 21. Qe4
-g5 22. g3 Bg4 23. Nd2 Nh3+ 24. Kh1
+g5 22. g3 Bg4 23. Nd2 Nh3+ 24. Kh1 Nf6 25. Qd3 Nxe5 26. Qxe5 Nf4 27. Qg4 Ne7
+28. Qh5 Nf6 29. Qg6 Ng8 30. Qh7+ Ke7 31. Qg6+ Nf6 32. Qh7+ Ke7 33. Qg6+ Nf6 34.
+Qh7+ Ke7 35. Qg6+ Nf6 36. Qh7+ Ke7 37. Qg6+ Nf6 38. Qh7+ Ke7 39. Qg6+ Nf6 40.
+Qh7+ Ke7 41. Qg6+ Nf6 42. Qh7+ Ke7 43. Qg6+ Nf6 44. Qh7+ Ke7 45. Qg6+ Nf6 46.
+Qh7+ Ke7 47. Qg6+ Nf6 48. Qh7+ Ke7 49. Qg6+ Nf6 50. Qh7+ Ke7 51. Qg6+ Nf6 52.
+Qh7+ Ke7 53. Qg6+ Nf6 54. Qh7+ Ke7 55. Qg6+ Nf6 56. Qh7+ Ke7 57. Qg6+ Nf6 58.
+Qh7+ Ke7 59. Qg6+ Nf6 60. Qh7+ Ke7 61. Qg6+ Nf6 62. Qh7+ Ke7 63. Qg6+ Nf6 64.
+Qh7+ Ke7 65. Qg6+ Nf6 66. Qh7+ Ke7 67. Qg6+ Nf6 68. Qh7+ Ke7 69. Qg6+ Nf6 70.
+Qh7+ Ke7 71. Qg6+ Nf6 72.",Nf6,285,640,925,arcee-ai/afm-4.5b,length,285,640,925,0.0,285,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 47, ""turn_number"": 24, ""is_white_to_move"": false, ""prompt_tokens"": 285, ""completion_tokens"": 640, ""total_tokens"": 925, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 33}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 47, ""turn_number"": 24, ""is_white_to_move"": false, ""prompt_tokens"": 285, ""completion_tokens"": 640, ""total_tokens"": 925, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 33}]",False,r5k1/1pb2p2/1pp4p/4P1pq/3PQ1b1/2P3Pn/PP1N1P1P/R3RB1K b - - 4 24,47,24,False,"1. e4 d6 2. d4 Nf6 3. Bd3 g6 4. c3 Bg7 5. Nf3 O-O 6. O-O Nbd7 7. Re1 e5 8. Bg5
+h6 9. Bh4 c6 10. Nbd2 Qc7 11. Qc2 Nh5 12. Nc4 Nf4 13. Be7 Nb6 14. Bxd6 Qd8 15.
+Bxf8 Bxf8 16. Nxb6 axb6 17. Nxe5 Qg5 18. Bf1 Bd6 19. Nf3 Qh5 20. e5 Bc7 21. Qe4
+g5 22. g3 Bg4 23. Nd2 Nh3+ 24. Kh1 *","You are a chess grandmaster.
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+You will be given a partially completed game.
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+ALWAYS repeat the entire representation of the game so far.
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+NEVER explain your choice.
+"
+MQdJS,2r5/2r3k1/1p1pq1b1/pP2p1Q1/2P3P1/B2B4/6P1/5RK1 b - - 7 44,c7f7 d3f5 e6f6 g5f6 f7f6 f5c8,2048,advantage exposedKing long middlegame,0,False,3.0,33.33333333333333,Mismatch: expected d3f5 but got None,"1.d4 c5 2.d5 e5 3.c4 d6 4.Nc3 f5 5.e4 Nf6 6.Bd3 f4 7.h3 Be7 8.Nf3 h6 9.a3 O-O 10.b4 Nbd7 11.Rb1 b6 12.Qc2 cxb4 13.axb4 a5 14.b5 Nc5 15.Na4 Nfd7 16.Ba3 Nxa4 17.Qxa4 g5 18.Nd2 Qc7 19.Be2 Nf6 20.Qc2 Bd7 21.Qd3 Kg7 22.f3 Rac8 23.Nf1 Be8 24.Nh2 Nh5 25.Rg1 Ng3 26.Rc1 Bd7 27.Kf2 h5 28.Rgd1 Be8 29.Nf1 Nxf1 30.Kxf1 Bg6 31.Kf2 Qd7 32.Rd2 Rc7 33.Rdc2 Rfc8 34.Qb3 g4 35.hxg4 hxg4 36.fxg4 Bxe4 37.Rc3 Bh4+ 38.Kg1 Bg3 39.Rxg3 fxg3 40.Qxg3 Bxd5 41.Qe3 Bf7 42.Qg5+ Bg6 43.Bd3 Qe6 44.Rf1 Rf7
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
+45.Rc2
 
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-Ng1 f5 25. Ne4 Bxe5 26. Nxc7 Qxc7 27. Qd5+
-
-Ng1 f5",f5,319,645,319,google/gemma-3-12b-it:free,length,319,645,319,0.0,319,645,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 47, ""turn_number"": 24, ""is_white_to_move"": false, ""prompt_tokens"": 319, ""completion_tokens"": 645, ""total_tokens"": 319, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 33}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 47, ""turn_number"": 24, ""is_white_to_move"": false, ""prompt_tokens"": 319, ""completion_tokens"": 645, ""total_tokens"": 319, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 33}]",False,,0,0,True,,
-MQdJS,2r5/2r3k1/1p1pq1b1/pP2p1Q1/2P3P1/B2B4/6P1/5RK1 b - - 7 44,c7f7 d3f5 e6f6 g5f6 f7f6 f5c8,2048,advantage exposedKing long middlegame,0,False,3.0,33.33333333333333,Mismatch: expected d3f5 but got None,"1. d4 c5 2. d5 e5 3. c4 d6 4. Nc3 f5 5. e4 Nf6 6. Bd3 f4 7. h3 Be7 8. Nf3 h6 9.
+45.Rc2",Rc2,450,334,784,arcee-ai/afm-4.5b,stop,450,334,784,0.0,450,334,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 450, ""completion_tokens"": 334, ""total_tokens"": 784, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 34}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 450, ""completion_tokens"": 334, ""total_tokens"": 784, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 34}]",False,2r5/5rk1/1p1pq1b1/pP2p1Q1/2P3P1/B2B4/6P1/5RK1 w - - 8 45,88,45,True,"1. d4 c5 2. d5 e5 3. c4 d6 4. Nc3 f5 5. e4 Nf6 6. Bd3 f4 7. h3 Be7 8. Nf3 h6 9.
 a3 O-O 10. b4 Nbd7 11. Rb1 b6 12. Qc2 cxb4 13. axb4 a5 14. b5 Nc5 15. Na4 Nfd7
 16. Ba3 Nxa4 17. Qxa4 g5 18. Nd2 Qc7 19. Be2 Nf6 20. Qc2 Bd7 21. Qd3 Kg7 22. f3
 Rac8 23. Nf1 Be8 24. Nh2 Nh5 25. Rg1 Ng3 26. Rc1 Bd7 27. Kf2 h5 28. Rgd1 Be8
 29. Nf1 Nxf1 30. Kxf1 Bg6 31. Kf2 Qd7 32. Rd2 Rc7 33. Rdc2 Rfc8 34. Qb3 g4 35.
 hxg4 hxg4 36. fxg4 Bxe4 37. Rc3 Bh4+ 38. Kg1 Bg3 39. Rxg3 fxg3 40. Qxg3 Bxd5
-41. Qe3 Bf7 42. Qg5+ Bg6 43. Bd3 Qe6 44. Rf1 Rf7
+41. Qe3 Bf7 42. Qg5+ Bg6 43. Bd3 Qe6 44. Rf1 Rf7 *","You are a chess grandmaster.
 
-Rf8 Rd8 Qf6
-Rf8 Rd8 Qf6",Rf8,501,375,501,google/gemma-3-12b-it:free,stop,501,375,501,0.0,501,375,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 501, ""completion_tokens"": 375, ""total_tokens"": 501, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 34}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 501, ""completion_tokens"": 375, ""total_tokens"": 501, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 34}]",False,,0,0,True,,
-s79rI,2R1nk2/1r3p1p/p5p1/3p2P1/8/1P5P/P5r1/1K2R3 b - - 1 27,a6a5 e1e8 f8g7 e8g8,904,endgame mate mateIn2 short,0,False,2.0,100.0,Mismatch: expected e1e8 but got e1d1,"1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 Nc6 5. c4 Nf6 6. Nc3 dxc4 7. Bxc4 Bg4 8. h3 Bxf3 9. Qxf3 e6 10. Bb5 Qc7 11. Bf4 Bd6 12. Bxd6 Qxd6 13. O-O-O Rc8 14. Kb1 O-O 15. Bxc6 Rxc6 16. Qg3 Qxg3 17. fxg3 Rfc8 18. g4 a6 19. g5 Ne8 20. Ne4 Rc2 21. Nc5 Rxg2 22. Rc1 g6 23. Nxb7 Rb8 24. b3 Rxb7 25. Rc8 Kf8 26. d5 exd5 27. Re1 a5
+You will be given a partially completed game.
 
-Re1 a5 Rd1 Ke7 28. Rd8 Rxd8 29. Rxd8 a4 30. Kc2 Rd2+
-Rd1 Ke7 Rd8 Rxd8 Rxd8 a4 Kc2 Rd2+",Rd1,348,274,348,google/gemma-3-12b-it:free,stop,348,274,348,0.0,348,274,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 348, ""completion_tokens"": 274, ""total_tokens"": 348, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 35}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 348, ""completion_tokens"": 274, ""total_tokens"": 348, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 35}]",False,,0,0,True,,
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+s79rI,2R1nk2/1r3p1p/p5p1/3p2P1/8/1P5P/P5r1/1K2R3 b - - 1 27,a6a5 e1e8 f8g7 e8g8,904,endgame mate mateIn2 short,0,False,2.0,100.0,Mismatch: expected e1e8 but got None,1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 Nc6 5. c4 Nf6 6. Nc3 dxc4 7. Bxc4 Bg4 8. h3 Bxf3 9. Qxf3 e6 10. Bb5 Qc7 11. Bf4 Bd6 12. Bxd6 Qxd6 13. O-O-O Rc8 14. Kb1 O-O 15. Bxc6 Rxc6 16. Qg3 Qxg3 17. fxg3 Rfc8 18. g4 a6 19. g5 Ne8 20. Ne4 Rc2 21. Nc5 Rxg2 22. Rc1 g6 23. Nxb7 Rb8 24. b3 Rxb7 25. Rc8 Kf8 26. d5 exd5 27. Re1 a5 28. Qd2 Rb4 29. Qd3 Rb5 30. Qc4 Rb6 31. Qb3 Rb7 32. Qa4 Rb8 33. Qb5 Rb6 34. Qc4 Rb7 35. Qd3 Rb6 36. Qe2 Rb7 37. Qf3 Rb6 38. Qg2 Rb7 39. Qh1 Rb6 40. Qi2 Rb7 41. Qj3 Rb6 42. Qk2 Rb7 43. Ql1 Rb6 44. Qm3 Rb7 45. Qn2 Rb6 46. Qo1 Rb7 47. Qp1 Rb6 48. Qq2 Rb7 49. Qr1 Rb6 50. Qs1 Rb7 51. Qt1 Rb6 52. Qu1 Rb7 53. Qv1 Rb6 54. Qw1 Rb7 55. Qx1 Rb6 56. Qy1 Rb7 57. Qz1 Rb6 58. Qa1 Rb7 59. Qb1 Rb6 60. Qc1 Rb7 61. Qd1 Rb6 62. Qe1 Rb7 63. Qf1 Rb6 64. Qg1 Rb7 65. Qh1 Rb6 66. Qi1 Rb7 67. Qj1 Rb6 68. Qk1 Rb7 69. Ql1 Rb6 70. Qm1 Rb7 71. Qn1 Rb6 72. Qo1 Rb7 73. Qp1 Rb6 74. Qq1 R,Qd2,313,640,953,arcee-ai/afm-4.5b,length,313,640,953,0.0,313,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 313, ""completion_tokens"": 640, ""total_tokens"": 953, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 35}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 54, ""turn_number"": 28, ""is_white_to_move"": true, ""prompt_tokens"": 313, ""completion_tokens"": 640, ""total_tokens"": 953, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 35}]",False,2R1nk2/1r3p1p/6p1/p2p2P1/8/1P5P/P5r1/1K2R3 w - - 0 28,54,28,True,"1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 Nc6 5. c4 Nf6 6. Nc3 dxc4 7. Bxc4 Bg4 8.
+h3 Bxf3 9. Qxf3 e6 10. Bb5 Qc7 11. Bf4 Bd6 12. Bxd6 Qxd6 13. O-O-O Rc8 14. Kb1
+O-O 15. Bxc6 Rxc6 16. Qg3 Qxg3 17. fxg3 Rfc8 18. g4 a6 19. g5 Ne8 20. Ne4 Rc2
+21. Nc5 Rxg2 22. Rc1 g6 23. Nxb7 Rb8 24. b3 Rxb7 25. Rc8 Kf8 26. d5 exd5 27.
+Re1 a5 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 MyzF1,4rr1k/ppq2bpp/8/4b3/1Q4P1/2P5/PPB2PP1/R4R1K b - - 10 25,e8e6 b4f8 f7g8 g4g5,2491,advantage defensiveMove hangingPiece kingsideAttack middlegame short,0,False,2.0,50.0,Mismatch: expected b4f8 but got None,"1. d4 Nf6 2. e3 d5 3. Bd3 Bg4 4. Nf3 e6 5. Nbd2 Bd6 6. h3 Bh5 7. O-O O-O 8. Qe1
 Nbd7 9. c3 c5 10. e4 dxe4 11. Nxe4 Nxe4 12. Bxe4 Qc7 13. Be3 cxd4 14. Bxd4 Nc5
 15. Bxc5 Bxc5 16. Ne5 Bd6 17. Ng4 f5 18. Bc2 fxg4 19. Qxe6+ Kh8 20. hxg4 Bf7
-21. Qe2 Rae8 22. Qd2 Bf4 23. Qd4 Bh2+ 24. Kh1 Be5 25. Qb4 Re6
-Qc7 Rd6 26. Rd1 Rd8 27. Qc4 Rd7 28. Rxd7 Qxd7 29. Rd1 Qc7 30. Qc5
-Rd8 31. Qc4 Rd7 32. Rd1 Qc7 33. Qc5 Rd8
+21. Qe2 Rae8 22. Qd2 Bf4 23. Qd4 Bh2+ 24. Kh1 Be5 25. Qb4 Re6 26. Qc3
 
-Qc7 Rd6 34. Rd1 Rd8 35. Qc4 Rd7 36. Rd1 Qc7",Rd1,329,304,329,google/gemma-3-12b-it:free,stop,329,304,329,0.0,329,304,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 329, ""completion_tokens"": 304, ""total_tokens"": 329, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 36}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 329, ""completion_tokens"": 304, ""total_tokens"": 329, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 36}]",False,,0,0,True,,
+26... Rxe4 27. Rxe4 Rxe4 28. Rf4 Rf6 29. Rf3 Rf8 30. Rf2 Rf6 31. Rf3 Rf8 32. Rf2 Rf6 33. Rf3 Rf8 34. Rf2 Rf6 35. Rf3 Rf8 36. Rf2 Rf6 37. Rf3 Rf8 38. Rf2 Rf6 39. Rf3 Rf8 40. Rf2 Rf6 41. Rf3 Rf8 42. Rf2 Rf6 43. Rf3 Rf8 44. Rf2 Rf6 45. Rf3 Rf8 46. Rf2 Rf6 47. Rf3 Rf8 48. Rf2 Rf6 49. Rf3 Rf8 50. Rf2 Rf6 51. Rf3 Rf8 52. Rf2 Rf6 53. Rf3 Rf8 54. Rf2 Rf6 55. Rf3 Rf8 56. Rf2 Rf6 57. Rf3 Rf8 58. Rf2 Rf6 59. Rf3 Rf8 60. Rf2 Rf6 61. Rf3 Rf8 62. Rf2 Rf6 63. Rf3 Rf8 64. Rf2 Rf6 65. Rf3 Rf8 66. Rf2 Rf6 67. Rf3 Rf8 68. Rf2 Rf6 69. Rf3 Rf8 70. Rf2 Rf6 71. Rf3 Rf8 72. Rf2 Rf6 73. Rf3 Rf8 74",Qc3,296,640,936,arcee-ai/afm-4.5b,length,296,640,936,0.0,296,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 296, ""completion_tokens"": 640, ""total_tokens"": 936, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 36}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 50, ""turn_number"": 26, ""is_white_to_move"": true, ""prompt_tokens"": 296, ""completion_tokens"": 640, ""total_tokens"": 936, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 36}]",False,5r1k/ppq2bpp/4r3/4b3/1Q4P1/2P5/PPB2PP1/R4R1K w - - 11 26,50,26,True,"1. d4 Nf6 2. e3 d5 3. Bd3 Bg4 4. Nf3 e6 5. Nbd2 Bd6 6. h3 Bh5 7. O-O O-O 8. Qe1
+Nbd7 9. c3 c5 10. e4 dxe4 11. Nxe4 Nxe4 12. Bxe4 Qc7 13. Be3 cxd4 14. Bxd4 Nc5
+15. Bxc5 Bxc5 16. Ne5 Bd6 17. Ng4 f5 18. Bc2 fxg4 19. Qxe6+ Kh8 20. hxg4 Bf7
+21. Qe2 Rae8 22. Qd2 Bf4 23. Qd4 Bh2+ 24. Kh1 Be5 25. Qb4 Re6 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 wDwLc,8/1b1nk3/p2Rpp2/1p5q/7p/5P2/PP1Q1NrP/1B1R1NK1 w - - 0 29,g1g2 h5f3 g2g1 f3g2,1414,mate mateIn2 middlegame short,0,False,2.0,100.0,Mismatch: expected h5f3 but got None,"1. d4 e6 2. e4 d5 3. Be3 Nf6 4. f3 b6 5. Nd2 Bb7 6. e5 Nfd7 7. Nh3 c5 8. c3 h6
 9. Bd3 a6 10. O-O Qc7 11. Rc1 b5 12. Bb1 Nc6 13. Qe2 g5 14. Rfd1 Ncxe5 15. dxe5
 Qxe5 16. Nf1 d4 17. cxd4 cxd4 18. Rxd4 Bc5 19. Rd3 Bd6 20. Nf2 h5 21. Qd2 Ke7
 22. Bxg5+ f6 23. Bh4 Rag8 24. Bg3 Rxg3 25. Nxg3 h4 26. Nf1 Rg8 27. Rd1 Qh5 28.
-Rxd6 Rxg2+ 29. Kxg2
+Rxd6 Rxg2+ 29. Kxg2 30. Nf3 d3 31. Nc4 Nf6 32. Nf1 Nc6 33. Nc3 Bb7 34. Nf2 d2
+35. Nf3 Nc6 36. Nc4 Bb7 37. Nf2 d2 38. Nf3 Nc6 39. Nc4 Bb7 40. Nf2 d2 41. Nf3 Nc6
+42. Nc4 Bb7 43. Nf2 d2 44. Nf3 Nc6 45. Nc4 Bb7 46. Nf2 d2 47. Nf3 Nc6 48. Nc4 Bb7
+49. Nf2 d2 50. Nf3 Nc6 51. Nc4 Bb7 52. Nf2 d2 53. Nf3 Nc6 54. Nc4 Bb7 55. Nf2 d2
+56. Nf3 Nc6 57. Nc4 Bb7 58. Nf2 d2 59. Nf3 Nc6 60. Nc4 Bb7 61. Nf2 d2 62. Nf3 Nc6
+63. Nc4 Bb7 64. Nf2 d2 65. Nf3 Nc6 66. Nc4 Bb7 67. Nf2 d2 68. Nf3 Nc6 69. Nc4 Bb7
+70. Nf2 d2 71. Nf3 Nc6 72. Nc4 Bb7 73. Nf2 d2 74. Nf3 Nc6 75. Nc4 Bb7 76. Nf2 d",Kxg2,327,640,967,arcee-ai/afm-4.5b,length,327,640,967,0.0,327,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 57, ""turn_number"": 29, ""is_white_to_move"": false, ""prompt_tokens"": 327, ""completion_tokens"": 640, ""total_tokens"": 967, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 37}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 57, ""turn_number"": 29, ""is_white_to_move"": false, ""prompt_tokens"": 327, ""completion_tokens"": 640, ""total_tokens"": 967, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 37}]",False,8/1b1nk3/p2Rpp2/1p5q/7p/5P2/PP1Q1NKP/1B1R1N2 b - - 0 29,57,29,False,"1. d4 e6 2. e4 d5 3. Be3 Nf6 4. f3 b6 5. Nd2 Bb7 6. e5 Nfd7 7. Nh3 c5 8. c3 h6
+9. Bd3 a6 10. O-O Qc7 11. Rc1 b5 12. Bb1 Nc6 13. Qe2 g5 14. Rfd1 Ncxe5 15. dxe5
+Qxe5 16. Nf1 d4 17. cxd4 cxd4 18. Rxd4 Bc5 19. Rd3 Bd6 20. Nf2 h5 21. Qd2 Ke7
+22. Bxg5+ f6 23. Bh4 Rag8 24. Bg3 Rxg3 25. Nxg3 h4 26. Nf1 Rg8 27. Rd1 Qh5 28.
+Rxd6 Rxg2+ 29. Kxg2 *","You are a chess grandmaster.
 
-Qh2+ Kg3 Qf4",Qf4,361,244,361,google/gemma-3-12b-it:free,stop,361,244,361,0.0,361,244,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 57, ""turn_number"": 29, ""is_white_to_move"": false, ""prompt_tokens"": 361, ""completion_tokens"": 244, ""total_tokens"": 361, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 37}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 57, ""turn_number"": 29, ""is_white_to_move"": false, ""prompt_tokens"": 361, ""completion_tokens"": 244, ""total_tokens"": 361, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 37}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 LePY2,8/p4p2/1p1P2k1/1R2K1p1/6r1/8/8/8 b - - 0 47,g4g1 d6d7 g1e1 e5d6 e1e6 d6d5,2380,advancedPawn crushing defensiveMove endgame long master rookEndgame,0,False,3.0,33.33333333333333,Mismatch: expected d6d7 but got None,"1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Nf6 5. Bd3 c5 6. c3 Nc6 7. O-O Bd6 8. h3
 O-O 9. Re1 Re8 10. Bg5 Be6 11. Nbd2 c4 12. Bc2 h6 13. Bh4 g5 14. Bg3 Bxg3 15.
 fxg3 Qd6 16. Nf1 Re7 17. Qd2 Nh7 18. Ne3 Rae8 19. Bf5 Qxg3 20. Rf1 Nf8 21. Qc2
 Qd6 22. Ng4 Kg7 23. Nfe5 Nxe5 24. Nxe5 Bxf5 25. Qxf5 Qe6 26. Qf3 Ng6 27. Rae1
 Nf4 28. Nd3 Qf5 29. Rxe7 Rxe7 30. Nxf4 Qxf4 31. Qxd5 Qe3+ 32. Kh2 Qe6 33. Qxe6
 Rxe6 34. Rf2 Kg6 35. g4 h5 36. Kg3 hxg4 37. hxg4 Re4 38. Rf5 Re2 39. Rc5 Rxb2
-40. Rxc4 Rxa2 41. Rb4 b6 42. Rb5 Ra3 43. Kf3 Rxc3+ 44. Ke4 Rc1 45. Ke5 Rg1
-46. d5 Rxg4 47. d6 Rg1
+40. Rxc4 Rxa2 41. Rb4 b6 42. Rb5 Ra3 43. Kf3 Rxc3+ 44. Ke4 Rc1 45. Ke5 Rg1 46.
+d5 Rxg4 47. d6 Rg1 48. Rxd7+ Kf7 49. Rxd7+ Ke6 50. Rxd7+ Kf5 51. Rxd7+ Ke4 52.
+Rxd7+ Kf3 53. Rxd7+ Ke2 54. Rxd7+ Kd1 55. Rxd7+ Kc1 56. Rxd7+ Kd1 57. Rxd7+ Ke2
+58. Rxd7+ Kf1 59. Rxd7+ Ke1 60. Rxd7+ Kf1 61. Rxd7+ Ke1 62. Rxd7+ Kf1 63. Rxd7+
+Ke1 64. Rxd7+ Kf1 65. Rxd7+ Ke1 66. Rxd7+ Kf1 67. Rxd7+ Ke1 68. Rxd7+ Kf1 69. Rxd7+
+Ke1 70. Rxd7+ Kf1 71. Rxd7+ Ke1 72. Rxd7+ Kf1 73. Rxd7+ Ke1 74. R",Rxd7+,481,640,1121,arcee-ai/afm-4.5b,length,481,640,1121,0.0,481,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 481, ""completion_tokens"": 640, ""total_tokens"": 1121, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 38}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 481, ""completion_tokens"": 640, ""total_tokens"": 1121, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 38}]",False,8/p4p2/1p1P2k1/1R2K1p1/8/8/8/6r1 w - - 1 48,94,48,True,"1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Nf6 5. Bd3 c5 6. c3 Nc6 7. O-O Bd6 8. h3
+O-O 9. Re1 Re8 10. Bg5 Be6 11. Nbd2 c4 12. Bc2 h6 13. Bh4 g5 14. Bg3 Bxg3 15.
+fxg3 Qd6 16. Nf1 Re7 17. Qd2 Nh7 18. Ne3 Rae8 19. Bf5 Qxg3 20. Rf1 Nf8 21. Qc2
+Qd6 22. Ng4 Kg7 23. Nfe5 Nxe5 24. Nxe5 Bxf5 25. Qxf5 Qe6 26. Qf3 Ng6 27. Rae1
+Nf4 28. Nd3 Qf5 29. Rxe7 Rxe7 30. Nxf4 Qxf4 31. Qxd5 Qe3+ 32. Kh2 Qe6 33. Qxe6
+Rxe6 34. Rf2 Kg6 35. g4 h5 36. Kg3 hxg4 37. hxg4 Re4 38. Rf5 Re2 39. Rc5 Rxb2
+40. Rxc4 Rxa2 41. Rb4 b6 42. Rb5 Ra3 43. Kf3 Rxc3+ 44. Ke4 Rc1 45. Ke5 Rg1 46.
+d5 Rxg4 47. d6 Rg1 *","You are a chess grandmaster.
 
-Ke6 Rg6 Kd4 Rg4 Kd5 Rg8 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg6 Ke6 Rg6 Kd5 Rg",Ke6,533,746,533,google/gemma-3-12b-it:free,length,533,746,533,0.0,533,746,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 533, ""completion_tokens"": 746, ""total_tokens"": 533, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 38}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 94, ""turn_number"": 48, ""is_white_to_move"": true, ""prompt_tokens"": 533, ""completion_tokens"": 746, ""total_tokens"": 533, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 38}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 tRRZ8,8/R6p/6pk/8/1pp2KP1/3r4/8/8 b - - 1 50,c4c3 g4g5 h6h5 a7h7,1168,deflection endgame mate mateIn2 rookEndgame short,0,False,2.0,100.0,Mismatch: expected g4g5 but got None,"1. e4 c5 2. Nf3 g6 3. g3 Bg7 4. Nc3 d6 5. Bg2 Nc6 6. O-O Nf6 7. d3 O-O 8. a3
 Bg4 9. Ne2 Qd7 10. c3 Bh3 11. Nf4 Bxg2 12. Kxg2 b5 13. Qe2 a5 14. Rb1 Rab8 15.
 Be3 b4 16. axb4 axb4 17. c4 Qb7 18. Nd5 e6 19. Nxf6+ Bxf6 20. Bh6 Rfe8 21. h4
@@ -396,22 +1778,107 @@ Qc7 22. h5 d5 23. hxg6 fxg6 24. Bf4 e5 25. Be3 dxe4 26. dxe4 Nd4 27. Nxd4 exd4
 40. Kf3 Rxc4 41. Ra7 Rd4 42. Re3 Rd8 43. Ra5 c4 44. Ra4 Rxb2 45. Ra7 Rd3 46.
 Ra8+ Kg7 47. Ra7+ Kh6 48. g4 Rbb3 49. Rxd3 Rxd3+ 50. Kf4 c3
 
-Kf4 c3 Kg5 Kg5 Kg6 Kg6 Kf5 Kf5 Ke6 Ke6 Kd6 Kd6 Kc7 Kc7 Kb6 Kb6 Kc8 Kc8
+Nc1",Nc1,501,413,914,arcee-ai/afm-4.5b,stop,501,413,914,0.0,501,413,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 100, ""turn_number"": 51, ""is_white_to_move"": true, ""prompt_tokens"": 501, ""completion_tokens"": 413, ""total_tokens"": 914, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 39}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 100, ""turn_number"": 51, ""is_white_to_move"": true, ""prompt_tokens"": 501, ""completion_tokens"": 413, ""total_tokens"": 914, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 39}]",False,8/R6p/6pk/8/1p3KP1/2pr4/8/8 w - - 0 51,100,51,True,"1. e4 c5 2. Nf3 g6 3. g3 Bg7 4. Nc3 d6 5. Bg2 Nc6 6. O-O Nf6 7. d3 O-O 8. a3
+Bg4 9. Ne2 Qd7 10. c3 Bh3 11. Nf4 Bxg2 12. Kxg2 b5 13. Qe2 a5 14. Rb1 Rab8 15.
+Be3 b4 16. axb4 axb4 17. c4 Qb7 18. Nd5 e6 19. Nxf6+ Bxf6 20. Bh6 Rfe8 21. h4
+Qc7 22. h5 d5 23. hxg6 fxg6 24. Bf4 e5 25. Be3 dxe4 26. dxe4 Nd4 27. Nxd4 exd4
+28. Bf4 Be5 29. Bxe5 Qxe5 30. Rh1 Qxe4+ 31. Qxe4 Rxe4 32. Kf3 Rbe8 33. Ra1 d3
+34. Ra5 R4e5 35. Rd1 Rf8+ 36. Kg2 Re2 37. Rxd3 Rfxf2+ 38. Kh3 Rh2+ 39. Kg4 Re4+
+40. Kf3 Rxc4 41. Ra7 Rd4 42. Re3 Rd8 43. Ra5 c4 44. Ra4 Rxb2 45. Ra7 Rd3 46.
+Ra8+ Kg7 47. Ra7+ Kh6 48. g4 Rbb3 49. Rxd3 Rxd3+ 50. Kf4 c3 *","You are a chess grandmaster.
 
-Kf4 c3 Kg5 Kg5 Kg6 Kg6 Kf5 Kf5 Ke6 Ke6 Kd6 Kd6 Kc7 Kc7 Kb6 Kb6 Kc8 Kc8",Kf4,558,500,558,google/gemma-3-12b-it:free,stop,558,500,558,0.0,558,500,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 100, ""turn_number"": 51, ""is_white_to_move"": true, ""prompt_tokens"": 558, ""completion_tokens"": 500, ""total_tokens"": 558, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 39}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 100, ""turn_number"": 51, ""is_white_to_move"": true, ""prompt_tokens"": 558, ""completion_tokens"": 500, ""total_tokens"": 558, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 39}]",False,,0,0,True,,
-tBgQf,8/5pk1/2p3p1/1p5p/2q1PP1K/6P1/PQ5P/8 b - - 5 41,g7h6 b2h8,1022,endgame mate mateIn1 oneMove queenEndgame,0,False,1.0,100.0,Mismatch: expected b2h8 but got None,"1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 Nf6 6. Nc3 Be7 7. Be2 O-O
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+tBgQf,8/5pk1/2p3p1/1p5p/2q1PP1K/6P1/PQ5P/8 b - - 5 41,g7h6 b2h8,1022,endgame mate mateIn1 oneMove queenEndgame,0,False,1.0,100.0,Mismatch: expected b2h8 but got b2c2,"1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 Nf6 6. Nc3 Be7 7. Be2 O-O
 8. O-O c6 9. Bf3 d6 10. Re1 Bg4 11. Bxg4 Nxg4 12. f3 Bf6 13. Qd3 Ne5 14. Qe2
 Re8 15. Bf4 Ng6 16. Be3 Be5 17. Rf1 Nf4 18. Bxf4 Bxf4 19. g3 Qb6+ 20. Kh1 Be5
 21. Na4 Qa5 22. Nc3 Bxc3 23. bxc3 Qxc3 24. Rfd1 Red8 25. Rab1 b5 26. Rb3 Qf6
 27. Kg2 a5 28. Rbd3 Qb2 29. Rxd6 Rxd6 30. Rxd6 Rc8 31. Qd2 g6 32. Rd8+ Rxd8 33.
 Qxd8+ Kg7 34. Qxa5 Qxc2+ 35. Kh3 Qc4 36. Qd2 Qf1+ 37. Kg4 Qc4 38. f4 h5+ 39.
 Kh3 Qf1+ 40. Kh4 Qc4 41. Qb2+ Kh6
+42. Qc2+ Qc7
+43. Qd2+ Qd7
+44. Qc2+ Qc7
+45. Qd2+ Qd7
+46. Qc2+ Qc7
+47. Qd2+ Qd7
+48. Qc2+ Qc7
+49. Qd2+ Qd7
+50. Qc2+ Qc7
+51. Qd2+ Qd7
+52. Qc2+ Qc7
+53. Qd2+ Qd7
+54. Qc2+ Qc7
+55. Qd2+ Qd7
+56. Qc2+ Qc7
+57. Qd2+ Qd7
+58. Qc2+ Qc7
+59. Qd2+ Qd7
+60. Qc2+ Qc7
+61. Qd2+ Qd7
+62. Qc2+ Qc7
+63. Qd2+ Qd7
+64. Qc2+ Qc7
+65. Qd2+ Qd7
+66. Qc2+ Qc7
+67. Qd2+ Qd7
+68. Qc2+ Qc7
+69. Qd2+ Qd7
+70. Qc2+ Qc7
+71. Qd2+ Q",Qc2+,435,640,1075,arcee-ai/afm-4.5b,length,435,640,1075,0.0,435,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 82, ""turn_number"": 42, ""is_white_to_move"": true, ""prompt_tokens"": 435, ""completion_tokens"": 640, ""total_tokens"": 1075, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 40}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 82, ""turn_number"": 42, ""is_white_to_move"": true, ""prompt_tokens"": 435, ""completion_tokens"": 640, ""total_tokens"": 1075, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 40}]",False,8/5p2/2p3pk/1p5p/2q1PP1K/6P1/PQ5P/8 w - - 6 42,82,42,True,"1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 Nf6 6. Nc3 Be7 7. Be2 O-O
+8. O-O c6 9. Bf3 d6 10. Re1 Bg4 11. Bxg4 Nxg4 12. f3 Bf6 13. Qd3 Ne5 14. Qe2
+Re8 15. Bf4 Ng6 16. Be3 Be5 17. Rf1 Nf4 18. Bxf4 Bxf4 19. g3 Qb6+ 20. Kh1 Be5
+21. Na4 Qa5 22. Nc3 Bxc3 23. bxc3 Qxc3 24. Rfd1 Red8 25. Rab1 b5 26. Rb3 Qf6
+27. Kg2 a5 28. Rbd3 Qb2 29. Rxd6 Rxd6 30. Rxd6 Rc8 31. Qd2 g6 32. Rd8+ Rxd8 33.
+Qxd8+ Kg7 34. Qxa5 Qxc2+ 35. Kh3 Qc4 36. Qd2 Qf1+ 37. Kg4 Qc4 38. f4 h5+ 39.
+Kh3 Qf1+ 40. Kh4 Qc4 41. Qb2+ Kh6 *","You are a chess grandmaster.
 
-Kh5 Qf2+ Kg6 Qf6
-Kh5 Qf2+ Kg6 Qf6",Kh5,481,366,481,google/gemma-3-12b-it:free,stop,481,366,481,0.0,481,366,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 82, ""turn_number"": 42, ""is_white_to_move"": true, ""prompt_tokens"": 481, ""completion_tokens"": 366, ""total_tokens"": 481, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 40}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 82, ""turn_number"": 42, ""is_white_to_move"": true, ""prompt_tokens"": 481, ""completion_tokens"": 366, ""total_tokens"": 481, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 40}]",False,,0,0,True,,
-NzbM9,8/1Q2bk2/p2r1n2/1p1P1q2/2p4p/2P2p1P/PP3PP1/4R1K1 b - - 2 32,f3g2 b7e7 f7g6 e7d6 f5h3 d6h2,1591,advantage endgame fork long,0,False,3.0,0.0,Mismatch: expected b7e7 but got None,"1. d4 Nf6 2. Bf4 e6 3. h3 d5 4. Nf3 Nbd7 5. e3 c5 6. c3 a6 7. Bd3 b5 8. Nbd2 c4 9. Bb1 Be7 10. O-O O-O 11. Qc2 Re8 12. e4 dxe4 13. Nxe4 Bb7 14. Neg5 Bxf3 15. Nxh7 Be4 16. Nxf6+ Nxf6 17. Qe2 Bxb1 18. Raxb1 Qd5 19. Qe3 Bd6 20. Bg5 Nh7 21. Bh4 f5 22. Rbe1 f4 23. Qe2 Qf5 24. Qf3 g5 25. Re4 gxh4 26. Rfe1 Nf6 27. Rxe6 Rxe6 28. Qxa8+ Kf7 29. Qb7+ Be7 30. Rd1 f3 31. d5 Rd6 32. Re1 fxg2
+You will be given a partially completed game.
 
-Rd2 Bg5 33. Rxg2 Rd1+ 34. Kg2 Rd2+",Rxg2,397,284,397,google/gemma-3-12b-it:free,stop,397,284,397,0.0,397,284,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 64, ""turn_number"": 33, ""is_white_to_move"": true, ""prompt_tokens"": 397, ""completion_tokens"": 284, ""total_tokens"": 397, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 41}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 64, ""turn_number"": 33, ""is_white_to_move"": true, ""prompt_tokens"": 397, ""completion_tokens"": 284, ""total_tokens"": 397, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 41}]",False,,0,0,True,,
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+NzbM9,8/1Q2bk2/p2r1n2/1p1P1q2/2p4p/2P2p1P/PP3PP1/4R1K1 b - - 2 32,f3g2 b7e7 f7g6 e7d6 f5h3 d6h2,1591,advantage endgame fork long,0,False,3.0,0.0,Mismatch: expected b7e7 but got None,"1. d4 Nf6 2. Bf4 e6 3. h3 d5 4. Nf3 Nbd7 5. e3 c5 6. c3 a6 7. Bd3 b5 8. Nbd2 c4
+9. Bb1 Be7 10. O-O O-O 11. Qc2 Re8 12. e4 dxe4 13. Nxe4 Bb7 14. Neg5 Bxf3 15.
+Nxh7 Be4 16. Nxf6+ Nxf6 17. Qe2 Bxb1 18. Raxb1 Qd5 19. Qe3 Bd6 20. Bg5 Nh7 21.
+Bh4 f5 22. Rbe1 f4 23. Qe2 Qf5 24. Qf3 g5 25. Re4 gxh4 26. Rfe1 Nf6 27. Rxe6
+Rxe6 28. Qxa8+ Kf7 29. Qb7+ Be7 30. Rd1 f3 31. d5 Rd6 32. Re1 fxg2
+
+33. Qxg2+ Kxg2 34. Qg3+ Ke3 35. Qh4+ Kd4 36. Qf5+ Kc3 37. Qd6+ Kb2 38. Qc7+ Kc1
+39. Qb8+ Kd1 40. Qa7+ Ke2 41. Qb6+ Kd3 42. Qc5+ Kc2 43. Qd4+ Kb1 44. Qc3+ Kc2
+45. Qd2+ Kd3 46. Qc1+ Ke2 47. Qb2+ Kd3 48. Qa3+ Kc2 49. Qb4+ Kd3 50. Qc3+ Kc2
+51. Qd2+ Kd3 52. Qc1+ Ke2 53. Qb2+ Kd3 54. Qa3+ Kc2 55. Qb4+ Kd3 56. Qc3+ Kc2
+57. Qd2+ Kd3 58. Qc1+ Ke2 59. Qb2+ Kd3 60. Qa3+ Kc2 61. Qb4+ Kd3 62. Qc3+ Kc2
+63. Qd2+ Kd3 64. Qc1+ Ke2 65. Qb2+ Kd3 66. Qa3+ Kc2 67. Qb4+ Kd3 68. Qc3+ Kc2
+69. Qd2+ Kd3 70. Qc1+ Ke2 71. Qb",Qxg2+,355,640,995,arcee-ai/afm-4.5b,length,355,640,995,0.0,355,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 64, ""turn_number"": 33, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 640, ""total_tokens"": 995, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 41}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 64, ""turn_number"": 33, ""is_white_to_move"": true, ""prompt_tokens"": 355, ""completion_tokens"": 640, ""total_tokens"": 995, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 41}]",False,8/1Q2bk2/p2r1n2/1p1P1q2/2p4p/2P4P/PP3Pp1/4R1K1 w - - 0 33,64,33,True,"1. d4 Nf6 2. Bf4 e6 3. h3 d5 4. Nf3 Nbd7 5. e3 c5 6. c3 a6 7. Bd3 b5 8. Nbd2 c4
+9. Bb1 Be7 10. O-O O-O 11. Qc2 Re8 12. e4 dxe4 13. Nxe4 Bb7 14. Neg5 Bxf3 15.
+Nxh7 Be4 16. Nxf6+ Nxf6 17. Qe2 Bxb1 18. Raxb1 Qd5 19. Qe3 Bd6 20. Bg5 Nh7 21.
+Bh4 f5 22. Rbe1 f4 23. Qe2 Qf5 24. Qf3 g5 25. Re4 gxh4 26. Rfe1 Nf6 27. Rxe6
+Rxe6 28. Qxa8+ Kf7 29. Qb7+ Be7 30. Rd1 f3 31. d5 Rd6 32. Re1 fxg2 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 dsEdI,b7/8/1p6/p1p1B2K/6P1/2P4P/1k6/8 b - - 0 45,a8d5 c3c4 b2b3 c4d5,1283,bishopEndgame crushing discoveredAttack endgame short,0,False,2.0,0.0,Mismatch: expected c3c4 but got None,"1. e4 e5 2. Nf3 Nc6 3. Bb5 f6 4. O-O a6 5. Ba4 Bc5 6. Bxc6 dxc6 7. c3 Qe7 8. d4
 Bd6 9. dxe5 Bxe5 10. Nxe5 Qxe5 11. Re1 Bd7 12. f4 Qb5 13. Na3 Qc5+ 14. Be3 Qe7
 15. e5 O-O-O 16. exf6 Qxf6 17. Qf3 h6 18. Bd4 Qg6 19. Re5 Nf6 20. f5 Qg4 21.
@@ -419,36 +1886,104 @@ Rf1 h5 22. h3 Qxf3 23. Rxf3 b6 24. Re7 c5 25. Be5 Rhg8 26. Rg3 Ne8 27. f6 Nxf6
 28. Rgxg7 Rxg7 29. Rxg7 Ne4 30. Nc4 Be6 31. Ne3 Bxa2 32. Nf5 Re8 33. Rxc7+ Kb8
 34. Re7+ Kc8 35. Rxe8+ Kb7 36. Nd6+ Nxd6 37. Bxd6 Kc6 38. Be5 Kb5 39. Ra8 a5
 40. Kf2 Kc4 41. Kg3 Kb3 42. Kh4 Kxb2 43. Kxh5 Bd5 44. g3 Bxa8 45. g4 Bd5
+46. Bg5+ Kd7 47. Bxf6+ Kxf6 48. Bxf6+ Ke7 49. Bg5+ Kd7 50. Bxf6+ Kxf6 51. Bg5+
+Ke7 52. Bxf6+ Kxf6 53. Bg5+ Kd7 54. Bxf6+ Kxf6 55. Bg5+ Ke7 56. Bxf6+ Kxf6 57. Bg5+
+Ke7 58. Bxf6+ Kxf6 59. Bg5+ Kd7 60. Bxf6+ Kxf6 61. Bg5+ Ke7 62. Bxf6+ Kxf6 63. Bg5+
+Ke7 64. Bxf6+ Kxf6 65. Bg5+ Kd7 66. Bxf6+ Kxf6 67. Bg5+ Ke7 68. Bxf6+ Kxf6 69. Bg5+
+Ke7 70. Bxf6+ Kxf6 71. Bg5+ Kd7 72. Bxf6+ Kxf6 73. Bg5+ Ke7 74",Bg5+,460,640,1100,arcee-ai/afm-4.5b,length,460,640,1100,0.0,460,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 90, ""turn_number"": 46, ""is_white_to_move"": true, ""prompt_tokens"": 460, ""completion_tokens"": 640, ""total_tokens"": 1100, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 42}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 90, ""turn_number"": 46, ""is_white_to_move"": true, ""prompt_tokens"": 460, ""completion_tokens"": 640, ""total_tokens"": 1100, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 42}]",False,8/8/1p6/p1pbB2K/6P1/2P4P/1k6/8 w - - 1 46,90,46,True,"1. e4 e5 2. Nf3 Nc6 3. Bb5 f6 4. O-O a6 5. Ba4 Bc5 6. Bxc6 dxc6 7. c3 Qe7 8. d4
+Bd6 9. dxe5 Bxe5 10. Nxe5 Qxe5 11. Re1 Bd7 12. f4 Qb5 13. Na3 Qc5+ 14. Be3 Qe7
+15. e5 O-O-O 16. exf6 Qxf6 17. Qf3 h6 18. Bd4 Qg6 19. Re5 Nf6 20. f5 Qg4 21.
+Rf1 h5 22. h3 Qxf3 23. Rxf3 b6 24. Re7 c5 25. Be5 Rhg8 26. Rg3 Ne8 27. f6 Nxf6
+28. Rgxg7 Rxg7 29. Rxg7 Ne4 30. Nc4 Be6 31. Ne3 Bxa2 32. Nf5 Re8 33. Rxc7+ Kb8
+34. Re7+ Kc8 35. Rxe8+ Kb7 36. Nd6+ Nxd6 37. Bxd6 Kc6 38. Be5 Kb5 39. Ra8 a5
+40. Kf2 Kc4 41. Kg3 Kb3 42. Kh4 Kxb2 43. Kxh5 Bd5 44. g3 Bxa8 45. g4 Bd5 *","You are a chess grandmaster.
 
-g4 Bf3 Kg6
+You will be given a partially completed game.
 
-g4 Bf3 Kg6",g4,512,383,512,google/gemma-3-12b-it:free,stop,512,383,512,0.0,512,383,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 90, ""turn_number"": 46, ""is_white_to_move"": true, ""prompt_tokens"": 512, ""completion_tokens"": 383, ""total_tokens"": 512, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 42}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 90, ""turn_number"": 46, ""is_white_to_move"": true, ""prompt_tokens"": 512, ""completion_tokens"": 383, ""total_tokens"": 512, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 42}]",False,,0,0,True,,
-bNRIi,5rk1/5Rp1/p2p3p/qr1Pp3/1p6/1P3Q1P/5PP1/2R3K1 b - - 0 24,f8f7 c1c8 g8h7 f3f7 a5a1 g1h2,1155,crushing deflection endgame long,0,False,3.0,0.0,Mismatch: expected c1c8 but got None,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Bc4 d6 5. Nxc3 e5 6. Qf3 Nf6 7. Nd5 Be7 8.
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+bNRIi,5rk1/5Rp1/p2p3p/qr1Pp3/1p6/1P3Q1P/5PP1/2R3K1 b - - 0 24,f8f7 c1c8 g8h7 f3f7 a5a1 g1h2,1155,crushing deflection endgame long,0,False,3.0,0.0,Mismatch: expected c1c8 but got None,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Bc4 d6 5. Nxc3 e5 6. Qf3 Nf6 7. Nd5 Be7 8. Nxf6+ Bxf6 9. Bg5 Nd7 10. Ne2 O-O 11. Bxf6 Nxf6 12. Nc3 a6 13. Nd5 Nxd5 14. Bxd5 Rb8 15. Rc1 Qa5+ 16. Rc3 b5 17. O-O b4 18. Rc2 Bb7 19. Rfc1 Bxd5 20. exd5 Qxa2 21. b3 Qa5 22. Rc7 h6 23. h3 Rb5 24. Rxf7 Rxf7 25. Qg5
+
+26. Qh4",Qg5,288,207,495,arcee-ai/afm-4.5b,stop,288,207,495,0.0,288,207,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 207, ""total_tokens"": 495, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 43}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 288, ""completion_tokens"": 207, ""total_tokens"": 495, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 43}]",False,6k1/5rp1/p2p3p/qr1Pp3/1p6/1P3Q1P/5PP1/2R3K1 w - - 0 25,48,25,True,"1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Bc4 d6 5. Nxc3 e5 6. Qf3 Nf6 7. Nd5 Be7 8.
 Nxf6+ Bxf6 9. Bg5 Nd7 10. Ne2 O-O 11. Bxf6 Nxf6 12. Nc3 a6 13. Nd5 Nxd5 14.
 Bxd5 Rb8 15. Rc1 Qa5+ 16. Rc3 b5 17. O-O b4 18. Rc2 Bb7 19. Rfc1 Bxd5 20. exd5
-Qxa2 21. b3 Qa5 22. Rc7 h6 23. h3 Rb5 24. Rxf7 Rxf7
+Qxa2 21. b3 Qa5 22. Rc7 h6 23. h3 Rb5 24. Rxf7 Rxf7 *","You are a chess grandmaster.
 
-Rc1 Rc8 25. Qf3 Rd8 26. Rd1 Rxd1+ 27. Qxd1 Qc7
-Rc1 Rc8 25. Qf3 Rd8 26. Rd1 Rxd1+ 27. Qxd1 Qc7",Qf3,319,259,319,google/gemma-3-12b-it:free,stop,319,259,319,0.0,319,259,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 319, ""completion_tokens"": 259, ""total_tokens"": 319, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 43}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 48, ""turn_number"": 25, ""is_white_to_move"": true, ""prompt_tokens"": 319, ""completion_tokens"": 259, ""total_tokens"": 319, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 43}]",False,,0,0,True,,
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
 igtvn,r1bq1rk1/pp1n1ppp/2pb1n2/3pN3/B2P1B2/8/PPP2PPP/RN1Q1RK1 w - - 8 10,e5f7 f8f7 f4d6 d7b6 d6g3 b6a4,1648,advantage long opening,0,False,3.0,100.0,Mismatch: expected f8f7 but got None,"1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Bb5+ c6 6. Ba4 Be7 7. Bf4 O-O 8. O-O Bd6 9. Ne5 Nbd7 10. Nxf7
 
-Nf7 Qf6 Be3",Be3,190,85,190,google/gemma-3-12b-it:free,stop,190,85,190,0.0,190,85,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 19, ""turn_number"": 10, ""is_white_to_move"": false, ""prompt_tokens"": 190, ""completion_tokens"": 85, ""total_tokens"": 190, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 44}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 19, ""turn_number"": 10, ""is_white_to_move"": false, ""prompt_tokens"": 190, ""completion_tokens"": 85, ""total_tokens"": 190, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 44}]",False,,0,0,True,,
-msMhH,8/6pk/1pR4p/6P1/2n2P2/8/p1r3PK/8 b - - 0 44,a2a1q g5g6 h7h8 c6c8,1234,endgame mate mateIn2 short,0,False,2.0,0.0,Mismatch: expected g5g6 but got None,"1. d4 d5 2. Nf3 Nf6 3. Bf4 e6 4. e3 Bd6 5. Bg3 O-O 6. Nbd2 c5 7. c3 Nc6 8. a4
+Qd6
+
+11. Qxd6+ Qxd6 12. Qd5+ Ke7 13. Qc6+ Kf6 14. Qb7+ Ke5 15. Qc8+ Kd4 16. Qb7+ Kd5 17. Qc8+ Kd6 18. Qb7+ Kd7 19. Qc8+ Kd8 20. Qb7+ Ke8 21. Qc8+ Kf8 22. Qb7+ Ke8 23. Qc8+ Kf8 24. Qb7+ Ke8 25. Qc8+ Kf8 26. Qb7+ Ke8 27. Qc8+ Kf8 28. Qb7+ Ke8 29. Qc8+ Kf8 30. Qb7+ Ke8 31. Qc8+ Kf8 32. Qb7+ Ke8 33. Qc8+ Kf8 34. Qb7+ Ke8 35. Qc8+ Kf8 36. Qb7+ Ke8 37. Qc8+ Kf8 38. Qb7+ Ke8 39. Qc8+ Kf8 40. Qb7+ Ke8 41. Qc8+ Kf8 42. Qb7+ Ke8 43. Qc8+ Kf8 44. Qb7+ Ke8 45. Qc8+ Kf8 46. Qb7+ Ke8 47. Qc8+ Kf8 48. Qb7+ Ke8 49. Qc8+ Kf8 50. Qb7+ Ke8 51. Qc8+ Kf8 52. Qb7+ Ke8 53. Qc8+ Kf8 54. Qb7+ Ke8 55. Qc8+ Kf8 56. Qb7+ Ke8 57. Qc8+ Kf8 58. Qb7+ Ke8 59. Qc8+ Kf8 60. Qb7+ Ke8 61. Qc8+ Kf8 62. Qb7+ Ke8 63. Qc8+ Kf8 64. Qb7+ Ke8 65. Qc8+ Kf8 66. Qb7+ Ke8 67. Qc8+ Kf8 68. Qb7+ Ke8 69. Qc8+",Qd6,169,640,809,arcee-ai/afm-4.5b,length,169,640,809,0.0,169,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 19, ""turn_number"": 10, ""is_white_to_move"": false, ""prompt_tokens"": 169, ""completion_tokens"": 640, ""total_tokens"": 809, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 44}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 19, ""turn_number"": 10, ""is_white_to_move"": false, ""prompt_tokens"": 169, ""completion_tokens"": 640, ""total_tokens"": 809, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 44}]",False,r1bq1rk1/pp1n1Npp/2pb1n2/3p4/B2P1B2/8/PPP2PPP/RN1Q1RK1 b - - 0 10,19,10,False,"1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Bb5+ c6 6. Ba4 Be7 7. Bf4 O-O 8.
+O-O Bd6 9. Ne5 Nbd7 10. Nxf7 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+msMhH,8/6pk/1pR4p/6P1/2n2P2/8/p1r3PK/8 b - - 0 44,a2a1q g5g6 h7h8 c6c8,1234,endgame mate mateIn2 short,0,False,2.0,0.0,Mismatch: expected g5g6 but got None,"1. d4 d5 2. Nf3 Nf6 3. Bf4 e6 4. e3 Bd6 5. Bg3 O-O 6. Nbd2 c5 7. c3 Nc6 8. a4 Qc7 9. Bd3 e5 10. dxe5 Nxe5 11. Nxe5 Bxe5 12. O-O Bg4 13. Be2 Bxe2 14. Qxe2 Bxg3 15. hxg3 Rfe8 16. Nf3 Rad8 17. Rfd1 Ne4 18. Qc2 b6 19. Qb3 Qc6 20. Qb5 Qxb5 21. axb5 Re7 22. Ra6 Rdd7 23. Nd2 Nd6 24. Nb3 Nxb5 25. Raa1 h6 26. Rd2 a5 27. Rad1 a4 28. Na1 Nc7 29. c4 d4 30. exd4 cxd4 31. Rxd4 Rxd4 32. Rxd4 Re1+ 33. Kh2 Rxa1 34. Rd8+ Kh7 35. Rd7 Ne6 36. Rxf7 Ra2 37. Re7 Nc5 38. Re2 Nd3 39. Rd2 Nxb2 40. Rd6 Nxc4 41. Rc6 Rc2 42. g4 a3 43. f4 a2 44. g5 a1=Q
+
+43. g5 a1=Q",d4,448,361,809,arcee-ai/afm-4.5b,stop,448,361,809,0.0,448,361,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 448, ""completion_tokens"": 361, ""total_tokens"": 809, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 45}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 448, ""completion_tokens"": 361, ""total_tokens"": 809, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 45}]",False,8/6pk/1pR4p/6P1/2n2P2/8/2r3PK/q7 w - - 0 45,88,45,True,"1. d4 d5 2. Nf3 Nf6 3. Bf4 e6 4. e3 Bd6 5. Bg3 O-O 6. Nbd2 c5 7. c3 Nc6 8. a4
 Qc7 9. Bd3 e5 10. dxe5 Nxe5 11. Nxe5 Bxe5 12. O-O Bg4 13. Be2 Bxe2 14. Qxe2
 Bxg3 15. hxg3 Rfe8 16. Nf3 Rad8 17. Rfd1 Ne4 18. Qc2 b6 19. Qb3 Qc6 20. Qb5
 Qxb5 21. axb5 Re7 22. Ra6 Rdd7 23. Nd2 Nd6 24. Nb3 Nxb5 25. Raa1 h6 26. Rd2 a5
 27. Rad1 a4 28. Na1 Nc7 29. c4 d4 30. exd4 cxd4 31. Rxd4 Rxd4 32. Rxd4 Re1+ 33.
 Kh2 Rxa1 34. Rd8+ Kh7 35. Rd7 Ne6 36. Rxf7 Ra2 37. Re7 Nc5 38. Re2 Nd3 39. Rd2
-Nxb2 40. Rd6 Nxc4 41. Rc6 Rc2 42. g4 a3 43. f4 a2 44. g5 a1=Q
+Nxb2 40. Rd6 Nxc4 41. Rc6 Rc2 42. g4 a3 43. f4 a2 44. g5 a1=Q *","You are a chess grandmaster.
 
-Qe1+ Rd1 Qxd1+ Kh8 Rc8 Nd3
+You will be given a partially completed game.
 
-Qe1+ Rd1 Qxd1+ Kh8 Rc8 Nd3",Qe1+,499,389,499,google/gemma-3-12b-it:free,stop,499,389,499,0.0,499,389,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 499, ""completion_tokens"": 389, ""total_tokens"": 499, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 45}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 88, ""turn_number"": 45, ""is_white_to_move"": true, ""prompt_tokens"": 499, ""completion_tokens"": 389, ""total_tokens"": 499, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 45}]",False,,0,0,True,,
-J6ZG4,r1bq1rk1/pp3ppp/1bn2n2/3p2B1/8/PNN5/1PP1BPPP/R2QK2R w KQ - 2 11,c3d5 d8d5 d1d5 f6d5,1334,advantage opening short,0,False,2.0,0.0,Mismatch: expected d8d5 but got None,"Move: Re1
-Plan: Nf3, h3
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. a3 Bc5 7. Nb3 Bb6 8. Be2 d5 9. exd5 exd5 10. Bg5 O-O 11. Nxd5 Re1 Nf3 h3",h3,243,107,243,google/gemma-3-12b-it:free,stop,243,107,243,0.0,243,107,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 21, ""turn_number"": 11, ""is_white_to_move"": false, ""prompt_tokens"": 243, ""completion_tokens"": 107, ""total_tokens"": 243, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 46}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 21, ""turn_number"": 11, ""is_white_to_move"": false, ""prompt_tokens"": 243, ""completion_tokens"": 107, ""total_tokens"": 243, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 46}]",False,,0,0,True,,
-mCjnx,8/2R2p2/8/6r1/2b1kN1K/8/8/8 b - - 43 73,e4f4 c7c4 f4f5 c4c5,1287,crushing endgame hangingPiece short,0,False,2.0,0.0,Mismatch: expected c7c4 but got None,"1. e4 c5 2. Nf3 g6 3. c3 Bg7 4. d4 cxd4 5. cxd4 e6 6. Nc3 Ne7 7. Be3 O-O 8. Qd2
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+J6ZG4,r1bq1rk1/pp3ppp/1bn2n2/3p2B1/8/PNN5/1PP1BPPP/R2QK2R w KQ - 2 11,c3d5 d8d5 d1d5 f6d5,1334,advantage opening short,0,False,2.0,0.0,Mismatch: expected d8d5 but got f6d5,1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. a3 Bc5 7. Nb3 Bb6 8. Be2 d5 9. exd5 exd5 10. Bg5 O-O 11. Nxd5 Nxd5 12. Qxd5 Rf8 13. Qe2 Qd7 14. Qe3 Bg4 15. Qd2 Nf6 16. Qd3 Bxf3 17. Qxf3 Nc6 18. Qd4 Bxf3 19. Qxf3 Nc6 20. Qd4 Bxf3 21. Qxf3 Nc6 22. Qd4 Bxf3 23. Qxf3 Nc6 24. Qd4 Bxf3 25. Qxf3 Nc6 26. Qd4 Bxf3 27. Qxf3 Nc6 28. Qd4 Bxf3 29. Qxf3 Nc6 30. Qd4 Bxf3 31. Qxf3 Nc6 32. Qd4 Bxf3 33. Qxf3 Nc6 34. Qd4 Bxf3 35. Qxf3 Nc6 36. Qd4 Bxf3 37. Qxf3 Nc6 38. Qd4 Bxf3 39. Qxf3 Nc6 40. Qd4 Bxf3 41. Qxf3 Nc6 42. Qd4 Bxf3 43. Qxf3 Nc6 44. Qd4 Bxf3 45. Qxf3 Nc6 46. Qd4 Bxf3 47. Qxf3 Nc6 48. Qd4 Bxf3 49. Qxf3 Nc6 50. Qd4 Bxf3 51. Qxf3 Nc6 52. Qd4 Bxf3 53. Qxf3 Nc6 54. Qd4 Bxf3 55. Qxf3 Nc6 56. Qd4 Bxf3 57. Qxf3 Nc6 58. Qd4 Bxf3 59. Qxf3 Nc6 60. Qd4 Bxf3 61. Qxf3 Nc6 62. Qd4 Bxf3 63. Qxf3 Nc6 64. Qd4 Bxf3 65. Qxf3 Nc6 66. Qd4 Bxf3 67. Qxf3 Nc6 68. Qd4 Bxf3 69. Qxf3 Nc6 70. Qd4 Bxf3 71. Qxf3 Nc6 72. Qd4 Bxf3 73,Nxd5,179,640,819,arcee-ai/afm-4.5b,length,179,640,819,0.0,179,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 21, ""turn_number"": 11, ""is_white_to_move"": false, ""prompt_tokens"": 179, ""completion_tokens"": 640, ""total_tokens"": 819, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 46}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 21, ""turn_number"": 11, ""is_white_to_move"": false, ""prompt_tokens"": 179, ""completion_tokens"": 640, ""total_tokens"": 819, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 46}]",False,r1bq1rk1/pp3ppp/1bn2n2/3N2B1/8/PN6/1PP1BPPP/R2QK2R b KQ - 0 11,21,11,False,"1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. a3 Bc5 7. Nb3 Bb6 8.
+Be2 d5 9. exd5 exd5 10. Bg5 O-O 11. Nxd5 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+mCjnx,8/2R2p2/8/6r1/2b1kN1K/8/8/8 b - - 43 73,e4f4 c7c4 f4f5 c4c5,1287,crushing endgame hangingPiece short,0,False,2.0,0.0,Mismatch: expected c7c4 but got None,"After seeing the game, I will repeat the entire game so far and then give one new move.
+
+The game so far is:
+1. e4 c5 2. Nf3 g6 3. c3 Bg7 4. d4 cxd4 5. cxd4 e6 6. Nc3 Ne7 7. Be3 O-O 8. Qd2 a6 9. Bh6 b5 10. Bxg7 Kxg7 11. O-O-O Bb7 12. d5 exd5 13. exd5 d6 14. Qd4+ Kg8 15. Bd3 Nd7 16. Qh4 Nf5 17. Bxf5 Qxh4 18. Nxh4 gxf5 19. Nxf5 Nf6 20. Nxd6 Bc8 21. Nde4 Ng4 22. h3 Ne5 23. d6 Bf5 24. g4 Bg6 25. d7 b4 26. Nf6+ Kg7 27. Ncd5 Rfd8 28. Rhe1 Nxd7 29. Nxd7 Rxd7 30. Nb6 Rc7+ 31. Kd2 Rd8+ 32. Ke2 Rc2+ 33. Kf1 Rxd1 34. Rxd1 Rxb2 35. Ra1 a5 36. Kg1 h5 37. gxh5 Bxh5 38. Nc4 Rc2 39. Nxa5 Bf3 40. Nb3 Rc6 41. Nd4 Rg6+ 42. Kf1 Bg2+ 43. Ke1 Bxh3 44. Ke2 Bg4+ 45. f3 Bd7 46. Ke3 Ra6 47. Nb3 Ra3 48. Kd4 Be6 49. Nc1 Rxf3 50. Nd3 b3 51. axb3 Bxb3 52. Rg1+ Kf8 53. Ne5 Rf4+ 54. Kc3 Be6 55. Nd3 Ke7 56. Re1 Rc4+ 57. Kd2 Rd4 58. Ke3 Rh4 59. Nf4 Rh6 60. Kf3 Rf6 61. Kg3 Kd6 62. Rd1+ Ke5 63. Re1+ Kf5 64. Rf1 Ke4 65. Re1+ Kd4 66. Rd1+ Ke3 67. Rd3+ Ke4 68. Ra3 Bc4 69. Ra4 Rc6 70. Ra7 Rc5 71. Re7+ Re5 72. Rc7 Rg5+ 73. Kh4 Kxf4
+
+New move:
+73... Rg8
+
+The game continues with",e4,696,640,1336,arcee-ai/afm-4.5b,length,696,640,1336,0.0,696,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 146, ""turn_number"": 74, ""is_white_to_move"": true, ""prompt_tokens"": 696, ""completion_tokens"": 640, ""total_tokens"": 1336, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 47}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 146, ""turn_number"": 74, ""is_white_to_move"": true, ""prompt_tokens"": 696, ""completion_tokens"": 640, ""total_tokens"": 1336, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 47}]",False,8/2R2p2/8/6r1/2b2k1K/8/8/8 w - - 0 74,146,74,True,"1. e4 c5 2. Nf3 g6 3. c3 Bg7 4. d4 cxd4 5. cxd4 e6 6. Nc3 Ne7 7. Be3 O-O 8. Qd2
 a6 9. Bh6 b5 10. Bxg7 Kxg7 11. O-O-O Bb7 12. d5 exd5 13. exd5 d6 14. Qd4+ Kg8
 15. Bd3 Nd7 16. Qh4 Nf5 17. Bxf5 Qxh4 18. Nxh4 gxf5 19. Nxf5 Nf6 20. Nxd6 Bc8
 21. Nde4 Ng4 22. h3 Ne5 23. d6 Bf5 24. g4 Bg6 25. d7 b4 26. Nf6+ Kg7 27. Ncd5
@@ -459,61 +1994,218 @@ Ke3 Ra6 47. Nb3 Ra3 48. Kd4 Be6 49. Nc1 Rxf3 50. Nd3 b3 51. axb3 Bxb3 52. Rg1+
 Kf8 53. Ne5 Rf4+ 54. Kc3 Be6 55. Nd3 Ke7 56. Re1 Rc4+ 57. Kd2 Rd4 58. Ke3 Rh4
 59. Nf4 Rh6 60. Kf3 Rf6 61. Kg3 Kd6 62. Rd1+ Ke5 63. Re1+ Kf5 64. Rf1 Ke4 65.
 Re1+ Kd4 66. Rd1+ Ke3 67. Rd3+ Ke4 68. Ra3 Bc4 69. Ra4 Rc6 70. Ra7 Rc5 71. Re7+
-Re5 72. Rc7 Rg5+ 73. Kh4 Kxf4
+Re5 72. Rc7 Rg5+ 73. Kh4 Kxf4 *","You are a chess grandmaster.
 
-Kh4 Rg5+ 74. Kg3 Kg4 75. Rc6 Kf3 76. Kf4 Bf1 77",Kg3,772,636,772,google/gemma-3-12b-it:free,length,772,636,772,0.0,772,636,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 146, ""turn_number"": 74, ""is_white_to_move"": true, ""prompt_tokens"": 772, ""completion_tokens"": 636, ""total_tokens"": 772, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 47}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 146, ""turn_number"": 74, ""is_white_to_move"": true, ""prompt_tokens"": 772, ""completion_tokens"": 636, ""total_tokens"": 772, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""length"", ""puzzle_index"": 47}]",False,,0,0,True,,
-mO1IJ,1k6/1pp1N3/8/r7/3P2p1/1K2P3/p7/R7 w - - 0 44,a1a2 a5a2 b3a2 g4g3 e7d5 g3g2,1292,advancedPawn crushing endgame long,0,False,3.0,0.0,Mismatch: expected a5a2 but got None,"1. d4 d5 2. Bf4 Bf5 3. e3 Nf6 4. Bd3 Bxd3 5. Qxd3 e6 6. Nf3 Bd6 7. Bg3 Bxg3 8. hxg3 Nc6 9. Nbd2 Qd7 10. O-O-O O-O-O 11. a3 Kb8 12. b4 h6 13. Nb3 Ne4 14. Nc5 Qd6 15. Nxe4 dxe4 16. Qxe4 Nxb4 17. axb4 Qxb4 18. Qd3 Rd5 19. Qb3 Qa5 20. Nd2 Rb5 21. Nc4 Rxb3 22. Nxa5 Ra3 23. Nc4 Ra1+ 24. Kd2 Ra4 25. Ne5 f6 26. Ng6 Rd8 27. f4 Rd5 28. c3 Ra2+ 29. Kd3 Rxg2 30. Ne7 Rd7 31. Ng6 Rxg3 32. Nh4 e5 33. fxe5 fxe5 34. Rdg1 Rxg1 35. Rxg1 exd4 36. cxd4 a5 37. Nf5 g5 38. Nxh6 a4 39. Nf5 Rd5 40. Ne7 Ra5 41. Kc4 a3 42. Kb3 a2 43. Ra1 g4 44. Rxa2
+You will be given a partially completed game.
 
-Ra1 Nf3 Rd3",Rd3,499,362,499,google/gemma-3-12b-it:free,stop,499,362,499,0.0,499,362,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 87, ""turn_number"": 44, ""is_white_to_move"": false, ""prompt_tokens"": 499, ""completion_tokens"": 362, ""total_tokens"": 499, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 48}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 87, ""turn_number"": 44, ""is_white_to_move"": false, ""prompt_tokens"": 499, ""completion_tokens"": 362, ""total_tokens"": 499, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 48}]",False,,0,0,True,,
-7b2mb,r1br4/pp2kp1p/3Np1p1/q2pQ3/8/7P/PPP2PP1/2KR1B1R w - - 1 17,d1d5 a5d5 e5d5 e6d5,1503,advantage middlegame short,0,False,2.0,0.0,Mismatch: expected a5d5 but got None,"1. e4 c5 2. Nf3 e6 3. d3 Nc6 4. Be3 Nf6 5. h3 d5 6. e5 Nd7 7. d4 cxd4 8. Bxd4
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+mO1IJ,1k6/1pp1N3/8/r7/3P2p1/1K2P3/p7/R7 w - - 0 44,a1a2 a5a2 b3a2 g4g3 e7d5 g3g2,1292,advancedPawn crushing endgame long,0,False,3.0,0.0,Mismatch: expected a5a2 but got None,1. d4 d5 2. Bf4 Bf5 3. e3 Nf6 4. Bd3 Bxd3 5. Qxd3 e6 6. Nf3 Bd6 7. Bg3 Bxg3 8. hxg3 Nc6 9. Nbd2 Qd7 10. O-O-O O-O-O 11. a3 Kb8 12. b4 h6 13. Nb3 Ne4 14. Nc5 Qd6 15. Qxe4 Nxb4 16. axb4 Qxb4 17. Qd3 Rd5 18. Qb3 Qa5 19. Nd2 Rb5 20. Nc4 Rxb3 21. Nxa5 Ra3 22. Nc4 Ra1+ 23. Kd2 Ra4 24. Ne5 f6 25. Ng6 Rd8 26. f4 Rd5 27. c3 Ra2+ 28. Kd3 Rxg2 29. Ne7 Rd7 30. Ng6 Rxg3 31. Nh4 e5 32. fxe5 fxe5 33. Rdg1 Rxg1 34. Rxg1 exd4 35. cxd4 a5 36. Nf5 g5 37. Nxh6 a4 38. Nf5 Rd5 39. Ne7 Ra5 40. Kc4 a3 41. Kb3 a2 42. Ra1 g4 43. Rxa2 d6,d6,449,348,797,arcee-ai/afm-4.5b,stop,449,348,797,0.0,449,348,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 87, ""turn_number"": 44, ""is_white_to_move"": false, ""prompt_tokens"": 449, ""completion_tokens"": 348, ""total_tokens"": 797, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 48}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 87, ""turn_number"": 44, ""is_white_to_move"": false, ""prompt_tokens"": 449, ""completion_tokens"": 348, ""total_tokens"": 797, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""stop"", ""puzzle_index"": 48}]",False,1k6/1pp1N3/8/r7/3P2p1/1K2P3/R7/8 b - - 0 44,87,44,False,"1. d4 d5 2. Bf4 Bf5 3. e3 Nf6 4. Bd3 Bxd3 5. Qxd3 e6 6. Nf3 Bd6 7. Bg3 Bxg3 8.
+hxg3 Nc6 9. Nbd2 Qd7 10. O-O-O O-O-O 11. a3 Kb8 12. b4 h6 13. Nb3 Ne4 14. Nc5
+Qd6 15. Nxe4 dxe4 16. Qxe4 Nxb4 17. axb4 Qxb4 18. Qd3 Rd5 19. Qb3 Qa5 20. Nd2
+Rb5 21. Nc4 Rxb3 22. Nxa5 Ra3 23. Nc4 Ra1+ 24. Kd2 Ra4 25. Ne5 f6 26. Ng6 Rd8
+27. f4 Rd5 28. c3 Ra2+ 29. Kd3 Rxg2 30. Ne7 Rd7 31. Ng6 Rxg3 32. Nh4 e5 33.
+fxe5 fxe5 34. Rdg1 Rxg1 35. Rxg1 exd4 36. cxd4 a5 37. Nf5 g5 38. Nxh6 a4 39.
+Nf5 Rd5 40. Ne7 Ra5 41. Kc4 a3 42. Kb3 a2 43. Ra1 g4 44. Rxa2 *","You are a chess grandmaster.
+
+You will be given a partially completed game.
+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
+
+ALWAYS repeat the entire representation of the game so far.
+
+NEVER explain your choice.
+"
+7b2mb,r1br4/pp2kp1p/3Np1p1/q2pQ3/8/7P/PPP2PP1/2KR1B1R w - - 1 17,d1d5 a5d5 e5d5 e6d5,1503,advantage middlegame short,0,False,2.0,0.0,Mismatch: expected a5d5 but got None,"1. e4 c5 2. Nf3 e6 3. d3 Nc6 4. Be3 Nf6 5. h3 d5 6. e5 Nd7 7. d4 cxd4 8. Bxd4 Nxd4 9. Qxd4 Qc7 10. Nc3 g6 11. O-O-O Bg7 12. Nb5 Qa5 13. Nd6+ Ke7 14. Qf4 Nxe5 15. Nxe5 Bxe5 16. Qxe5 Rd8 17. Rxd5 Qd7
+
+18. Qg4
+
+19. Qh5
+
+20. Qh3
+
+21. Qh5
+
+22. Qh3
+
+23. Qh5
+
+24. Qh3
+
+25. Qh5
+
+26. Qh3
+
+27. Qh5
+
+28. Qh3
+
+29. Qh5
+
+30. Qh3
+
+31. Qh5
+
+32. Qh3
+
+33. Qh5
+
+34. Qh3
+
+35. Qh5
+
+36. Qh3
+
+37. Qh5
+
+38. Qh3
+
+39. Qh5
+
+40. Qh3
+
+41. Qh5
+
+42. Qh3
+
+43. Qh5
+
+44. Qh3
+
+45. Qh5
+
+46. Qh3
+
+47. Qh5
+
+48. Qh3
+
+49. Qh5
+
+50. Qh3
+
+51. Qh5
+
+52. Qh3
+
+53. Qh5
+
+54. Qh3
+
+55. Qh5
+
+56. Qh3
+
+57. Qh5
+
+58. Qh3
+
+59. Qh5
+
+60. Qh3
+
+61. Qh5
+
+62. Qh3
+
+63. Qh5
+
+64. Qh3
+
+65. Qh5
+
+66. Qh3
+
+67. Qh5
+
+68. Qh3
+
+69. Qh5
+
+70. Qh3
+
+71. Qh5
+
+72. Qh3
+
+73. Qh5
+
+74. Qh3
+
+75. Qh5
+
+76. Qh3
+
+77. Qh5
+
+78. Qh3
+
+79. Qh5
+
+80. Qh3
+
+81. Qh5
+
+82. Qh3
+
+83. Qh5
+
+84. Qh3
+
+85. Qh5
+
+86. Qh3
+
+87. Qh5
+
+88. Qh3
+
+89. Qh5
+
+90. Qh3
+
+91. Qh5
+
+92. Qh3
+
+93. Qh5
+
+94. Qh3
+
+95. Qh5
+
+96. Qh3
+
+97. Qh5
+
+98. Qh3
+
+99. Qh5
+
+100. Qh3
+
+101. Q",Qd7,229,640,869,arcee-ai/afm-4.5b,length,229,640,869,0.0,229,640,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 33, ""turn_number"": 17, ""is_white_to_move"": false, ""prompt_tokens"": 229, ""completion_tokens"": 640, ""total_tokens"": 869, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 49}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 33, ""turn_number"": 17, ""is_white_to_move"": false, ""prompt_tokens"": 229, ""completion_tokens"": 640, ""total_tokens"": 869, ""model"": ""arcee-ai/afm-4.5b"", ""finish_reason"": ""length"", ""puzzle_index"": 49}]",False,r1br4/pp2kp1p/3Np1p1/q2RQ3/8/7P/PPP2PP1/2K2B1R b - - 0 17,33,17,False,"1. e4 c5 2. Nf3 e6 3. d3 Nc6 4. Be3 Nf6 5. h3 d5 6. e5 Nd7 7. d4 cxd4 8. Bxd4
 Nxd4 9. Qxd4 Qc7 10. Nc3 g6 11. O-O-O Bg7 12. Nb5 Qa5 13. Nd6+ Ke7 14. Qf4 Nxe5
-15. Nxe5 Bxe5 16. Qxe5 Rd8 17. Rxd5
+15. Nxe5 Bxe5 16. Qxe5 Rd8 17. Rxd5 *","You are a chess grandmaster.
 
-Rxd5 Rxd5 18. Qxd5+ Kf8 19. Nc4 Qb6 20. Qxb7
-Rxd1+ 21. Kh2
-Rxg1+ 22. Qxg1
-f6 23. Ne3
-Kf7 24. Qf2+
+You will be given a partially completed game.
 
-Rxd5 Rxd5 18. Qxd5+ Kf8 19. Nc4 Qb6 20. Qxb7
-Rxd1+ 21. Kh2
-Rxg1+ 22. Qxg1
-f6 23. Ne3
-Kf7 24. Qf2+
-Kf7 25. Ng4
-Kg6 26. Nf6
-Kg7 27. Qh8+
+After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.
 
-Rxd5 Rxd5 18. Qxd5+ Kf8 19. Nc4 Qb6 20. Qxb7
-Rxd1+ 21. Kh2
-Rxg1+ 22. Qxg1
-f6 23. Ne3
-Kf7 24. Qf2+
-Kf7 25. Ng4
-Kg6 26. Nf6
-Kg7 27. Qh8+
-Kf7 28. Nd7
-Kg8 29. Qh7+
-Ke8 30. Ne5+
+Use standard algebraic notation, e.g. ""e4"" or ""Rdf8"" or ""R1a3"".
 
-Rxd5 Rxd5 18. Qxd5+ Kf8 19. Nc4 Qb6 20. Qxb7
-Rxd1+ 21. Kh2
-Rxg1+ 22. Qxg1
-f6 23. Ne3
-Kf7 24. Qf2+
-Kf7 25. Ng4
-Kg6 26. Nf6
-Kg7 27. Qh8+
-Kf7 28. Nd7
-Kg8 29. Qh7+
-Ke8 30. Ne5+
-Ke7 31. Ng6+
-Kd8 32. Qh8+
-Kd7 33. Ne5
+ALWAYS repeat the entire representation of the game so far.
 
-Kf7 Ng4 Kg6 Nf6 Kg7 Qh8+ Kf7 Nd7 Kg8 Qh7+ Ke8 Ne5+ Ke7 Ng6+ Kd8 Qh8+ Kd7 Ne5
-
-Ke7 Ng6+ Kd8 Qh8+ Kd7 Ne5",Ne5,255,660,255,google/gemma-3-12b-it:free,stop,255,660,255,0.0,255,660,"[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 33, ""turn_number"": 17, ""is_white_to_move"": false, ""prompt_tokens"": 255, ""completion_tokens"": 660, ""total_tokens"": 255, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 49}]","[{""paradigm"": ""single_model"", ""agent"": ""single"", ""role"": ""move_prediction"", ""ply_index"": 33, ""turn_number"": 17, ""is_white_to_move"": false, ""prompt_tokens"": 255, ""completion_tokens"": 660, ""total_tokens"": 255, ""model"": ""google/gemma-3-12b-it:free"", ""finish_reason"": ""stop"", ""puzzle_index"": 49}]",False,,0,0,True,,
+NEVER explain your choice.
+"
 jMTP1,8/6p1/8/p4PkP/1p6/1P4K1/P7/8 b - - 0 48,g5h5 g3f4 h5h6 f4e4,2786,crushing defensiveMove endgame master pawnEndgame short,0,False,2.0,0.0,,,,0,0,0,,,0,0,0,0.0,0,0,,,False,,0,0,True,,
 5yjuF,2r5/p4p2/1p3pk1/4pN1p/4Pn2/P1q2P2/5QPP/5R1K b - - 5 34,c8c7 f2g3 g6h7 g3g7,1195,endgame mate mateIn2 short,0,False,2.0,100.0,,,,0,0,0,,,0,0,0,0.0,0,0,,,False,,0,0,True,,
 ZEeKK,r4rk1/2pn3p/p1p1pqp1/2P5/3P4/7R/PPB3PP/RNQ3K1 w - - 1 18,c1d2 f6f1,740,mate mateIn1 middlegame oneMove,0,False,1.0,100.0,,,,0,0,0,,,0,0,0,0.0,0,0,,,False,,0,0,True,,

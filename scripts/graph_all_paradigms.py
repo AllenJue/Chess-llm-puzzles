@@ -34,11 +34,29 @@ EXCLUDED_MODELS = [
     "meta-llama/llama-3.3-8b-instruct (free)",
 ]
 
+def should_exclude_model(model_name: str) -> bool:
+    """Check if a model should be excluded (handles variations)."""
+    model_lower = model_name.lower()
+    # Check exact match
+    if model_name in EXCLUDED_MODELS:
+        return True
+    # Check variations: gemma free models
+    if 'gemma-3-4b-it' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+        return True
+    if 'gemma-3-12b-it' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+        return True
+    # Check llama 3.3 8b free
+    if 'llama-3.3-8b-instruct' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+        return True
+    return False
+
 def extract_model_name(filename: str, mode: str) -> str:
     """Extract a clean model name from filename."""
     name = filename.replace("test_results_", "").replace(f"_{mode}_50.csv", "")
     # Clean up model name for display
-    name = name.replace("_", "/").replace(":free", " (free)")
+    # Handle both _free and :free patterns
+    name = name.replace("_free", ":free").replace(":free", " (free)")
+    name = name.replace("_", "/")
     return name
 
 def load_accuracy_data(csv_file: Path, num_puzzles: int = 50) -> Optional[Dict]:
@@ -219,7 +237,8 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
             model_name = extract_model_name(csv_file.name, paradigm)
             
             # Skip excluded models
-            if model_name in EXCLUDED_MODELS:
+            if should_exclude_model(model_name):
+                print(f"Skipping excluded model: {model_name} for {paradigm} paradigm")
                 continue
             
             all_models.add(model_name)

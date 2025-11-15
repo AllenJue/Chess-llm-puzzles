@@ -25,7 +25,9 @@ def extract_model_name(filename: str) -> str:
     """Extract a clean model name from filename."""
     name = filename.replace("test_results_", "").replace("_single_50.csv", "")
     # Clean up model name for display
-    name = name.replace("_", "/").replace(":free", " (free)")
+    # Handle both _free and :free patterns BEFORE replacing other underscores
+    name = name.replace("_free", ":free").replace(":free", " (free)")
+    name = name.replace("_", "/")
     return name
 
 def analyze_errors(csv_file: Path, num_puzzles: int = 50) -> Dict:
@@ -125,12 +127,25 @@ def create_error_graphs(results_dir: str = "data/test_results", output_dir: str 
         "meta-llama/llama-3.3-8b-instruct (free)",
     ]
     
+    def should_exclude_model(model_name: str) -> bool:
+        """Check if a model should be excluded (handles variations)."""
+        model_lower = model_name.lower()
+        if model_name in excluded_models:
+            return True
+        if 'gemma-3-4b-it' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+            return True
+        if 'gemma-3-12b-it' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+            return True
+        if 'llama-3.3-8b-instruct' in model_lower and ('free' in model_lower or '(free)' in model_lower):
+            return True
+        return False
+    
     # Analyze errors for each model
     model_results = {}
     for csv_file in csv_files:
         model_name = extract_model_name(csv_file.name)
         # Skip excluded models
-        if model_name in excluded_models:
+        if should_exclude_model(model_name):
             print(f"Skipping excluded model: {model_name}")
             continue
         error_data = analyze_errors(csv_file, num_puzzles=50)

@@ -361,7 +361,76 @@ class ChessSelfConsistency:
         if not valid_moves:
             self.final_move = None
             print(f"<self-consistency> : No valid moves extracted")
-            return self.final_move, {}
+            # Still return a complete structure even when all moves fail
+            self_consistency_history = {
+                "query1": {
+                    "aggressive_move": aggressive_san,
+                    "aggressive_uci": agg_move_uci,
+                    "aggressive_response": agg_response,
+                    "aggressive_tokens": agg_token_info,
+                    "plan_full": aggressive_plan_full,
+                    "plan_execute": aggressive_plan_execute
+                },
+                "query2": {
+                    "positional_move": positional_san,
+                    "positional_uci": pos_move_uci,
+                    "positional_response": pos_response,
+                    "positional_tokens": pos_token_info,
+                    "plan_full": positional_plan_full,
+                    "plan_execute": positional_plan_execute
+                },
+                "query3": {
+                    "neutral_move": neutral_san,
+                    "neutral_uci": neutral_move_uci,
+                    "neutral_response": neutral_response,
+                    "neutral_tokens": neutral_token_info,
+                    "plan_full": neutral_plan_full,
+                    "plan_execute": neutral_plan_execute
+                },
+                "final_moves": {
+                    "aggressive_uci": agg_move_uci,
+                    "positional_uci": pos_move_uci,
+                    "neutral_uci": neutral_move_uci,
+                    "consensus_move": None,
+                    "source_agents": [],
+                    "selected_agent": None
+                },
+                "plans": {
+                    "aggressive": {
+                        "full": aggressive_plan_full,
+                        "execute": aggressive_plan_execute
+                    },
+                    "positional": {
+                        "full": positional_plan_full,
+                        "execute": positional_plan_execute
+                    },
+                    "neutral": {
+                        "full": neutral_plan_full,
+                        "execute": neutral_plan_execute
+                    }
+                },
+                "final_plan": {
+                    "moves_for_execution": [],
+                    "full_moves": [],
+                    "source_agent": None
+                },
+                "total_tokens": {
+                    "aggressive": agg_token_info,
+                    "positional": pos_token_info,
+                    "neutral": neutral_token_info,
+                    "total_prompt_tokens": (agg_token_info.get("prompt_tokens", 0) if agg_token_info else 0) + 
+                                          (pos_token_info.get("prompt_tokens", 0) if pos_token_info else 0) + 
+                                          (neutral_token_info.get("prompt_tokens", 0) if neutral_token_info else 0),
+                    "total_completion_tokens": (agg_token_info.get("completion_tokens", 0) if agg_token_info else 0) + 
+                                             (pos_token_info.get("completion_tokens", 0) if pos_token_info else 0) + 
+                                             (neutral_token_info.get("completion_tokens", 0) if neutral_token_info else 0),
+                    "total_tokens": (agg_token_info.get("total_tokens", 0) if agg_token_info else 0) + 
+                                   (pos_token_info.get("total_tokens", 0) if pos_token_info else 0) + 
+                                   (neutral_token_info.get("total_tokens", 0) if neutral_token_info else 0)
+                },
+                "token_events": token_events
+            }
+            return self.final_move, self_consistency_history
         
         # Count frequency of moves
         from collections import Counter
@@ -902,11 +971,19 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                         predicted_uci, debate_history = debate.run_debate(user_prompt, expected_uci, played_plies, current_board.fen())
                         print(f"Debate predicted UCI: {predicted_uci}")
                         
+                        # Check if debate_history has the expected structure
+                        if not debate_history or "query1" not in debate_history:
+                            error_msg = "No legal move generated"
+                            print(f"Error: debate_history missing expected structure: {error_msg}")
+                            df_eval.loc[idx, "error"] = error_msg
+                            df_eval.loc[idx, "final_consensus_move"] = predicted_uci if predicted_uci else ""
+                            continue
+                        
                         # Save self-consistency data to DataFrame
-                        df_eval.loc[idx, "aggressive_move"] = debate_history["query1"]["aggressive_move"]
-                        df_eval.loc[idx, "positional_move"] = debate_history["query2"]["positional_move"]
-                        df_eval.loc[idx, "neutral_move"] = debate_history["query3"]["neutral_move"]
-                        df_eval.loc[idx, "final_consensus_move"] = debate_history["final_moves"]["consensus_move"]
+                        df_eval.loc[idx, "aggressive_move"] = debate_history.get("query1", {}).get("aggressive_move", "")
+                        df_eval.loc[idx, "positional_move"] = debate_history.get("query2", {}).get("positional_move", "")
+                        df_eval.loc[idx, "neutral_move"] = debate_history.get("query3", {}).get("neutral_move", "")
+                        df_eval.loc[idx, "final_consensus_move"] = debate_history.get("final_moves", {}).get("consensus_move", predicted_uci if predicted_uci else "")
                         df_eval.loc[idx, "debate_history"] = str(debate_history)
                         
                         token_events = debate_history.get("token_events") or []
@@ -982,34 +1059,51 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                             move_selected_san = san_lookup.get(move_source_agent or "")
 
                         # Save token information for self-consistency
+                        # Accumulate tokens across all moves (don't overwrite, add to existing)
+                        # Always save tokens, even if no valid move was found
                         if "total_tokens" in debate_history:
                             token_info = debate_history["total_tokens"]
                             
-                            # Aggressive tokens
-                            if token_info.get("aggressive"):
-                                aff_tokens = token_info["aggressive"]
-                                df_eval.loc[idx, "aggressive_prompt_tokens"] = aff_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "aggressive_completion_tokens"] = aff_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "aggressive_total_tokens"] = aff_tokens.get("total_tokens", 0)
+                            # Aggressive tokens - accumulate (always save, even if None/empty)
+                            aff_tokens = token_info.get("aggressive") or {}
+                            current_agg_p = df_eval.loc[idx, "aggressive_prompt_tokens"] or 0
+                            current_agg_c = df_eval.loc[idx, "aggressive_completion_tokens"] or 0
+                            current_agg_t = df_eval.loc[idx, "aggressive_total_tokens"] or 0
+                            df_eval.loc[idx, "aggressive_prompt_tokens"] = current_agg_p + (aff_tokens.get("prompt_tokens", 0) or 0)
+                            df_eval.loc[idx, "aggressive_completion_tokens"] = current_agg_c + (aff_tokens.get("completion_tokens", 0) or 0)
+                            df_eval.loc[idx, "aggressive_total_tokens"] = current_agg_t + (aff_tokens.get("total_tokens", 0) or 0)
+                            # Only set model/finish_reason if not already set (use first move's info)
+                            if not df_eval.loc[idx, "aggressive_model"]:
                                 df_eval.loc[idx, "aggressive_model"] = aff_tokens.get("model", "")
+                            if not df_eval.loc[idx, "aggressive_finish_reason"]:
                                 df_eval.loc[idx, "aggressive_finish_reason"] = aff_tokens.get("finish_reason", "")
                             
-                            # Positional tokens
-                            if token_info.get("positional"):
-                                pos_tokens = token_info["positional"]
-                                df_eval.loc[idx, "positional_prompt_tokens"] = pos_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "positional_completion_tokens"] = pos_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "positional_total_tokens"] = pos_tokens.get("total_tokens", 0)
+                            # Positional tokens - accumulate (always save, even if None/empty)
+                            pos_tokens = token_info.get("positional") or {}
+                            current_pos_p = df_eval.loc[idx, "positional_prompt_tokens"] or 0
+                            current_pos_c = df_eval.loc[idx, "positional_completion_tokens"] or 0
+                            current_pos_t = df_eval.loc[idx, "positional_total_tokens"] or 0
+                            df_eval.loc[idx, "positional_prompt_tokens"] = current_pos_p + (pos_tokens.get("prompt_tokens", 0) or 0)
+                            df_eval.loc[idx, "positional_completion_tokens"] = current_pos_c + (pos_tokens.get("completion_tokens", 0) or 0)
+                            df_eval.loc[idx, "positional_total_tokens"] = current_pos_t + (pos_tokens.get("total_tokens", 0) or 0)
+                            # Only set model/finish_reason if not already set
+                            if not df_eval.loc[idx, "positional_model"]:
                                 df_eval.loc[idx, "positional_model"] = pos_tokens.get("model", "")
+                            if not df_eval.loc[idx, "positional_finish_reason"]:
                                 df_eval.loc[idx, "positional_finish_reason"] = pos_tokens.get("finish_reason", "")
                             
-                            # Neutral tokens
-                            if token_info.get("neutral"):
-                                neu_tokens = token_info["neutral"]
-                                df_eval.loc[idx, "neutral_prompt_tokens"] = neu_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "neutral_completion_tokens"] = neu_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "neutral_total_tokens"] = neu_tokens.get("total_tokens", 0)
+                            # Neutral tokens - accumulate (always save, even if None/empty)
+                            neu_tokens = token_info.get("neutral") or {}
+                            current_neu_p = df_eval.loc[idx, "neutral_prompt_tokens"] or 0
+                            current_neu_c = df_eval.loc[idx, "neutral_completion_tokens"] or 0
+                            current_neu_t = df_eval.loc[idx, "neutral_total_tokens"] or 0
+                            df_eval.loc[idx, "neutral_prompt_tokens"] = current_neu_p + (neu_tokens.get("prompt_tokens", 0) or 0)
+                            df_eval.loc[idx, "neutral_completion_tokens"] = current_neu_c + (neu_tokens.get("completion_tokens", 0) or 0)
+                            df_eval.loc[idx, "neutral_total_tokens"] = current_neu_t + (neu_tokens.get("total_tokens", 0) or 0)
+                            # Only set model/finish_reason if not already set
+                            if not df_eval.loc[idx, "neutral_model"]:
                                 df_eval.loc[idx, "neutral_model"] = neu_tokens.get("model", "")
+                            if not df_eval.loc[idx, "neutral_finish_reason"]:
                                 df_eval.loc[idx, "neutral_finish_reason"] = neu_tokens.get("finish_reason", "")
                             
                             # Cost calculation will be done later
@@ -1078,44 +1172,41 @@ def evaluate_puzzles(df: pd.DataFrame, model_interface: ChessModelInterface = No
                             move_response_text = response_lookup_debate.get("judge")
 
                         # Token information
+                        # Always save tokens, even if no valid move was found
                         if "total_tokens" in debate_history:
                             token_info = debate_history["total_tokens"]
                             
-                            # Aggressive tokens
-                            if token_info.get("affirmative"):
-                                aff_tokens = token_info["affirmative"]
-                                df_eval.loc[idx, "aggressive_prompt_tokens"] = aff_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "aggressive_completion_tokens"] = aff_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "aggressive_total_tokens"] = aff_tokens.get("total_tokens", 0)
-                                df_eval.loc[idx, "aggressive_model"] = aff_tokens.get("model", "")
-                                df_eval.loc[idx, "aggressive_finish_reason"] = aff_tokens.get("finish_reason", "")
+                            # Aggressive tokens (always save, even if None/empty)
+                            aff_tokens = token_info.get("affirmative") or {}
+                            df_eval.loc[idx, "aggressive_prompt_tokens"] = aff_tokens.get("prompt_tokens", 0) or 0
+                            df_eval.loc[idx, "aggressive_completion_tokens"] = aff_tokens.get("completion_tokens", 0) or 0
+                            df_eval.loc[idx, "aggressive_total_tokens"] = aff_tokens.get("total_tokens", 0) or 0
+                            df_eval.loc[idx, "aggressive_model"] = aff_tokens.get("model", "")
+                            df_eval.loc[idx, "aggressive_finish_reason"] = aff_tokens.get("finish_reason", "")
                             
-                            # Positional tokens
-                            if token_info.get("negative"):
-                                neg_tokens = token_info["negative"]
-                                df_eval.loc[idx, "positional_prompt_tokens"] = neg_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "positional_completion_tokens"] = neg_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "positional_total_tokens"] = neg_tokens.get("total_tokens", 0)
-                                df_eval.loc[idx, "positional_model"] = neg_tokens.get("model", "")
-                                df_eval.loc[idx, "positional_finish_reason"] = neg_tokens.get("finish_reason", "")
+                            # Positional tokens (always save, even if None/empty)
+                            neg_tokens = token_info.get("negative") or {}
+                            df_eval.loc[idx, "positional_prompt_tokens"] = neg_tokens.get("prompt_tokens", 0) or 0
+                            df_eval.loc[idx, "positional_completion_tokens"] = neg_tokens.get("completion_tokens", 0) or 0
+                            df_eval.loc[idx, "positional_total_tokens"] = neg_tokens.get("total_tokens", 0) or 0
+                            df_eval.loc[idx, "positional_model"] = neg_tokens.get("model", "")
+                            df_eval.loc[idx, "positional_finish_reason"] = neg_tokens.get("finish_reason", "")
                             
-                            # Moderator tokens
-                            if token_info.get("moderator"):
-                                mod_tokens = token_info["moderator"]
-                                df_eval.loc[idx, "moderator_prompt_tokens"] = mod_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "moderator_completion_tokens"] = mod_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "moderator_total_tokens"] = mod_tokens.get("total_tokens", 0)
-                                df_eval.loc[idx, "moderator_model"] = mod_tokens.get("model", "")
-                                df_eval.loc[idx, "moderator_finish_reason"] = mod_tokens.get("finish_reason", "")
+                            # Moderator tokens (always save, even if None/empty)
+                            mod_tokens = token_info.get("moderator") or {}
+                            df_eval.loc[idx, "moderator_prompt_tokens"] = mod_tokens.get("prompt_tokens", 0) or 0
+                            df_eval.loc[idx, "moderator_completion_tokens"] = mod_tokens.get("completion_tokens", 0) or 0
+                            df_eval.loc[idx, "moderator_total_tokens"] = mod_tokens.get("total_tokens", 0) or 0
+                            df_eval.loc[idx, "moderator_model"] = mod_tokens.get("model", "")
+                            df_eval.loc[idx, "moderator_finish_reason"] = mod_tokens.get("finish_reason", "")
                             
-                            # Judge tokens
-                            if token_info.get("judge"):
-                                judge_tokens = token_info["judge"]
-                                df_eval.loc[idx, "judge_prompt_tokens"] = judge_tokens.get("prompt_tokens", 0)
-                                df_eval.loc[idx, "judge_completion_tokens"] = judge_tokens.get("completion_tokens", 0)
-                                df_eval.loc[idx, "judge_total_tokens"] = judge_tokens.get("total_tokens", 0)
-                                df_eval.loc[idx, "judge_model"] = judge_tokens.get("model", "")
-                                df_eval.loc[idx, "judge_finish_reason"] = judge_tokens.get("finish_reason", "")
+                            # Judge tokens (always save, even if None/empty)
+                            judge_tokens = token_info.get("judge") or {}
+                            df_eval.loc[idx, "judge_prompt_tokens"] = judge_tokens.get("prompt_tokens", 0) or 0
+                            df_eval.loc[idx, "judge_completion_tokens"] = judge_tokens.get("completion_tokens", 0) or 0
+                            df_eval.loc[idx, "judge_total_tokens"] = judge_tokens.get("total_tokens", 0) or 0
+                            df_eval.loc[idx, "judge_model"] = judge_tokens.get("model", "")
+                            df_eval.loc[idx, "judge_finish_reason"] = judge_tokens.get("finish_reason", "")
                             
                         # Response information
                         df_eval.loc[idx, "aggressive_response"] = debate_history["round1"]["affirmative_response"]

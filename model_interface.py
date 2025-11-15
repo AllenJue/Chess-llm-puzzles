@@ -379,10 +379,16 @@ class ChessModelInterface:
             attempt += 1
             temperature = max(0.0, temperature - 0.05)
 
-        fallback_move = force_fallback_move or ("Nf3" if is_white_to_move else "Nf6")
-        fallback_response = f"Move: {fallback_move}"
-        fallback_token_info = token_info if token_info is not None else self._empty_token_info("fallback")
-        return fallback_response, fallback_move, fallback_token_info
+        # No move could be extracted - return None instead of default fallback
+        # Only use force_fallback_move if explicitly provided
+        if force_fallback_move:
+            fallback_response = f"Move: {force_fallback_move}"
+            fallback_token_info = token_info if token_info is not None else self._empty_token_info("fallback")
+            return fallback_response, force_fallback_move, fallback_token_info
+        
+        # Return None to indicate no move could be extracted
+        fallback_token_info = token_info if token_info is not None else self._empty_token_info("no_move_extracted")
+        return None, None, fallback_token_info
 
     def get_uci_move(self, system_prompt: str, user_prompt: str, current_fen: str,
                     current_turn_number: Optional[int] = None,

@@ -1,0 +1,348 @@
+====================================================================================================
+WORKING MODELS ORGANIZED BY FAMILY AND COST
+====================================================================================================
+
+
+====================================================================================================
+FAMILY: ANTHROPIC (14 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - anthropic/claude-3-haiku                                     [Cost:    $1.50/1M, Context:   200K, Tier: light]
+    - anthropic/claude-3-haiku                                     [Cost:    $1.50/1M, Context:   200K, Tier: light]
+    - anthropic/claude-3.5-haiku                                   [Cost:    $4.80/1M, Context:   200K, Tier: light]
+    - anthropic/claude-3.5-haiku                                   [Cost:    $4.80/1M, Context:   200K, Tier: light]
+    - anthropic/claude-haiku-4.5                                   [Cost:    $6.00/1M, Context:   200K, Tier: light]
+    - anthropic/claude-haiku-4.5                                   [Cost:    $6.00/1M, Context:   200K, Tier: light]
+    - anthropic/claude-3.7-sonnet                                  [Cost:   $18.00/1M, Context:   200K, Tier: fast]
+    - anthropic/claude-3.7-sonnet                                  [Cost:   $18.00/1M, Context:   200K, Tier: fast]
+    - anthropic/claude-sonnet-4                                    [Cost:   $18.00/1M, Context:   200K, Tier: fast]
+    - anthropic/claude-sonnet-4                                    [Cost:   $18.00/1M, Context:   200K, Tier: fast]
+    - anthropic/claude-sonnet-4.5                                  [Cost:   $18.00/1M, Context:   200K, Tier: fast]
+    - anthropic/claude-opus-4                                      [Cost:   $90.00/1M, Context:   200K, Tier: flagship]
+    - anthropic/claude-opus-4                                      [Cost:   $90.00/1M, Context:   200K, Tier: flagship]
+    - anthropic/claude-opus-4.1                                    [Cost:   $90.00/1M, Context:   200K, Tier: flagship]
+
+
+====================================================================================================
+FAMILY: ARCEE-AI (8 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - arcee-ai/afm-4.5b                                            [Cost:    $0.02/1M, Context:     4K, Tier: light]
+    - arcee-ai/afm-4.5b                                            [Cost:    $0.02/1M, Context:     4K, Tier: light]
+    - arcee-ai/coder-large                                         [Cost:    $1.30/1M, Context:    33K, Tier: standard]
+    - arcee-ai/coder-large                                         [Cost:    $1.30/1M, Context:    33K, Tier: standard]
+    - arcee-ai/virtuoso-large                                      [Cost:    $1.95/1M, Context:   131K, Tier: standard]
+    - arcee-ai/virtuoso-large                                      [Cost:    $1.95/1M, Context:   131K, Tier: standard]
+    - arcee-ai/maestro-reasoning                                   [Cost:    $4.20/1M, Context:   131K, Tier: reasoning]
+    - arcee-ai/maestro-reasoning                                   [Cost:    $4.20/1M, Context:   131K, Tier: reasoning]
+
+
+====================================================================================================
+FAMILY: DEEPSEEK (19 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - deepseek-ai/deepseek-v3                                      [Cost:    $2.00/1M, Context:   164K, Tier: fast]
+    - deepseek-ai/deepseek-v3                                      [Cost:    $2.00/1M, Context:   164K, Tier: fast]
+    - deepseek-ai/deepseek-v3-0324                                 [Cost:    $2.00/1M, Context:   164K, Tier: fast]
+    - deepseek-ai/deepseek-v3-0324                                 [Cost:    $2.00/1M, Context:   164K, Tier: fast]
+    - deepseek/deepseek-v3-0324                                    [Cost:    $2.00/1M, Context:   128K, Tier: fast]
+    - deepseek/deepseek-v3-0324                                    [Cost:    $2.00/1M, Context:   128K, Tier: fast]
+    - together/deepseek-ai-DeepSeek-V3.1                           [Cost:    $2.30/1M, Context:   131K, Tier: flagship]
+    - together/deepseek-ai-DeepSeek-V3.1                           [Cost:    $2.30/1M, Context:   131K, Tier: flagship]
+    - together/deepcogito-cogito-v2-preview-deepseek-671b          [Cost:    $2.50/1M, Context:   164K, Tier: flagship]
+    - together/deepcogito-cogito-v2-preview-deepseek-671b          [Cost:    $2.50/1M, Context:   164K, Tier: flagship]
+    - deepseek/deepseek-r1                                         [Cost:    $2.71/1M, Context:   128K, Tier: reasoning]
+    - deepseek/deepseek-r1-distill-llama-70b                       [Cost:    $2.71/1M, Context:   128K, Tier: fast]
+    - deepseek/deepseek-r1-distill-llama-70b                       [Cost:    $2.71/1M, Context:   128K, Tier: fast]
+    - together/deepseek-ai-DeepSeek-R1-0528-tput                   [Cost:    $2.74/1M, Context:   164K, Tier: flagship]
+    - together/deepseek-ai-DeepSeek-R1-0528-tput                   [Cost:    $2.74/1M, Context:   164K, Tier: flagship]
+    - deepseek-ai/deepseek-v3-0324-fast                            [Cost:    $3.00/1M, Context:    33K, Tier: fast]
+    - deepseek-ai/deepseek-v3-0324-fast                            [Cost:    $3.00/1M, Context:    33K, Tier: fast]
+    - deepseek/deepseek-r1-0528                                    [Cost:    $3.20/1M, Context:   164K, Tier: reasoning]
+    - deepseek/deepseek-r1-0528                                    [Cost:    $3.20/1M, Context:   164K, Tier: reasoning]
+
+
+====================================================================================================
+FAMILY: GOOGLE (8 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - together/google-gemma-3n-E4B-it                              [Cost:    $0.06/1M, Context:    33K, Tier: light]
+    - together/google-gemma-3n-E4B-it                              [Cost:    $0.06/1M, Context:    33K, Tier: light]
+    - google/gemma-2-2b-it                                         [Cost:    $0.08/1M, Context:     8K, Tier: light]
+    - google/gemma-2-2b-it                                         [Cost:    $0.08/1M, Context:     8K, Tier: light]
+    - google/gemma-2-9b-it-fast                                    [Cost:    $0.12/1M, Context:     8K, Tier: light]
+    - google/gemma-2-9b-it-fast                                    [Cost:    $0.12/1M, Context:     8K, Tier: light]
+    - together/scb10x-scb10x-typhoon-2-1-gemma3-12b                [Cost:    $0.40/1M, Context:   131K, Tier: flagship]
+    - together/scb10x-scb10x-typhoon-2-1-gemma3-12b                [Cost:    $0.40/1M, Context:   131K, Tier: flagship]
+
+
+====================================================================================================
+FAMILY: GROK (16 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - grok/grok-4-fast-non-reasoning                               [Cost:    $0.70/1M, Context:  2000K, Tier: standard]
+    - grok/grok-4-fast-non-reasoning                               [Cost:    $0.70/1M, Context:  2000K, Tier: standard]
+    - grok/grok-4-fast-reasoning                                   [Cost:    $0.70/1M, Context:  2000K, Tier: standard]
+    - grok/grok-4-fast-reasoning                                   [Cost:    $0.70/1M, Context:  2000K, Tier: standard]
+    - grok/grok-3-mini                                             [Cost:    $0.80/1M, Context:   131K, Tier: standard]
+    - grok/grok-3-mini                                             [Cost:    $0.80/1M, Context:   131K, Tier: standard]
+    - grok/grok-code-fast-1                                        [Cost:    $1.70/1M, Context:   256K, Tier: standard]
+    - grok/grok-code-fast-1                                        [Cost:    $1.70/1M, Context:   256K, Tier: standard]
+    - grok/grok-2-vision-1212                                      [Cost:   $12.00/1M, Context:    33K, Tier: flagship]
+    - grok/grok-2-vision-1212                                      [Cost:   $12.00/1M, Context:    33K, Tier: flagship]
+    - grok/grok-3                                                  [Cost:   $18.00/1M, Context:   131K, Tier: flagship]
+    - grok/grok-3                                                  [Cost:   $18.00/1M, Context:   131K, Tier: flagship]
+    - grok/grok-4                                                  [Cost:   $18.00/1M, Context:   256K, Tier: flagship]
+    - grok/grok-4                                                  [Cost:   $18.00/1M, Context:   256K, Tier: flagship]
+    - grok/grok-4-0709                                             [Cost:   $18.00/1M, Context:   256K, Tier: flagship]
+    - grok/grok-4-0709                                             [Cost:   $18.00/1M, Context:   256K, Tier: flagship]
+
+
+====================================================================================================
+FAMILY: META-LLAMA (31 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - meta-llama/llama-3.1-8b-instruct-fast                        [Cost:    $0.12/1M, Context:   131K, Tier: fast]
+    - meta-llama/llama-3.1-8b-instruct-fast                        [Cost:    $0.12/1M, Context:   131K, Tier: fast]
+    - together/meta-llama-Llama-3.2-3B-Instruct-Turbo              [Cost:    $0.12/1M, Context:   131K, Tier: light]
+    - together/meta-llama-Llama-3.2-3B-Instruct-Turbo              [Cost:    $0.12/1M, Context:   131K, Tier: light]
+    - together/meta-llama-Meta-Llama-3-8B-Instruct-Lite            [Cost:    $0.20/1M, Context:     8K, Tier: fast]
+    - together/meta-llama-Meta-Llama-3-8B-Instruct-Lite            [Cost:    $0.20/1M, Context:     8K, Tier: fast]
+    - meta-llama/llama-3.1-8b-instruct                             [Cost:    $0.36/1M, Context:   131K, Tier: light]
+    - meta-llama/llama-3.1-8b-instruct                             [Cost:    $0.36/1M, Context:   131K, Tier: light]
+    - together/meta-llama-Meta-Llama-3.1-8B-Instruct-Turbo         [Cost:    $0.36/1M, Context:   131K, Tier: flagship]
+    - together/deepcogito-cogito-v2-preview-llama-109B-MoE         [Cost:    $0.77/1M, Context:    33K, Tier: fast]
+    - together/deepcogito-cogito-v2-preview-llama-109B-MoE         [Cost:    $0.77/1M, Context:    33K, Tier: fast]
+    - together/meta-llama-Llama-4-Scout-17B-16E-Instruct           [Cost:    $0.77/1M, Context:  1000K, Tier: flagship]
+    - together/meta-llama-Llama-4-Scout-17B-16E-Instruct           [Cost:    $0.77/1M, Context:  1000K, Tier: flagship]
+    - together/meta-llama-Llama-4-Maverick-17B-128E-Instruct-FP8   [Cost:    $1.12/1M, Context:  1000K, Tier: flagship]
+    - together/meta-llama-Llama-4-Maverick-17B-128E-Instruct-FP8   [Cost:    $1.12/1M, Context:  1000K, Tier: flagship]
+    - meta-llama/llama-3.3-70b-instruct                            [Cost:    $1.76/1M, Context:   131K, Tier: fast]
+    - meta-llama/llama-3.3-70b-instruct                            [Cost:    $1.76/1M, Context:   131K, Tier: fast]
+    - together/deepcogito-cogito-v2-preview-llama-70B              [Cost:    $1.76/1M, Context:    33K, Tier: fast]
+    - together/deepcogito-cogito-v2-preview-llama-70B              [Cost:    $1.76/1M, Context:    33K, Tier: fast]
+    - together/meta-llama-Llama-3.3-70B-Instruct-Turbo             [Cost:    $1.76/1M, Context:   131K, Tier: flagship]
+    - together/meta-llama-Llama-3.3-70B-Instruct-Turbo             [Cost:    $1.76/1M, Context:   131K, Tier: flagship]
+    - together/meta-llama-Meta-Llama-3-70B-Instruct-Turbo          [Cost:    $1.76/1M, Context:     8K, Tier: fast]
+    - together/meta-llama-Meta-Llama-3-70B-Instruct-Turbo          [Cost:    $1.76/1M, Context:     8K, Tier: fast]
+    - together/meta-llama-Meta-Llama-3.1-70B-Instruct-Turbo        [Cost:    $1.76/1M, Context:   131K, Tier: flagship]
+    - together/meta-llama-Meta-Llama-3.1-70B-Instruct-Turbo        [Cost:    $1.76/1M, Context:   131K, Tier: flagship]
+    - together/deepcogito-cogito-v2-preview-llama-405B             [Cost:    $7.00/1M, Context:    33K, Tier: fast]
+    - together/deepcogito-cogito-v2-preview-llama-405B             [Cost:    $7.00/1M, Context:    33K, Tier: fast]
+    - together/meta-llama-Meta-Llama-3.1-405B-Instruct-Turbo       [Cost:    $7.00/1M, Context:   131K, Tier: flagship]
+    - together/meta-llama-Meta-Llama-3.1-405B-Instruct-Turbo       [Cost:    $7.00/1M, Context:   131K, Tier: flagship]
+
+  UNKNOWN COST:
+    - together/meta-llama-Llama-3-70b-chat-hf                      [Context:      ?, Tier: ?]
+    - together/meta-llama-Llama-3-70b-chat-hf                      [Context:      ?, Tier: ?]
+
+
+====================================================================================================
+FAMILY: MISTRALAI (5 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - mistralai/mistral-7b-instruct-v0.3                           [Cost:    $0.08/1M, Context:    33K, Tier: light]
+    - mistralai/mistral-small-24b-instruct-2501                    [Cost:    $0.13/1M, Context:    33K, Tier: light]
+    - mistralai/mistral-small-24b-instruct-2501                    [Cost:    $0.13/1M, Context:    33K, Tier: light]
+    - mistralai/mistral-7b-instruct-v0.2                           [Cost:    $0.40/1M, Context:    33K, Tier: light]
+    - mistralai/mistral-7b-instruct-v0.2                           [Cost:    $0.40/1M, Context:    33K, Tier: light]
+
+
+====================================================================================================
+FAMILY: MOONSHOTAI (4 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - moonshotai/kimi-k2-instruct                                  [Cost:    $2.90/1M, Context:   131K, Tier: fast]
+    - moonshotai/kimi-k2-instruct                                  [Cost:    $2.90/1M, Context:   131K, Tier: fast]
+    - moonshotai/kimi-k2-thinking                                  [Cost:    $3.10/1M, Context:   262K, Tier: reasoning]
+    - moonshotai/kimi-k2-thinking                                  [Cost:    $3.10/1M, Context:   262K, Tier: reasoning]
+
+
+====================================================================================================
+FAMILY: NOUSRESEARCH (4 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - nousresearch/hermes-4-70b                                    [Cost:    $0.53/1M, Context:   128K, Tier: fast]
+    - nousresearch/hermes-4-70b                                    [Cost:    $0.53/1M, Context:   128K, Tier: fast]
+    - nousresearch/hermes-4-405b                                   [Cost:    $4.00/1M, Context:   128K, Tier: flagship]
+    - nousresearch/hermes-4-405b                                   [Cost:    $4.00/1M, Context:   128K, Tier: flagship]
+
+
+====================================================================================================
+FAMILY: NVIDIA (2 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - nvidia/llama-3_1-nemotron-ultra-253b-v1                      [Cost:    $2.40/1M, Context:   128K, Tier: flagship]
+    - nvidia/llama-3_1-nemotron-ultra-253b-v1                      [Cost:    $2.40/1M, Context:   128K, Tier: flagship]
+
+
+====================================================================================================
+FAMILY: OPENAI (60 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - openai/gpt-oss-20b                                           [Cost:    $0.19/1M, Context:   131K, Tier: light]
+    - openai/gpt-oss-20b                                           [Cost:    $0.19/1M, Context:   131K, Tier: light]
+    - openai/gpt-oss-120b                                          [Cost:    $0.35/1M, Context:   131K, Tier: fast]
+    - openai/gpt-oss-120b                                          [Cost:    $0.35/1M, Context:   131K, Tier: fast]
+    - openai/gpt-5-nano                                            [Cost:    $0.45/1M, Context:   400K, Tier: light]
+    - openai/gpt-5-nano                                            [Cost:    $0.45/1M, Context:   400K, Tier: light]
+    - openai/gpt-4.1-nano                                          [Cost:    $0.50/1M, Context:  1000K, Tier: light]
+    - openai/gpt-4.1-nano                                          [Cost:    $0.50/1M, Context:  1000K, Tier: light]
+    - openai/gpt-4o-mini                                           [Cost:    $0.75/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-mini-2024-07-18                                [Cost:    $0.75/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-mini-2024-07-18                                [Cost:    $0.75/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-mini-search-preview                            [Cost:    $0.75/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-mini-search-preview                            [Cost:    $0.75/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4.1-mini                                          [Cost:    $2.00/1M, Context:  1000K, Tier: fast]
+    - openai/gpt-4.1-mini                                          [Cost:    $2.00/1M, Context:  1000K, Tier: fast]
+    - openai/gpt-5-mini                                            [Cost:    $2.25/1M, Context:   400K, Tier: fast]
+    - openai/gpt-5-mini                                            [Cost:    $2.25/1M, Context:   400K, Tier: fast]
+    - openai/gpt-5.1-codex-mini                                    [Cost:    $2.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5.1-codex-mini                                    [Cost:    $2.25/1M, Context:   400K, Tier: flagship]
+    - openai/o3-mini                                               [Cost:    $5.50/1M, Context:   200K, Tier: reasoning]
+    - openai/o3-mini                                               [Cost:    $5.50/1M, Context:   200K, Tier: reasoning]
+    - openai/o4-mini                                               [Cost:    $5.50/1M, Context:   200K, Tier: reasoning]
+    - openai/o4-mini                                               [Cost:    $5.50/1M, Context:   200K, Tier: reasoning]
+    - openai/codex-mini                                            [Cost:    $7.50/1M, Context:   200K, Tier: fast]
+    - openai/codex-mini                                            [Cost:    $7.50/1M, Context:   200K, Tier: fast]
+    - openai/gpt-4.1                                               [Cost:   $10.00/1M, Context:  1000K, Tier: flagship]
+    - openai/gpt-4.1                                               [Cost:   $10.00/1M, Context:  1000K, Tier: flagship]
+    - openai/o3                                                    [Cost:   $10.00/1M, Context:   200K, Tier: reasoning]
+    - openai/o3                                                    [Cost:   $10.00/1M, Context:   200K, Tier: reasoning]
+    - openai/gpt-5                                                 [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5                                                 [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5-chat                                            [Cost:   $11.25/1M, Context:   128K, Tier: flagship]
+    - openai/gpt-5-chat                                            [Cost:   $11.25/1M, Context:   128K, Tier: flagship]
+    - openai/gpt-5.1                                               [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5.1                                               [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5.1-chat                                          [Cost:   $11.25/1M, Context:   128K, Tier: flagship]
+    - openai/gpt-5.1-chat                                          [Cost:   $11.25/1M, Context:   128K, Tier: flagship]
+    - openai/gpt-5.1-codex                                         [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-5.1-codex                                         [Cost:   $11.25/1M, Context:   400K, Tier: flagship]
+    - openai/gpt-4o                                                [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o                                                [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-08-06                                     [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-08-06                                     [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-11-20                                     [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-11-20                                     [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-search-preview                                 [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-search-preview                                 [Cost:   $12.50/1M, Context:   128K, Tier: fast]
+    - openai/chatgpt-4o-latest                                     [Cost:   $20.00/1M, Context:   128K, Tier: fast]
+    - openai/chatgpt-4o-latest                                     [Cost:   $20.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-05-13                                     [Cost:   $20.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o-2024-05-13                                     [Cost:   $20.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o:extended                                       [Cost:   $24.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4o:extended                                       [Cost:   $24.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-4-turbo                                           [Cost:   $40.00/1M, Context:   128K, Tier: fast]
+    - openai/gpt-5-codex                                           [Cost:   $45.00/1M, Context:   400K, Tier: flagship]
+    - openai/o1                                                    [Cost:   $75.00/1M, Context:   200K, Tier: reasoning]
+    - openai/o3-pro                                                [Cost:  $100.00/1M, Context:   200K, Tier: reasoning]
+    - openai/o3-pro                                                [Cost:  $100.00/1M, Context:   200K, Tier: reasoning]
+    - openai/gpt-5-pro                                             [Cost:  $110.00/1M, Context:   400K, Tier: flagship]
+    - openai/o1-pro                                                [Cost:  $750.00/1M, Context:   200K, Tier: reasoning]
+
+
+====================================================================================================
+FAMILY: QWEN (32 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - qwen/qwen2.5-coder-7b                                        [Cost:    $0.12/1M, Context:    32K, Tier: light]
+    - qwen/qwen2.5-coder-7b                                        [Cost:    $0.12/1M, Context:    32K, Tier: light]
+    - together/arize-ai-qwen-2-1.5b-instruct                       [Cost:    $0.20/1M, Context:    33K, Tier: fast]
+    - together/arize-ai-qwen-2-1.5b-instruct                       [Cost:    $0.20/1M, Context:    33K, Tier: fast]
+    - qwen/qwen3-30b-a3b-instruct-2507                             [Cost:    $0.40/1M, Context:   262K, Tier: fast]
+    - qwen/qwen3-30b-a3b-thinking-2507                             [Cost:    $0.40/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-30b-a3b-thinking-2507                             [Cost:    $0.40/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-32b                                               [Cost:    $0.40/1M, Context:    41K, Tier: fast]
+    - qwen/qwen3-32b                                               [Cost:    $0.40/1M, Context:    41K, Tier: fast]
+    - qwen/qwen2.5-vl-72b-instruct                                 [Cost:    $0.41/1M, Context:    33K, Tier: standard]
+    - qwen/qwen2.5-vl-72b-instruct                                 [Cost:    $0.41/1M, Context:    33K, Tier: standard]
+    - together/Qwen-Qwen2.5-7B-Instruct-Turbo                      [Cost:    $0.60/1M, Context:    33K, Tier: fast]
+    - together/Qwen-Qwen2.5-7B-Instruct-Turbo                      [Cost:    $0.60/1M, Context:    33K, Tier: fast]
+    - qwen/qwen3-235b-a22b-instruct-2507                           [Cost:    $0.80/1M, Context:   262K, Tier: fast]
+    - together/Qwen-Qwen3-235B-A22B-Instruct-2507-tput             [Cost:    $0.80/1M, Context:   262K, Tier: flagship]
+    - together/Qwen-Qwen3-235B-A22B-Instruct-2507-tput             [Cost:    $0.80/1M, Context:   262K, Tier: flagship]
+    - together/Qwen-Qwen3-235B-A22B-fp8-tput                       [Cost:    $0.80/1M, Context:    41K, Tier: fast]
+    - together/Qwen-Qwen3-235B-A22B-fp8-tput                       [Cost:    $0.80/1M, Context:    41K, Tier: fast]
+    - qwen/qwen3-next-80b-a3b-instruct                             [Cost:    $0.90/1M, Context:   262K, Tier: standard]
+    - qwen/qwen3-next-80b-a3b-instruct                             [Cost:    $0.90/1M, Context:   262K, Tier: standard]
+    - qwen/qwen3-235b-a22b-thinking-2507                           [Cost:    $1.00/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-235b-a22b-thinking-2507                           [Cost:    $1.00/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-next-80b-a3b-thinking                             [Cost:    $1.35/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-next-80b-a3b-thinking                             [Cost:    $1.35/1M, Context:   262K, Tier: reasoning]
+    - qwen/qwen3-coder-480b-a35b-instruct                          [Cost:    $2.20/1M, Context:   262K, Tier: fast]
+    - qwen/qwen3-coder-480b-a35b-instruct                          [Cost:    $2.20/1M, Context:   262K, Tier: fast]
+    - together/Qwen-Qwen2.5-72B-Instruct-Turbo                     [Cost:    $2.40/1M, Context:   131K, Tier: flagship]
+    - together/Qwen-Qwen2.5-72B-Instruct-Turbo                     [Cost:    $2.40/1M, Context:   131K, Tier: flagship]
+    - together/Qwen-Qwen3-Coder-480B-A35B-Instruct-FP8             [Cost:    $4.00/1M, Context:   262K, Tier: flagship]
+    - together/Qwen-Qwen3-Coder-480B-A35B-Instruct-FP8             [Cost:    $4.00/1M, Context:   262K, Tier: flagship]
+
+  UNKNOWN COST:
+    - qwen/qwen2.5-coder-7b-fast                                   [Context:      ?, Tier: ?]
+    - qwen/qwen2.5-coder-7b-fast                                   [Context:      ?, Tier: ?]
+
+
+====================================================================================================
+FAMILY: TOGETHER (18 models)
+====================================================================================================
+
+  FREE MODELS:
+    - together/ServiceNow-AI-Apriel-1.5-15b-Thinker                [Context:   131K, Tier: light]
+    - together/ServiceNow-AI-Apriel-1.5-15b-Thinker                [Context:   131K, Tier: light]
+
+  PAID MODELS (sorted by cost):
+    - together/nvidia-NVIDIA-Nemotron-Nano-9B-v2                   [Cost:    $0.31/1M, Context:   131K, Tier: light]
+    - together/nvidia-NVIDIA-Nemotron-Nano-9B-v2                   [Cost:    $0.31/1M, Context:   131K, Tier: light]
+    - together/arcee_ai-arcee-spotlight                            [Cost:    $0.36/1M, Context:   131K, Tier: flagship]
+    - together/arcee_ai-arcee-spotlight                            [Cost:    $0.36/1M, Context:   131K, Tier: flagship]
+    - together/marin-community-marin-8b-instruct                   [Cost:    $0.36/1M, Context:     4K, Tier: fast]
+    - together/marin-community-marin-8b-instruct                   [Cost:    $0.36/1M, Context:     4K, Tier: fast]
+    - together/togethercomputer-Refuel-Llm-V2-Small                [Cost:    $0.40/1M, Context:     8K, Tier: fast]
+    - together/togethercomputer-Refuel-Llm-V2-Small                [Cost:    $0.40/1M, Context:     8K, Tier: fast]
+    - together/togethercomputer-Refuel-Llm-V2                      [Cost:    $1.20/1M, Context:    16K, Tier: fast]
+    - together/togethercomputer-Refuel-Llm-V2                      [Cost:    $1.20/1M, Context:    16K, Tier: fast]
+    - together/zai-org-GLM-4.5-Air-FP8                             [Cost:    $1.30/1M, Context:   131K, Tier: flagship]
+    - together/zai-org-GLM-4.5-Air-FP8                             [Cost:    $1.30/1M, Context:   131K, Tier: flagship]
+    - together/moonshotai-Kimi-K2-Instruct-0905                    [Cost:    $4.00/1M, Context:   262K, Tier: flagship]
+    - together/moonshotai-Kimi-K2-Instruct-0905                    [Cost:    $4.00/1M, Context:   262K, Tier: flagship]
+
+  UNKNOWN COST:
+    - together/mistralai-Mixtral-8x7B-Instruct-v0.1                [Context:      ?, Tier: ?]
+    - together/mistralai-Mixtral-8x7B-Instruct-v0.1                [Context:      ?, Tier: ?]
+
+
+====================================================================================================
+FAMILY: Z-AI (6 models)
+====================================================================================================
+
+  PAID MODELS (sorted by cost):
+    - z-ai/glm-4.5-air                                             [Cost:    $1.40/1M, Context:   128K, Tier: fast]
+    - z-ai/glm-4.5-air                                             [Cost:    $1.40/1M, Context:   128K, Tier: fast]
+    - z-ai/glm-4.5                                                 [Cost:    $2.80/1M, Context:   128K, Tier: fast]
+    - z-ai/glm-4.5                                                 [Cost:    $2.80/1M, Context:   128K, Tier: fast]
+    - z-ai/glm-4.6                                                 [Cost:    $2.80/1M, Context:   128K, Tier: fast]
+    - z-ai/glm-4.6                                                 [Cost:    $2.80/1M, Context:   128K, Tier: fast]
+
+
+====================================================================================================
+SUMMARY STATISTICS
+====================================================================================================
+
+Free models: 2
+Paid models: 219
+Unknown cost: 6
+
+Cost range: $0.02 - $750.00 per 1M tokens
+Median cost: $2.00 per 1M tokens

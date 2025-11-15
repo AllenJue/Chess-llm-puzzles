@@ -38,7 +38,7 @@ run_evaluation() {
         ${extra_args} \
         --max-puzzles 50 \
         --start-puzzle 50 \
-        --csv-file ./data/lichess_puzzles_with_pgn_1000.csv \
+        --csv-file ./data/input/lichess_puzzles_with_pgn_1000.csv \
         --output "${output_file}"
     
     if [ $? -eq 0 ]; then

@@ -17,9 +17,11 @@ from collections import Counter
 parent_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(parent_dir))
 
-# Set style
-sns.set_style("whitegrid")
-plt.rcParams['font.size'] = 10
+# Import academic style
+from graph_style import set_academic_style, apply_academic_axes, create_academic_legend
+
+# Set academic style
+set_academic_style()
 
 # Models to exclude (failed models or API issues)
 EXCLUDED_MODELS = [
@@ -266,9 +268,14 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
     # Prepare data for plotting
     paradigms_list = ['single', 'self_consistency', 'debate']
     paradigm_labels = ['Single', 'Self-Consistency', 'Debate']
+    paradigm_colors = {
+        'single': '#3498db',      # Blue
+        'self_consistency': '#2ecc71',  # Green
+        'debate': '#e74c3c',      # Red
+    }
     
     # Graph 1: Puzzle Accuracy Comparison
-    fig1, ax1 = plt.subplots(figsize=(16, max(8, len(sorted_models) * 0.5)))
+    fig1, ax1 = plt.subplots(figsize=(12, max(8, len(sorted_models) * 0.4)))
     
     x = np.arange(len(sorted_models))
     width = 0.25
@@ -281,26 +288,34 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
             else:
                 puzzle_accuracies[paradigm].append(0)
     
-    bars1 = ax1.barh(x - width, puzzle_accuracies['single'], width, label='Single', color='#3498db')
-    bars2 = ax1.barh(x, puzzle_accuracies['self_consistency'], width, label='Self-Consistency', color='#2ecc71')
-    bars3 = ax1.barh(x + width, puzzle_accuracies['debate'], width, label='Debate', color='#e74c3c')
+    bars1 = ax1.barh(x - width, puzzle_accuracies['single'], width, label='Single Model', 
+                     color='#3498db', edgecolor='black', linewidth=0.5)
+    bars2 = ax1.barh(x, puzzle_accuracies['self_consistency'], width, label='Self-Consistency', 
+                     color='#2ecc71', edgecolor='black', linewidth=0.5)
+    bars3 = ax1.barh(x + width, puzzle_accuracies['debate'], width, label='Debate', 
+                     color='#e74c3c', edgecolor='black', linewidth=0.5)
     
     ax1.set_yticks(x)
-    ax1.set_yticklabels(sorted_models)
-    ax1.set_xlabel('Puzzle Accuracy (%)', fontsize=12, fontweight='bold')
-    ax1.set_title('Puzzle Accuracy Comparison: Single vs Self-Consistency vs Debate (First 50 Puzzles)', 
-                 fontsize=14, fontweight='bold')
-    ax1.legend(loc='lower right', fontsize=10)
-    ax1.grid(axis='x', alpha=0.3)
+    ax1.set_yticklabels(sorted_models, fontsize=10)
+    ax1.set_xlabel('Puzzle Accuracy (%)', fontsize=13, fontweight='bold')
+    ax1.set_title('Puzzle Accuracy by Paradigm', fontsize=15, fontweight='bold', pad=20)
+    apply_academic_axes(ax1)
+    from matplotlib.patches import Patch
+    legend_elements = [
+        Patch(facecolor=paradigm_colors['single'], edgecolor='black', linewidth=0.5, label='Single Model'),
+        Patch(facecolor=paradigm_colors['self_consistency'], edgecolor='black', linewidth=0.5, label='Self-Consistency'),
+        Patch(facecolor=paradigm_colors['debate'], edgecolor='black', linewidth=0.5, label='Debate'),
+    ]
+    create_academic_legend(ax1, legend_elements)
     
     plt.tight_layout()
     output_file1 = output_path / "paradigm_comparison_puzzle_accuracy.png"
-    plt.savefig(output_file1, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file1, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig1)
     print(f"✅ Graph saved to: {output_file1}")
     
     # Graph 2: Move Accuracy Comparison
-    fig2, ax2 = plt.subplots(figsize=(16, max(8, len(sorted_models) * 0.5)))
+    fig2, ax2 = plt.subplots(figsize=(12, max(8, len(sorted_models) * 0.4)))
     
     move_accuracies = {p: [] for p in paradigms_list}
     for model in sorted_models:
@@ -310,26 +325,35 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
             else:
                 move_accuracies[paradigm].append(0)
     
-    bars1 = ax2.barh(x - width, move_accuracies['single'], width, label='Single', color='#3498db')
-    bars2 = ax2.barh(x, move_accuracies['self_consistency'], width, label='Self-Consistency', color='#2ecc71')
-    bars3 = ax2.barh(x + width, move_accuracies['debate'], width, label='Debate', color='#e74c3c')
+    bars1 = ax2.barh(x - width, move_accuracies['single'], width, label='Single Model', 
+                     color='#3498db', edgecolor='black', linewidth=0.5)
+    bars2 = ax2.barh(x, move_accuracies['self_consistency'], width, label='Self-Consistency', 
+                     color='#2ecc71', edgecolor='black', linewidth=0.5)
+    bars3 = ax2.barh(x + width, move_accuracies['debate'], width, label='Debate', 
+                     color='#e74c3c', edgecolor='black', linewidth=0.5)
     
     ax2.set_yticks(x)
-    ax2.set_yticklabels(sorted_models)
-    ax2.set_xlabel('Move Accuracy (%)', fontsize=12, fontweight='bold')
-    ax2.set_title('Move Accuracy Comparison: Single vs Self-Consistency vs Debate (First 50 Puzzles)', 
-                 fontsize=14, fontweight='bold')
-    ax2.legend(loc='lower right', fontsize=10)
-    ax2.grid(axis='x', alpha=0.3)
+    ax2.set_yticklabels(sorted_models, fontsize=10)
+    ax2.set_xlabel('Move Accuracy (%)', fontsize=13, fontweight='bold')
+    ax2.set_title('Move Accuracy by Paradigm', fontsize=15, fontweight='bold', pad=20)
+    apply_academic_axes(ax2)
+    # Reuse legend elements for consistency
+    from matplotlib.patches import Patch
+    legend_elements_2 = [
+        Patch(facecolor=paradigm_colors['single'], edgecolor='black', linewidth=0.5, label='Single Model'),
+        Patch(facecolor=paradigm_colors['self_consistency'], edgecolor='black', linewidth=0.5, label='Self-Consistency'),
+        Patch(facecolor=paradigm_colors['debate'], edgecolor='black', linewidth=0.5, label='Debate'),
+    ]
+    create_academic_legend(ax2, legend_elements_2)
     
     plt.tight_layout()
     output_file2 = output_path / "paradigm_comparison_move_accuracy.png"
-    plt.savefig(output_file2, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file2, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig2)
     print(f"✅ Graph saved to: {output_file2}")
     
     # Graph 3: Token Usage Per Move Comparison (stacked)
-    fig3, ax3 = plt.subplots(figsize=(16, max(8, len(sorted_models) * 0.5)))
+    fig3, ax3 = plt.subplots(figsize=(12, max(8, len(sorted_models) * 0.4)))
     
     # Prepare token per move data
     prompt_tokens_per_move = {p: [] for p in paradigms_list}
@@ -353,29 +377,30 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
         offset = (i - 1) * width
         ax3.barh(x + offset, prompt_tokens_per_move[paradigm], width, 
                 label=f'{paradigm_labels[i]} (Prompt)', 
-                color=['#3498db', '#2ecc71', '#e74c3c'][i], alpha=0.7)
+                color=['#3498db', '#2ecc71', '#e74c3c'][i], alpha=0.7, 
+                edgecolor='black', linewidth=0.3)
         ax3.barh(x + offset, completion_tokens_per_move[paradigm], width, 
                 left=prompt_tokens_per_move[paradigm],
                 label=f'{paradigm_labels[i]} (Completion)', 
-                color=['#2980b9', '#27ae60', '#c0392b'][i], alpha=0.9)
+                color=['#2980b9', '#27ae60', '#c0392b'][i], alpha=0.9,
+                edgecolor='black', linewidth=0.3)
     
     ax3.set_yticks(x)
-    ax3.set_yticklabels(sorted_models)
-    ax3.set_xlabel('Tokens per Move', fontsize=12, fontweight='bold')
-    ax3.set_title('Token Usage Per Move Comparison: Single vs Self-Consistency vs Debate (First 50 Puzzles)', 
-                 fontsize=14, fontweight='bold')
+    ax3.set_yticklabels(sorted_models, fontsize=10)
+    ax3.set_xlabel('Tokens per Move', fontsize=13, fontweight='bold')
+    ax3.set_title('Token Usage by Paradigm', fontsize=15, fontweight='bold', pad=20)
+    apply_academic_axes(ax3)
     # Create custom legend
     from matplotlib.patches import Patch
-    legend_elements = [
-        Patch(facecolor='#3498db', alpha=0.7, label='Single (Prompt)'),
-        Patch(facecolor='#2980b9', alpha=0.9, label='Single (Completion)'),
-        Patch(facecolor='#2ecc71', alpha=0.7, label='Self-Consistency (Prompt)'),
-        Patch(facecolor='#27ae60', alpha=0.9, label='Self-Consistency (Completion)'),
-        Patch(facecolor='#e74c3c', alpha=0.7, label='Debate (Prompt)'),
-        Patch(facecolor='#c0392b', alpha=0.9, label='Debate (Completion)'),
+    token_legend_elements = [
+        Patch(facecolor='#3498db', alpha=0.7, edgecolor='black', linewidth=0.5, label='Single (Prompt)'),
+        Patch(facecolor='#2980b9', alpha=0.9, edgecolor='black', linewidth=0.5, label='Single (Completion)'),
+        Patch(facecolor='#2ecc71', alpha=0.7, edgecolor='black', linewidth=0.5, label='Self-Consistency (Prompt)'),
+        Patch(facecolor='#27ae60', alpha=0.9, edgecolor='black', linewidth=0.5, label='Self-Consistency (Completion)'),
+        Patch(facecolor='#e74c3c', alpha=0.7, edgecolor='black', linewidth=0.5, label='Debate (Prompt)'),
+        Patch(facecolor='#c0392b', alpha=0.9, edgecolor='black', linewidth=0.5, label='Debate (Completion)'),
     ]
-    ax3.legend(handles=legend_elements, loc='lower right', fontsize=9)
-    ax3.grid(axis='x', alpha=0.3)
+    create_academic_legend(ax3, token_legend_elements, fontsize=10)
     
     # Add value labels on bars
     # Find max value across all paradigms for spacing
@@ -399,7 +424,7 @@ def create_comparison_graphs(results_dir: str = "data/test_results", output_dir:
     
     plt.tight_layout()
     output_file3 = output_path / "paradigm_comparison_tokens.png"
-    plt.savefig(output_file3, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file3, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig3)
     print(f"✅ Graph saved to: {output_file3}")
     

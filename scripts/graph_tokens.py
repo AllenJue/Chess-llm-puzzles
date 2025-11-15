@@ -15,10 +15,11 @@ from typing import Dict
 parent_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(parent_dir))
 
-# Set style
-sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (14, 8)
-plt.rcParams['font.size'] = 10
+# Import academic style
+from graph_style import set_academic_style, apply_academic_axes, create_academic_legend
+
+# Set academic style
+set_academic_style()
 
 def extract_model_name(filename: str) -> str:
     """Extract a clean model name from filename."""
@@ -177,22 +178,27 @@ def create_token_graphs(results_dir: str = "data/test_results", output_dir: str 
     total_tokens = [data['total_tokens'] for _, data in sorted_models]
     
     # Create stacked bar chart
-    fig, ax = plt.subplots(figsize=(14, max(8, len(model_names) * 0.4)))
+    fig, ax = plt.subplots(figsize=(12, max(8, len(model_names) * 0.4)))
     
     # Create stacked bars: prompt tokens first (bottom), then completion tokens on top
     # For horizontal bars, "left" parameter positions the second bar after the first
     bars1 = ax.barh(range(len(model_names)), prompt_tokens, label='Prompt Tokens', 
-                    color=sns.color_palette("Blues", 3)[1])
+                    color=sns.color_palette("Blues", 3)[1], edgecolor='black', linewidth=0.3)
     bars2 = ax.barh(range(len(model_names)), completion_tokens, left=prompt_tokens, 
-                    label='Completion Tokens', color=sns.color_palette("Oranges", 3)[1])
+                    label='Completion Tokens', color=sns.color_palette("Oranges", 3)[1], 
+                    edgecolor='black', linewidth=0.3)
     
     ax.set_yticks(range(len(model_names)))
-    ax.set_yticklabels(model_names)
-    ax.set_xlabel('Total Tokens', fontsize=12, fontweight='bold')
-    ax.set_title('Token Usage: Prompt + Completion Tokens by Model (First 50 Puzzles)', 
-                 fontsize=14, fontweight='bold')
-    ax.legend(loc='lower right', fontsize=10)
-    ax.grid(axis='x', alpha=0.3)
+    ax.set_yticklabels(model_names, fontsize=10)
+    ax.set_xlabel('Total Tokens', fontsize=13, fontweight='bold')
+    ax.set_title('Token Usage by Model', fontsize=15, fontweight='bold', pad=20)
+    apply_academic_axes(ax)
+    from matplotlib.patches import Patch
+    legend_patches = [
+        Patch(facecolor=sns.color_palette("Blues", 3)[1], edgecolor='black', linewidth=0.5, label='Prompt Tokens'),
+        Patch(facecolor=sns.color_palette("Oranges", 3)[1], edgecolor='black', linewidth=0.5, label='Completion Tokens'),
+    ]
+    create_academic_legend(ax, legend_patches)
     
     # Add value labels on bars
     for i, (prompt, completion, total) in enumerate(zip(prompt_tokens, completion_tokens, total_tokens)):
@@ -213,7 +219,7 @@ def create_token_graphs(results_dir: str = "data/test_results", output_dir: str 
     
     # Save the figure
     output_file = output_path / "single_model_token_usage.png"
-    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig)
     print(f"\n✅ Token graph saved to: {output_file}")
     

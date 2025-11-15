@@ -16,10 +16,11 @@ from typing import Dict, List
 parent_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(parent_dir))
 
-# Set style
-sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (16, 10)
-plt.rcParams['font.size'] = 10
+# Import academic style
+from graph_style import set_academic_style, apply_academic_axes, create_academic_legend
+
+# Set academic style
+set_academic_style()
 
 def extract_model_name(filename: str) -> str:
     """Extract a clean model name from filename."""
@@ -171,45 +172,49 @@ def create_error_graphs(results_dir: str = "data/test_results", output_dir: str 
     
     # Plot 1: Error Rate (%) - Separate file
     fig1, ax1 = plt.subplots(figsize=(12, max(8, len(model_names) * 0.4)))
-    bars1 = ax1.barh(range(len(model_names)), error_rates, color=colors)
+    bars1 = ax1.barh(range(len(model_names)), error_rates, color=colors, 
+                     edgecolor='black', linewidth=0.5)
     ax1.set_yticks(range(len(model_names)))
-    ax1.set_yticklabels(model_names)
-    ax1.set_xlabel('Error Rate (%)', fontsize=12, fontweight='bold')
-    ax1.set_title('Error Rate: Percentage of Puzzles with Errors (First 50 Puzzles)', fontsize=14, fontweight='bold')
-    ax1.set_xlim(0, max(error_rates) * 1.1 if max(error_rates) > 0 else 10)
-    ax1.grid(axis='x', alpha=0.3)
+    ax1.set_yticklabels(model_names, fontsize=10)
+    ax1.set_xlabel('Error Rate (%)', fontsize=13, fontweight='bold')
+    ax1.set_title('Error Rate by Model', fontsize=15, fontweight='bold', pad=20)
+    max_err_rate = max(error_rates) if max(error_rates) > 0 else 10
+    ax1.set_xlim(0, max_err_rate * 1.15)
+    apply_academic_axes(ax1)
     
     # Add value labels on bars
     for i, (bar, rate) in enumerate(zip(bars1, error_rates)):
         if rate > 0:
-            ax1.text(rate + max(error_rates) * 0.01, i, f'{rate:.1f}%', 
+            ax1.text(rate + max_err_rate * 0.02, i, f'{rate:.1f}%', 
                     va='center', fontsize=9, fontweight='bold')
     
     plt.tight_layout()
     output_file1 = output_path / "single_model_error_rate.png"
-    plt.savefig(output_file1, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file1, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig1)
     print(f"✅ Graph saved to: {output_file1}")
     
     # Plot 2: Error Count - Separate file
     fig2, ax2 = plt.subplots(figsize=(12, max(8, len(model_names) * 0.4)))
-    bars2 = ax2.barh(range(len(model_names)), error_counts, color=colors)
+    bars2 = ax2.barh(range(len(model_names)), error_counts, color=colors, 
+                     edgecolor='black', linewidth=0.5)
     ax2.set_yticks(range(len(model_names)))
-    ax2.set_yticklabels(model_names)
-    ax2.set_xlabel('Number of Puzzles with Errors', fontsize=12, fontweight='bold')
-    ax2.set_title('Error Count: Puzzles with Errors (First 50 Puzzles)', fontsize=14, fontweight='bold')
-    ax2.set_xlim(0, max(error_counts) * 1.1 if max(error_counts) > 0 else 5)
-    ax2.grid(axis='x', alpha=0.3)
+    ax2.set_yticklabels(model_names, fontsize=10)
+    ax2.set_xlabel('Number of Puzzles with Errors', fontsize=13, fontweight='bold')
+    ax2.set_title('Error Count by Model', fontsize=15, fontweight='bold', pad=20)
+    max_err_count = max(error_counts) if max(error_counts) > 0 else 5
+    ax2.set_xlim(0, max_err_count * 1.15)
+    apply_academic_axes(ax2)
     
     # Add value labels on bars
     for i, (bar, count) in enumerate(zip(bars2, error_counts)):
         if count > 0:
-            ax2.text(count + max(error_counts) * 0.01, i, f'{count}/{total_puzzles[i]}', 
+            ax2.text(count + max_err_count * 0.02, i, f'{count}/{total_puzzles[i]}', 
                     va='center', fontsize=9, fontweight='bold')
     
     plt.tight_layout()
     output_file2 = output_path / "single_model_error_count.png"
-    plt.savefig(output_file2, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file2, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig2)
     print(f"✅ Graph saved to: {output_file2}")
     
@@ -243,15 +248,18 @@ def create_error_graphs(results_dir: str = "data/test_results", output_dir: str 
             bottom = [b + c for b, c in zip(bottom, counts)]
     
     ax3.set_yticks(range(len(model_names)))
-    ax3.set_yticklabels(model_names)
-    ax3.set_xlabel('Number of Errors', fontsize=12, fontweight='bold')
-    ax3.set_title('Error Type Distribution by Model (First 50 Puzzles)', fontsize=14, fontweight='bold')
-    ax3.legend(loc='lower right', fontsize=9)
-    ax3.grid(axis='x', alpha=0.3)
+    ax3.set_yticklabels(model_names, fontsize=10)
+    ax3.set_xlabel('Number of Errors', fontsize=13, fontweight='bold')
+    ax3.set_title('Error Type Distribution by Model', fontsize=15, fontweight='bold', pad=20)
+    apply_academic_axes(ax3)
+    from matplotlib.patches import Patch
+    legend_patches = [Patch(facecolor=colors_stacked[i], edgecolor='black', linewidth=0.5, label=error_type) 
+                     for i, error_type in enumerate(all_error_types) if any(error_type_data[error_type])]
+    create_academic_legend(ax3, legend_patches, fontsize=10)
     
     plt.tight_layout()
     output_file3 = output_path / "single_model_error_types.png"
-    plt.savefig(output_file3, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file3, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig3)
     print(f"✅ Graph saved to: {output_file3}")
     

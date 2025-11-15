@@ -16,10 +16,11 @@ import numpy as np
 parent_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(parent_dir))
 
-# Set style
-sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (14, 8)
-plt.rcParams['font.size'] = 10
+# Import academic style
+from graph_style import set_academic_style, apply_academic_axes, create_academic_legend
+
+# Set academic style
+set_academic_style()
 
 def extract_model_name(filename: str) -> str:
     """Extract a clean model name from filename."""
@@ -167,45 +168,49 @@ def create_accuracy_graph(results_dir: str = "data/test_results", output_dir: st
     
     # Plot 1: Puzzle Accuracy (Puzzles Solved %) - Separate file
     fig1, ax1 = plt.subplots(figsize=(12, max(8, len(model_names) * 0.4)))
-    bars1 = ax1.barh(range(len(model_names)), puzzle_accuracies, color=colors)
+    bars1 = ax1.barh(range(len(model_names)), puzzle_accuracies, color=colors, 
+                     edgecolor='black', linewidth=0.5)
     ax1.set_yticks(range(len(model_names)))
-    ax1.set_yticklabels(model_names)
-    ax1.set_xlabel('Puzzle Accuracy (%)', fontsize=12, fontweight='bold')
-    ax1.set_title(f'Puzzle Accuracy: Puzzles Fully Solved (First 50 Puzzles)', fontsize=14, fontweight='bold')
-    ax1.set_xlim(0, max(puzzle_accuracies) * 1.1 if max(puzzle_accuracies) > 0 else 10)
-    ax1.grid(axis='x', alpha=0.3)
+    ax1.set_yticklabels(model_names, fontsize=10)
+    ax1.set_xlabel('Puzzle Accuracy (%)', fontsize=13, fontweight='bold')
+    ax1.set_title('Puzzle Accuracy by Model', fontsize=15, fontweight='bold', pad=20)
+    ax1.set_xlim(0, max(puzzle_accuracies) * 1.15 if max(puzzle_accuracies) > 0 else 10)
+    apply_academic_axes(ax1)
     
     # Add value labels on bars
+    max_acc = max(puzzle_accuracies) if max(puzzle_accuracies) > 0 else 10
     for i, (bar, acc) in enumerate(zip(bars1, puzzle_accuracies)):
         if acc > 0:
-            ax1.text(acc + max(puzzle_accuracies) * 0.01, i, f'{acc:.1f}%', 
+            ax1.text(acc + max_acc * 0.02, i, f'{acc:.1f}%', 
                     va='center', fontsize=9, fontweight='bold')
     
     plt.tight_layout()
     output_file1 = output_path / "single_model_puzzle_accuracy.png"
-    plt.savefig(output_file1, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file1, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig1)
     print(f"✅ Graph saved to: {output_file1}")
     
     # Plot 2: Move Accuracy (Correct Moves %) - Separate file
     fig2, ax2 = plt.subplots(figsize=(12, max(8, len(model_names) * 0.4)))
-    bars2 = ax2.barh(range(len(model_names)), move_accuracies, color=colors)
+    bars2 = ax2.barh(range(len(model_names)), move_accuracies, color=colors, 
+                     edgecolor='black', linewidth=0.5)
     ax2.set_yticks(range(len(model_names)))
-    ax2.set_yticklabels(model_names)
-    ax2.set_xlabel('Move Accuracy (%)', fontsize=12, fontweight='bold')
-    ax2.set_title(f'Move Accuracy: Correct Moves / Total Moves (First 50 Puzzles)', fontsize=14, fontweight='bold')
-    ax2.set_xlim(0, max(move_accuracies) * 1.1 if max(move_accuracies) > 0 else 10)
-    ax2.grid(axis='x', alpha=0.3)
+    ax2.set_yticklabels(model_names, fontsize=10)
+    ax2.set_xlabel('Move Accuracy (%)', fontsize=13, fontweight='bold')
+    ax2.set_title('Move Accuracy by Model', fontsize=15, fontweight='bold', pad=20)
+    ax2.set_xlim(0, max(move_accuracies) * 1.15 if max(move_accuracies) > 0 else 10)
+    apply_academic_axes(ax2)
     
     # Add value labels on bars
+    max_move_acc = max(move_accuracies) if max(move_accuracies) > 0 else 10
     for i, (bar, acc) in enumerate(zip(bars2, move_accuracies)):
         if acc > 0:
-            ax2.text(acc + max(move_accuracies) * 0.01, i, f'{acc:.1f}%', 
+            ax2.text(acc + max_move_acc * 0.02, i, f'{acc:.1f}%', 
                     va='center', fontsize=9, fontweight='bold')
     
     plt.tight_layout()
     output_file2 = output_path / "single_model_move_accuracy.png"
-    plt.savefig(output_file2, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file2, dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close(fig2)
     print(f"✅ Graph saved to: {output_file2}")
     

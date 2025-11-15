@@ -1,5 +1,22 @@
 # Model Testing Log
 
+## Results Summary
+
+### Performance Graphs
+
+#### Paradigm Comparison
+![Paradigm Comparison - Puzzle Accuracy](../../data/graphs/paradigm_comparison_puzzle_accuracy.png)
+![Paradigm Comparison - Move Accuracy](../../data/graphs/paradigm_comparison_move_accuracy.png)
+![Paradigm Comparison - Token Usage](../../data/graphs/paradigm_comparison_tokens.png)
+
+#### Single Model Performance
+![Single Model - Puzzle Accuracy](../../data/graphs/single_model_puzzle_accuracy.png)
+![Single Model - Move Accuracy](../../data/graphs/single_model_move_accuracy.png)
+![Single Model - Token Usage](../../data/graphs/single_model_token_usage.png)
+![Single Model - Error Analysis](../../data/graphs/single_model_error_rate.png)
+
+---
+
 ## Puzzle 0 Testing Results (2024-11-14)
 
 ### Summary

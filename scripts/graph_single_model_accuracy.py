@@ -109,10 +109,21 @@ def create_accuracy_graph(results_dir: str = "data/test_results", output_dir: st
     
     print(f"Found {len(csv_files)} single model result files")
     
+    # Models to exclude (failed models)
+    excluded_models = [
+        "google/gemma-3-4b-it (free)",
+        "google/gemma-3-12b-it (free)",
+        "meta-llama/llama-3.3-8b-instruct (free)",
+    ]
+    
     # Load and calculate accuracy for each model (first 50 puzzles)
     model_results = {}
     for csv_file in csv_files:
         model_name = extract_model_name(csv_file.name)
+        # Skip excluded models
+        if model_name in excluded_models:
+            print(f"Skipping excluded model: {model_name}")
+            continue
         accuracy_data = load_and_calculate_accuracy(csv_file, num_puzzles=50)
         if accuracy_data:
             model_results[model_name] = accuracy_data

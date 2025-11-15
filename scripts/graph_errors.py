@@ -112,10 +112,21 @@ def create_error_graphs(results_dir: str = "data/test_results", output_dir: str 
     
     print(f"Found {len(csv_files)} single model result files")
     
+    # Models to exclude (failed models)
+    excluded_models = [
+        "google/gemma-3-4b-it (free)",
+        "google/gemma-3-12b-it (free)",
+        "meta-llama/llama-3.3-8b-instruct (free)",
+    ]
+    
     # Analyze errors for each model
     model_results = {}
     for csv_file in csv_files:
         model_name = extract_model_name(csv_file.name)
+        # Skip excluded models
+        if model_name in excluded_models:
+            print(f"Skipping excluded model: {model_name}")
+            continue
         error_data = analyze_errors(csv_file, num_puzzles=50)
         if error_data:
             model_results[model_name] = error_data

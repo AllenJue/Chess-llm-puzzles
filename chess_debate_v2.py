@@ -71,7 +71,7 @@ class ChessDebatePlayer(Agent):
         print(f"\n<debug> : ChessDebatePlayer '{self.name}' ask() method:")
         print(f"<debug> : combined_prompt: {repr(combined_prompt[:200])}...")
         print(f"<debug> : prompt_tokens={prompt_tokens}, max_tokens={max_tokens}")
-
+        
         response, token_info = self.model_interface.query_model_for_move_with_tokens(
             system_prompt="",  # Already included in combined_prompt
             user_prompt=combined_prompt,

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 Test all specified models on puzzle 0 only.
-Does not save results - just shows which models can solve it.
+Saves results to CSV file in data/test_results/ directory.
 """
 
 import os
 import sys
 import time
+import pandas as pd
 from pathlib import Path
+from datetime import datetime
 
 # Add parent directory to path
 parent_dir = Path(__file__).parent.parent
@@ -17,48 +19,41 @@ from main import load_environment, evaluate_puzzles, read_chess_puzzles_csv
 from model_interface import ChessModelInterface
 
 # Models to test - using Anannas API for all (NOT including OpenAI models)
-# Free models + paid models via Anannas
+# Free models + low-cost paid models via Anannas
 MODELS_TO_TEST = [
-    # Free models (high priority)
-    # "google/gemini-2.0-flash-exp:free",
-    # "together/deepseek-ai-DeepSeek-R1-Distill-Llama-70B-free",
-    # "microsoft/phi-3-mini-128k-instruct:free",
-    # "qwen/qwen3-4b:free",
-    # "mistralai/mistral-small-3.2-24b-instruct:free",
-    # "qwen/qwen2.5-vl-72b-instruct:free",
-    # "minimax/minimax-m2:free",
-    # "google/gemma-3-12b-it:free",
-    # "google/gemma-2-9b-it:free",
-    # "google/gemma-3-4b-it:free",
-    # "together/meta-llama-Llama-3.3-70B-Instruct-Turbo-Free",
-    # "qwen/qwen2.5-vl-32b-instruct:free",
-    # "qwen/qwen-2.5-coder-32b-instruct:free",
-    # "meta-llama/llama-3.3-8b-instruct:free",
-    # "google/gemma-3-27b-it:free",
-    # "huggingfaceh4/zephyr-7b-beta:free",
-    # "qwen/qwen3-8b:free",
-    # "liquid/lfm-40b:free",
+    # FREE MODELS (from smoke test analysis)
+    "together/ServiceNow-AI-Apriel-1.5-15b-Thinker",  # Free, 131K context
     
-    # # Anthropic via Anannas
-    # "anthropic/claude-3.7-sonnet",
-    # "anthropic/claude-opus-4.1",
-    # "anthropic/claude-3.5-sonnet",
+    # VERY LOW COST MODELS ($0.02 - $0.20/1M tokens)
+    "arcee-ai/afm-4.5b",  # $0.02/1M, 4K context
+    "together/google-gemma-3n-E4B-it",  # $0.06/1M, 33K context
+    "google/gemma-2-2b-it",  # $0.08/1M, 8K context
+    "mistralai/mistral-7b-instruct-v0.3",  # $0.08/1M, 33K context
+    "google/gemma-2-9b-it-fast",  # $0.12/1M, 8K context
+    "qwen/qwen2.5-coder-7b",  # $0.12/1M, 32K context
+    "meta-llama/llama-3.1-8b-instruct-fast",  # $0.12/1M, 131K context
+    "together/meta-llama-Llama-3.2-3B-Instruct-Turbo",  # $0.12/1M, 131K context
+    "mistralai/mistral-small-24b-instruct-2501",  # $0.13/1M, 33K context
+    "openai/gpt-oss-20b",  # $0.19/1M, 131K context
+    "together/meta-llama-Meta-Llama-3-8B-Instruct-Lite",  # $0.20/1M, 8K context
+    "together/arize-ai-qwen-2-1.5b-instruct",  # $0.20/1M, 33K context
     
-    # Qwen models (including the 235b)
-    # "qwen/qwen3-max",
-    "qwen/qwen3-235b-a22b-instruct-2507",  # The 235b model user mentioned
-    # "qwen/qwen2.5-72b-instruct",
-    # "qwen/qwen3-30b-a3b-instruct-2507",
+    # LOW COST MODELS ($0.31 - $0.80/1M tokens)
+    "together/nvidia-NVIDIA-Nemotron-Nano-9B-v2",  # $0.31/1M, 131K context
+    "openai/gpt-oss-120b",  # $0.35/1M, 131K context
+    "together/arcee_ai-arcee-spotlight",  # $0.36/1M, 131K context
+    "together/marin-community-marin-8b-instruct",  # $0.36/1M, 4K context
+    "meta-llama/llama-3.1-8b-instruct",  # $0.36/1M, 131K context
+    "together/meta-llama-Meta-Llama-3.1-8B-Instruct-Turbo",  # $0.36/1M, 131K context
+    "qwen/qwen3-30b-a3b-instruct-2507",  # $0.40/1M, 262K context
+    "qwen/qwen3-32b",  # $0.40/1M, 41K context
+    "mistralai/mistral-7b-instruct-v0.2",  # $0.40/1M, 33K context
+    "together/togethercomputer-Refuel-Llm-V2-Small",  # $0.40/1M, 8K context
+    "qwen/qwen2.5-vl-72b-instruct",  # $0.41/1M, 33K context
+    "together/Qwen-Qwen3-235B-A22B-Instruct-2507-tput",  # $0.80/1M, 262K context
     
-    # Strong 70B+ models
-    # "meta-llama/llama-3.1-70b-instruct",
-    # "meta-llama/llama-3.3-70b-instruct",
-    # "nvidia/llama-3.1-nemotron-70b-instruct",
-    
-    # # Other strong models
-    # "deepseek/deepseek-v3",
-    # "ai21/jamba-instruct",
-    # "mistralai/mistral-7b-instruct-v0.3",
+    # Qwen 235b model (user's original request)
+    "qwen/qwen3-235b-a22b-instruct-2507",  # $0.80/1M, 262K context
 ]
 
 
@@ -234,6 +229,19 @@ def main():
         status = "✅" if r.get("solved") else "❌"
         moves = f"{r.get('correct_moves', 0)}/{r.get('total_moves', 0)}"
         print(f"{status} {r['model']:50s} - {moves} correct moves")
+    
+    # Save results to CSV
+    output_dir = parent_dir / "data" / "test_results"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = output_dir / f"puzzle0_all_models_{timestamp}.csv"
+    
+    df_results = pd.DataFrame(results)
+    df_results = df_results.sort_values(by=["correct_moves", "model"], ascending=[False, True])
+    df_results.to_csv(output_file, index=False)
+    
+    print(f"\n✅ Results saved to: {output_file}")
 
 
 if __name__ == "__main__":

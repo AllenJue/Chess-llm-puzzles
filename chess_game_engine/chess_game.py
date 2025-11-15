@@ -90,7 +90,7 @@ class ChessGameEngine:
             default_temperature=0.1,
             retry_attempts=2,
         )
-
+        
         # Initialize strategy-specific helpers
         if use_self_consistency:
             self.self_consistency = ChessSelfConsistency(
@@ -694,7 +694,7 @@ class ChessGameEngine:
         sc_total_tokens = sum(entry["total_tokens"] for entry in self.self_consistency_token_log)
         if sc_total_tokens:
             print(f"📊 Self-consistency token usage -> prompt {sc_total_prompt}, completion {sc_total_completion}, total {sc_total_tokens}")
-
+        
         return {
             "result": result,
             "total_moves": len(self.game_moves),
@@ -912,7 +912,7 @@ def main():
                 print("Please add one of these to your .env file:")
                 print("  OPENAI_API_KEY=your-openai-key-here")
                 print("  ANANNAS_API_KEY=your-anannas-key-here")
-                sys.exit(1)
+        sys.exit(1)
     
     # Initialize game engine
     engine = ChessGameEngine(

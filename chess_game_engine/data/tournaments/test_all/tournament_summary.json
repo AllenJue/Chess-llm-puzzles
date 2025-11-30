@@ -1,0 +1,39 @@
+{
+  "tournament_info": {
+    "timestamp": "2025-11-29T18:23:29.957430",
+    "total_players": 2,
+    "total_games": 1,
+    "games_per_matchup": 1,
+    "use_openings": false,
+    "openings_used": 0
+  },
+  "leaderboard": [
+    {
+      "rank": 1,
+      "player": "gpt-3.5-turbo-instruct",
+      "rating": 1662.310890696989,
+      "rd": 290.3189608477996,
+      "games": 1
+    },
+    {
+      "rank": 2,
+      "player": "Stockfish",
+      "rating": 1337.689109303011,
+      "rd": 290.3189608477996,
+      "games": 1
+    }
+  ],
+  "match_results": [
+    {
+      "player1": "gpt-3.5-turbo-instruct",
+      "player2": "Stockfish",
+      "games": [
+        "gpt-3.5-turbo-instruct_vs_Stockfish_1"
+      ],
+      "player1_wins": 1,
+      "player2_wins": 0,
+      "draws": 0
+    }
+  ],
+  "ratings_file": "data/tournaments/test_all/ratings.json"
+}

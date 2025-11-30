@@ -142,4 +142,63 @@ Thumbs.db
 *.zst
 *.zip
 
+# Generated graphs and visualizations
+data/graphs/*.png
+graphs/*.png
+
+# Generated analysis outputs
+data/results_analysis.txt
+data/smoke_test_analysis.txt
+data/smoke_test_analysis_organized.csv
+data/smoke_test_results.csv
+
+# Generated LaTeX tables
+data/*.tex
+data/latex_tables.tex
+data/paradigm_token_table.tex
+data/gpt_rating_bin_table.tex
+
+# Generated CSV results (keep input data)
+data/results/*.csv
+data/test_results/**/*.csv
+
+# Generated text outputs
+data/text_outputs/*.txt
+
+# Generated game files
+data/games/*.pgn
+data/games/*.json
+
+# Graphing and visualization scripts
+scripts/graph_*.py
+scripts/visualize_*.py
+scripts/analyze_*.py
+scripts/generate_*.py
+scripts/check_suspicious_results.py
+scripts/show_prompts.py
+
+# Extra markdown files (keep README.md files)
+# Ignore all .md files except README.md files
+*.md
+!README.md
+!**/README.md
+!chess_game_engine/README.md
+!chess_game_engine/TOURNAMENT_README.md
+!MAD/Multi-Agents-Debate_README.md
+!MAD/Multi-Agents-Debate_LICENSE.md
+
+# Specific markdown files to ignore
+USAGE_GUIDE.md
+QUICK_TESTS.md
+REPOSITORY_CLEANUP.md
+chess_game_engine/USAGE_GUIDE.md
+chess_game_engine/QUICK_TESTS.md
+scripts/logs/*.md
+
+# Test and utility scripts
+scripts/test_utils/
+scripts/logs/
+test_scenarios.py
+test_minimal_tournament.py
+
 

@@ -1,0 +1,102 @@
+{
+  "result": "gpt-3.5-turbo-instruct wins by disqualification (deepseek-ai/deepseek-v3 failed to produce a legal move)",
+  "white_player": "gpt-3.5-turbo-instruct",
+  "black_player": "deepseek-ai/deepseek-v3",
+  "white_score": 1.0,
+  "black_score": 0.0,
+  "total_moves": 1,
+  "moves": [
+    "e2e4"
+  ],
+  "game_history": [
+    {
+      "move_number": 1,
+      "player": "gpt-3.5-turbo-instruct",
+      "color": "white",
+      "move_uci": "e2e4",
+      "move_san": "e4",
+      "fen_after": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+    }
+  ],
+  "final_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+  "white_tokens": {
+    "prompt_tokens": 104,
+    "completion_tokens": 439,
+    "total_tokens": 543
+  },
+  "black_tokens": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "white_token_log": [
+    {
+      "turn": 1,
+      "attempt": 1,
+      "tokens": {
+        "prompt_tokens": 104,
+        "completion_tokens": 439,
+        "total_tokens": 543,
+        "model": "gpt-3.5-turbo-instruct",
+        "finish_reason": "stop"
+      }
+    }
+  ],
+  "black_token_log": [],
+  "white_responses": [
+    {
+      "turn": 1,
+      "attempt": 1,
+      "raw_response": "1. e4 e5\n2. Nf3 Nc6\n3. Bb5 a6\n4. Ba4 Nf6\n5. O-O Be7\n6. Re1 b5\n7. Bb3 d6\n8. c3 O-O\n9. h3 Na5\n10. Bc2 c5\n11. d4 Qc7\n12. Nbd2 cxd4\n13. cxd4 Nc6\n14. Nb3 a5\n15. Be3 a4\n16. Nbd2 Bd7\n17. Rc1 Qb7\n18. Bb1 Rfc8\n19. Nf1 Bd8\n20. Ng3 Bb6\n21. Qd2 Ba5\n22. Qe2 Bxe1\n23. Rxe1 b4\n24. d5 Ne7\n25. Bg5 Bb5\n26. Qd2 Ne8\n27. Nh4 f6\n28. Be3 b3\n29. a3 Rc7\n30. f4 Rac8\n31. fxe5 dxe5\n32. d6 Rd7\n33. Qb4 Nxd6\n34. Rd1 Nc4\n35. Rxd7 Qxd7\n36. Bc5 Nc6\n37. Qxb5 Qd1+\n38. Kh2 Qxb1\n39. Qxc4+ Kh8\n40. Qe6 Rg8\n41. Qxc6 Qxb2\n42. Ngf5 Qc2\n43. Ne7 b2\n44. Nhg6+ hxg6\n45. Nxg6+ Kh7\n46. Nf8+ Rxf8\n47. Qe6 b1=Q\n48. Qf5+ Kg8\n49. Qe6+ Kh8\n50. Bxf8 Qxe4\n51. Qf7 Qf4+ 52. g3 Qf2#\n53. Kh1 Qd1#",
+      "predicted_san": "e4",
+      "board_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    }
+  ],
+  "black_responses": [
+    {
+      "turn": 2,
+      "attempt": 1,
+      "raw_response": "1. e4 *\n\nWhite e4",
+      "predicted_san": "e4",
+      "board_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+    },
+    {
+      "turn": 2,
+      "attempt": 2,
+      "raw_response": "1. e4 *\n\nWhite e4",
+      "predicted_san": "e4",
+      "board_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+    },
+    {
+      "turn": 2,
+      "attempt": 3,
+      "raw_response": "1. e4 *\n\nWhite e4",
+      "predicted_san": "e4",
+      "board_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+    }
+  ],
+  "white_errors": [],
+  "black_errors": [
+    {
+      "turn": 2,
+      "attempt": 1,
+      "error_type": "exception",
+      "error_message": "object of type 'NoneType' has no len()"
+    },
+    {
+      "turn": 2,
+      "attempt": 2,
+      "error_type": "exception",
+      "error_message": "object of type 'NoneType' has no len()"
+    },
+    {
+      "turn": 2,
+      "attempt": 3,
+      "error_type": "exception",
+      "error_message": "object of type 'NoneType' has no len()"
+    }
+  ],
+  "timestamp": "2025-11-29T19:38:47.404745",
+  "game_id": "gpt-3.5-turbo-instruct_vs_deepseek-ai_deepseek-v3_1",
+  "opening": "standard"
+}

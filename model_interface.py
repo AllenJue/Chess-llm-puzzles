@@ -47,20 +47,41 @@ class ChessModelInterface:
             api_key (Optional[str]): OpenAI API key. If None, will try to get from environment.
             model_name (str): Model name to use
         """
+        # Determine if this is an OpenAI model or open-source model
+        normalized_name = (model_name or "").lower()
+        is_openai_model = "gpt" in normalized_name
+        
+        # Select appropriate API key and base URL
         if api_key is None:
-            api_key = (
-                os.getenv("ANANNAS_API_KEY")
-                or os.getenv("OPENAI_API_KEY")
-            )
-            if not api_key:
-                raise ValueError("OpenAI/Anannas API key not provided and not found in environment")
+            if is_openai_model:
+                # OpenAI models need OpenAI API key
+                api_key = os.getenv("OPENAI_API_KEY")
+                if not api_key:
+                    raise ValueError(
+                        f"OpenAI model '{model_name}' requires OPENAI_API_KEY. "
+                        f"Set OPENAI_API_KEY in your .env file or use an open-source model with ANANNAS_API_KEY."
+                    )
+            else:
+                # Open-source models use Anannas API key
+                api_key = os.getenv("ANANNAS_API_KEY")
+                if not api_key:
+                    raise ValueError(
+                        f"Open-source model '{model_name}' requires ANANNAS_API_KEY. "
+                        f"Set ANANNAS_API_KEY in your .env file or use an OpenAI model with OPENAI_API_KEY."
+                    )
 
         if base_url is None:
-            base_url = (
-                os.getenv("ANANNAS_API_URL")
-                or os.getenv("OPENAI_BASE_URL")
-                or os.getenv("OPENAI_API_BASE")
-            )
+            if is_openai_model:
+                # OpenAI models use OpenAI API
+                base_url = (
+                    os.getenv("OPENAI_BASE_URL")
+                    or os.getenv("OPENAI_API_BASE")
+                    # Default: None (uses OpenAI's default endpoint)
+                )
+            else:
+                # Open-source models use Anannas API
+                base_url = os.getenv("ANANNAS_API_URL", "https://api.anannas.ai/v1")
+                print(f"<debug> : Using Anannas API for open-source model '{model_name}'")
 
         client_kwargs = {"api_key": api_key}
         if base_url:
@@ -68,7 +89,12 @@ class ChessModelInterface:
         
         # Debug: print API setup
         if base_url and "anannas" in base_url.lower():
-            print(f"<debug> : Using Anannas API with base_url={base_url}")
+            print(f"<debug> : Using Anannas API for open-source model '{model_name}'")
+            print(f"<debug> : base_url={base_url}")
+            print(f"<debug> : API key present: {bool(api_key)}")
+        elif is_openai_model:
+            print(f"<debug> : Using OpenAI API for OpenAI model '{model_name}'")
+            print(f"<debug> : base_url={base_url or 'OpenAI default'}")
             print(f"<debug> : API key present: {bool(api_key)}")
 
         self.client = OpenAI(**client_kwargs)
@@ -490,61 +516,6 @@ class ChessModelInterface:
             "model": model_override or self.model_name,
             "finish_reason": finish_reason,
         }
-
-
-def query_model_for_move(system_prompt: str, user_prompt: str, api_key: str) -> Optional[str]:
-    """
-    Legacy function for backward compatibility.
-    Call OpenAI instruct model with system and user prompts and return predicted move SAN.
-
-    Args:
-        system_prompt (str): The system prompt guiding the model.
-        user_prompt (str): The user prompt with current game state.
-        api_key (str): OpenAI API key.
-
-    Returns:
-        Optional[str]: Predicted SAN move or None on failure.
-    """
-    interface = ChessModelInterface(api_key=api_key)
-    return interface.query_model_for_move(system_prompt, user_prompt)
-
-
-def query_model_for_gpt4_move(system_prompt: str, user_prompt: str, api_key: str) -> Optional[str]:
-    """
-    Legacy function for backward compatibility.
-    Call OpenAI GPT-4 model with system and user prompts and return predicted move SAN.
-
-    Args:
-        system_prompt (str): The system prompt guiding the model.
-        user_prompt (str): The user prompt with current game state.
-        api_key (str): OpenAI API key.
-
-    Returns:
-        Optional[str]: Predicted SAN move or None on failure.
-    """
-    interface = ChessModelInterface(api_key=api_key, model_name="gpt-4-turbo")
-    return interface.query_model_for_move(system_prompt, user_prompt)
-
-
-def process_puzzles_with_model(df, model_interface: ChessModelInterface, 
-                             max_puzzles: int = 5, api_delay: float = 0.1) -> None:
-    """
-    Process puzzles with rate limiting to avoid API limits.
-    
-    Args:
-        df: DataFrame with puzzle data
-        model_interface: ChessModelInterface instance
-        max_puzzles (int): Maximum number of puzzles to process
-        api_delay (float): Delay between API calls in seconds
-    """
-    for i, url in enumerate(df["GameUrl"].head(max_puzzles)):
-        try:
-            # Process puzzle here
-            print(f"Processing puzzle {i+1}/{max_puzzles}")
-            time.sleep(api_delay)
-        except Exception as e:
-            print(f"Error processing puzzle {i+1}: {e}")
-            continue
 
 
 if __name__ == "__main__":

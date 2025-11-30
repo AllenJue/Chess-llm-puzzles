@@ -1,0 +1,9 @@
+[Event "Model vs Model Tournament"]
+[Site "Chess Tournament Engine"]
+[Date "2025.11.29"]
+[Round "?"]
+[White "gpt-3.5-turbo-instruct"]
+[Black "Stockfish"]
+[Result "1-0"]
+
+1. e4 e6 2. d4 d5 3. Nc3 c6 4. Nf3 Be7 5. Bd3 Nd7 6. O-O a6 7. Re1 a5 8. exd5 cxd5 9. Bf4 Ngf6 10. Nb5 O-O 11. Bc7 Nc5 12. Bxd8 Nxd3 13. Qd2 Nxf2 14. Bxe7 N6e4 15. Rxe4 Nxe4 16. Qf4 Re8 17. Nc7 Bd7 18. Nxa8 Rxa8 19. Ne5 Kh8 20. Qxf7 Bb5 21. Bf8 g5 22. Qg7# 1-0

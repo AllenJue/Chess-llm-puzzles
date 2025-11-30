@@ -9,13 +9,22 @@ A Python project for evaluating chess puzzles using multiple LLM paradigms (sing
    pip install -r requirements.txt
    ```
 
-2. **Set up your OpenAI API key**:
-   ```bash
-   export OPENAI_API_KEY=<your key>
-   ```
-   Or create a `.env` file:
+2. **Set up your API key**:
+   Create a `.env` file in the `chess_puzzles` directory:
    ```env
-   OPENAI_API_KEY=<your key>
+   OPENAI_API_KEY=your-openai-key-here
+   # OR for open-source models:
+   ANANNAS_API_KEY=your-anannas-key-here
+   ANANNAS_API_URL=https://api.anannas.ai/v1
+   ```
+
+3. **Run minimal tests**:
+   ```bash
+   # Test 1 puzzle and 1 game
+   python test_minimal.py
+   
+   # Test minimal tournament
+   python chess_game_engine/test_minimal_tournament.py
    ```
 
 ## Usage
@@ -23,20 +32,20 @@ A Python project for evaluating chess puzzles using multiple LLM paradigms (sing
 ### Basic Commands
 
 ```bash
+# Quick test (1 puzzle, 1 game)
+python test_minimal.py
+
 # Show help
 python main.py --help
 
-# Show puzzle statistics
-python main.py --stats
+# Evaluate 1 puzzle (minimal test)
+python main.py --evaluate --max-puzzles 1
 
 # Evaluate 10 puzzles with GPT-3.5
 python main.py --evaluate --max-puzzles 10
 
 # Evaluate with GPT-4
 python main.py --evaluate --max-puzzles 5 --model gpt-4-turbo
-
-# Sample 100 puzzles and evaluate
-python main.py --sample 100 --evaluate --max-puzzles 50
 
 # Calculate Glicko-2 rating (after evaluation)
 python main.py --rating

@@ -93,6 +93,7 @@ class Player:
         self.model_name = model_name
         self.use_self_consistency = use_self_consistency
         self.use_debate = use_debate
+        self.plan_plies = plan_plies
         
         # Set Stockfish path - try to find it if not provided or if default doesn't work
         if player_type == PlayerType.STOCKFISH:
@@ -168,6 +169,10 @@ class Player:
         self.token_log: List[Dict[str, Any]] = []
         self.response_log: List[Dict[str, Any]] = []  # Track model responses
         self.error_log: List[Dict[str, Any]] = []  # Track errors
+        
+        # Planning state (matching puzzle implementation)
+        self.active_plan: Optional[Dict[str, Any]] = None  # Current active plan
+        self.plan_log: List[Dict[str, Any]] = []  # Log of all plan events
     
     def get_move(self, board: chess.Board, verbose: bool = False) -> Optional[str]:
         """
@@ -213,6 +218,148 @@ class Player:
         
         return None
     
+    def _attempt_planned_move(self, board: chess.Board, verbose: bool = False) -> Optional[str]:
+        """
+        Attempt to use a planned move if available (matching chess_game.py implementation exactly)
+        
+        Returns:
+            UCI move string if planned move is available and legal, None otherwise
+        """
+        if not self.active_plan:
+            return None
+        if not self.active_plan.get("remaining_san"):
+            self._discard_active_plan("no_remaining_moves")
+            return None
+
+        next_san = self.active_plan["remaining_san"][0]
+        try:
+            move = board.parse_san(next_san)
+        except ValueError:
+            # Not a legal move for the current side (likely waiting for opponent)
+            return None
+
+        if move not in board.legal_moves:
+            self._discard_active_plan(f"planned move {next_san} not legal")
+            return None
+
+        self.active_plan["remaining_san"].pop(0)
+        move_uci = move.uci()
+        self._log_plan_event(
+            self.active_plan.get("source", "unknown"),
+            "plan_move_used",
+            planned_san=next_san,
+            move_uci=move_uci
+        )
+
+        if not self.active_plan["remaining_san"]:
+            self._log_plan_event(
+                self.active_plan.get("source", "unknown"),
+                "plan_completed",
+                reason="plan fully executed"
+            )
+            self.active_plan = None
+
+        if verbose:
+            print(f"🤖 Using planned move without prompting: {board.san(move)} ({move_uci})")
+        
+        return move_uci
+    
+    def _set_active_plan(self, source: str, plan_full: List[str], plan_execute: List[str], *, turn: int, attempt: int, selected_san: Optional[str] = None) -> None:
+        """
+        Set an active plan (matching chess_game.py implementation exactly)
+        
+        Args:
+            source: Source of the plan (e.g., "single_model", "self_consistency", "aggressive", "positional", "neutral")
+            plan_full: Full plan extracted from response
+            plan_execute: List of SAN moves to execute (first N plies)
+            turn: Current turn number
+            attempt: Current attempt number
+            selected_san: Selected move in SAN notation
+        """
+        if self.active_plan and self.active_plan.get("source") == source:
+            self._log_plan_event(source, "plan_replaced", turn=turn, attempt=attempt)
+            self.active_plan = None
+
+        self._log_plan_event(
+            source,
+            "plan_generated",
+            turn=turn,
+            attempt=attempt,
+            plan_full=plan_full,
+            plan_execute=plan_execute,
+            selected_move=selected_san
+        )
+
+        if not plan_execute:
+            return
+
+        self.active_plan = {
+            "source": source,
+            "remaining_san": list(plan_execute),
+            "plan_full": list(plan_full) if plan_full else list(plan_execute),
+            "turn": turn,
+            "attempt": attempt,
+            "selected_move": selected_san
+        }
+    
+    def _discard_active_plan(self, reason: str) -> None:
+        """
+        Discard/clear the active plan (matching chess_game.py implementation exactly)
+        
+        Args:
+            reason: Reason for discarding (e.g., "replaced", "aborted", "completed")
+        """
+        if self.active_plan:
+            source = self.active_plan.get("source", "unknown")
+            self._log_plan_event(source, "plan_discarded", reason=reason)
+        
+        self.active_plan = None
+    
+    def _handle_opponent_plan(self, move_san: str, verbose: bool = False) -> None:
+        """
+        Handle opponent move - check if it matches the plan (matching chess_game.py implementation exactly)
+        
+        Args:
+            move_san: Opponent's move in SAN notation
+            verbose: Whether to print debug information
+        """
+        if not self.active_plan:
+            return
+        if not self.active_plan.get("remaining_san"):
+            self._discard_active_plan("no_remaining_moves_for_opponent")
+            return
+
+        expected_san = self.active_plan["remaining_san"][0]
+        source = self.active_plan.get("source", "unknown")
+        if move_san == expected_san:
+            self.active_plan["remaining_san"].pop(0)
+            self._log_plan_event(source, "plan_opponent_matched", move_san=move_san)
+            if not self.active_plan["remaining_san"]:
+                self._log_plan_event(source, "plan_completed", reason="opponent finished plan")
+                self.active_plan = None
+        else:
+            self._log_plan_event(source, "plan_aborted", expected_san=expected_san, actual_san=move_san)
+            if verbose:
+                print(f"<planning> : Opponent move {move_san} diverged from plan {expected_san}, clearing plan.")
+            self.active_plan = None
+    
+    def _log_plan_event(self, source: str, event: str, **data) -> None:
+        """
+        Log a plan event for tracking (matching chess_game.py implementation exactly)
+        
+        Args:
+            source: Source of the plan (e.g., "single_model", "self_consistency")
+            event: Type of event (e.g., "plan_generated", "plan_move_used", "plan_discarded")
+            **data: Additional event data
+        """
+        entry = {
+            "event": event,
+            "source": source,
+            **data
+        }
+        print(f"<planning> : {entry}")
+        self.plan_log.append(entry)
+    
     def _get_stockfish_move(self, board: chess.Board, verbose: bool = False) -> Optional[str]:
         """Get move from Stockfish"""
         try:
@@ -236,6 +383,12 @@ class Player:
     
     def _get_llm_move(self, board: chess.Board, verbose: bool = False) -> Optional[str]:
         """Get move from LLM with retry logic"""
+        # Try to use planned move first (matching puzzle implementation)
+        if self.plan_plies > 0:
+            planned_move = self._attempt_planned_move(board, verbose=verbose)
+            if planned_move:
+                return planned_move
+        
         exporter = chess.pgn.StringExporter(headers=False, variations=False, comments=False)
         current_game = chess.pgn.Game.from_board(board)
         user_prompt = current_game.accept(exporter)
@@ -301,6 +454,30 @@ class Player:
                         board_fen=board.fen(),
                         board=board
                     )
+                    
+                    # Extract and set plan from self-consistency (matching chess_game.py implementation exactly)
+                    if predicted_uci:
+                        move = chess.Move.from_uci(predicted_uci)
+                        if move in board.legal_moves:
+                            plan_info = debate_history.get("final_plan", {}) if isinstance(debate_history, dict) else {}
+                            plan_execute = plan_info.get("moves_for_execution") or []
+                            if self.plan_plies > 0:
+                                plan_execute = plan_execute[:self.plan_plies]
+                            plan_full = plan_info.get("full_moves") or list(plan_execute)
+                            if self.plan_plies > 0:
+                                print(f"<self-consistency> : plan (full): {plan_full}")
+                                print(f"<self-consistency> : plan (first {self.plan_plies} plies): {plan_execute}")
+                            
+                            move_san = board.san(move)
+                            if plan_execute:
+                                self._set_active_plan(
+                                    "self_consistency",
+                                    plan_full,
+                                    plan_execute,
+                                    turn=len(board.move_stack) + 1,
+                                    attempt=attempt + 1,
+                                    selected_san=move_san
+                                )
                     
                     # Save full debate history (individual agent responses, plans, tokens)
                     if debate_history:
@@ -368,12 +545,22 @@ class Player:
                         retry_attempts=self.model_interface.retry_attempts,
                     )
                     
-                    # Extract planning information if plan_plies > 0
-                    plan_full = []
-                    plan_execute = []
-                    if self.plan_plies > 0 and raw_response and predicted_san:
-                        plan_full = extract_plan_sans(raw_response, primary_san=predicted_san)
-                        plan_execute = plan_full[:self.plan_plies] if plan_full else []
+                    # Extract planning information if plan_plies > 0 (matching chess_game.py implementation exactly)
+                    plan_full = extract_plan_sans(raw_response, primary_san=predicted_san)
+                    plan_execute = plan_full[:self.plan_plies] if self.plan_plies > 0 else []
+                    if self.plan_plies > 0:
+                        print(f"<single-model> : plan (full): {plan_full}")
+                        print(f"<single-model> : plan (first {self.plan_plies} plies): {plan_execute}")
+                        # Set active plan for future moves (matching chess_game.py signature)
+                        if plan_execute and predicted_san:
+                            self._set_active_plan(
+                                "single_model",
+                                plan_full,
+                                plan_execute,
+                                turn=len(board.move_stack) + 1,
+                                attempt=attempt + 1,
+                                selected_san=predicted_san
+                            )
                     
                     # Track response with planning information
                     response_entry = {
@@ -522,6 +709,24 @@ class ModelVsModelGame:
                     break
                 
                 move_san = self.board.san(move)
+                
+                # Check if this was a planned move by checking if active_plan had remaining moves
+                # and if the move matches what was expected (matching chess_game.py)
+                was_planned = False
+                plan_source = None
+                if current_player.active_plan and current_player.active_plan.get("remaining_san"):
+                    # Check if this move matches the first planned move
+                    planned_san = current_player.active_plan["remaining_san"][0] if current_player.active_plan["remaining_san"] else None
+                    if planned_san and move_san == planned_san:
+                        was_planned = True
+                        plan_source = current_player.active_plan.get("source", "unknown")
+                
+                # Handle opponent planning BEFORE pushing move (matching chess_game.py)
+                # The opponent's plan expects the move we're about to make
+                opponent_player = self.black_player if is_white_turn else self.white_player
+                if not is_white_turn:  # Black just moved, so white (opponent) should check their plan
+                    opponent_player._handle_opponent_plan(move_san, verbose=self.verbose)
+                
                 self.board.push(move)
                 self.moves.append(move_uci)
                 
@@ -534,10 +739,19 @@ class ModelVsModelGame:
                     "move_san": move_san,
                     "fen_after": self.board.fen(),
                 }
+                
+                # Track if move was from plan (matching chess_game.py)
+                if was_planned and current_player.plan_plies > 0:
+                    move_info["from_plan"] = True
+                    move_info["plan_source"] = plan_source
+                
                 self.game_history.append(move_info)
                 
                 if self.verbose:
-                    print(f"✅ {current_player.name} plays: {move_san} ({move_uci})")
+                    if was_planned and current_player.plan_plies > 0:
+                        print(f"✅ {current_player.name} plays: {move_san} ({move_uci}) [from plan]")
+                    else:
+                        print(f"✅ {current_player.name} plays: {move_san} ({move_uci})")
                 
                 # Check game end conditions
                 if self.board.is_checkmate():
@@ -634,6 +848,10 @@ class ModelVsModelGame:
         white_errors = self.white_player.error_log if hasattr(self.white_player, 'error_log') else []
         black_errors = self.black_player.error_log if hasattr(self.black_player, 'error_log') else []
         
+        # Collect plan logs (matching puzzle implementation)
+        white_plan_log = self.white_player.plan_log if hasattr(self.white_player, 'plan_log') else []
+        black_plan_log = self.black_player.plan_log if hasattr(self.black_player, 'plan_log') else []
+        
         return {
             "result": result,
             "white_player": self.white_player.name,
@@ -652,6 +870,8 @@ class ModelVsModelGame:
             "black_responses": black_responses,  # Model responses/outputs
             "white_errors": white_errors,  # Error log
             "black_errors": black_errors,  # Error log
+            "white_plan_log": white_plan_log,  # Planning events and metadata
+            "black_plan_log": black_plan_log,  # Planning events and metadata
             "timestamp": datetime.now().isoformat(),
         }
     

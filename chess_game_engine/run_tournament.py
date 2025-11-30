@@ -268,7 +268,7 @@ Examples:
         
         from model_vs_model_game import ModelVsModelGame
         
-        # Helper to create player from name (handles Stockfish)
+        # Helper to create player from name (handles Stockfish and GPT configs)
         def create_player_from_name(name: str) -> Player:
             if name.lower() == "stockfish":
                 return Player(
@@ -276,12 +276,35 @@ Examples:
                     player_type=PlayerType.STOCKFISH,
                     stockfish_path=args.stockfish_path,
                     stockfish_skill=args.stockfish_skill,
+                    plan_plies=args.plan_plies,  # Pass plan_plies for consistency
                 )
             else:
+                # Parse configuration from name (e.g., "gpt-3.5-turbo-instruct_SC_plan3")
+                # Extract base model name and config
+                base_name = name
+                use_sc = args.use_self_consistency
+                plan_plies = args.plan_plies
+                
+                # Check for configuration suffixes in name
+                if "_SC_plan3" in name:
+                    base_name = name.replace("_SC_plan3", "")
+                    use_sc = True
+                    plan_plies = 3
+                elif "_plan3" in name:
+                    base_name = name.replace("_plan3", "")
+                    use_sc = False
+                    plan_plies = 3
+                elif "_SC" in name:
+                    base_name = name.replace("_SC", "")
+                    use_sc = True
+                    plan_plies = 0
+                
                 return Player(
-                    name=name,
+                    name=name,  # Keep full name for identification
                     player_type=PlayerType.LLM,
-                    model_name=name,
+                    model_name=base_name,  # Use base model name for API
+                    use_self_consistency=use_sc,
+                    plan_plies=plan_plies,
                     api_key=api_key,
                     base_url=base_url,
                 )
@@ -295,11 +318,66 @@ Examples:
         output_dir = args.output_dir
         os.makedirs(output_dir, exist_ok=True)
         
+        # Determine configuration suffix for game ID
+        config_parts = []
+        if args.use_self_consistency:
+            config_parts.append("SC")
+        if args.plan_plies and args.plan_plies > 0:
+            config_parts.append(f"plan{args.plan_plies}")
+        config_suffix = "_".join(config_parts) if config_parts else "single"
+        
+        # Sanitize names for file paths
+        white_safe = player1.name.replace('/', '_').replace('\\', '_')
+        black_safe = player2.name.replace('/', '_').replace('\\', '_')
+        
+        # Find the highest existing game number to avoid overwriting
+        # Check both orderings and with/without config suffix
+        base_pattern1 = f"{white_safe}_vs_{black_safe}_"
+        base_pattern2 = f"{black_safe}_vs_{white_safe}_"
+        max_game_num = 0
+        
+        if os.path.exists(output_dir):
+            for filename in os.listdir(output_dir):
+                if filename.endswith('.json'):
+                    # Check if this file matches our configuration
+                    # Pattern: {white}_vs_{black}_{config}_{num}.json or {white}_vs_{black}_{num}.json
+                    for base_pattern in [base_pattern1, base_pattern2]:
+                        if filename.startswith(base_pattern):
+                            # Try to extract number - could be after config suffix or directly
+                            remaining = filename[len(base_pattern):-5]  # Remove .json
+                            
+                            # Check if it has config suffix
+                            if config_suffix and remaining.startswith(config_suffix + "_"):
+                                try:
+                                    num = int(remaining[len(config_suffix) + 1:])
+                                    max_game_num = max(max_game_num, num)
+                                except ValueError:
+                                    pass
+                            elif config_suffix == "single" and "_" in remaining:
+                                # Old format without config - skip for new configs
+                                pass
+                            else:
+                                # No config suffix (old format) - only count if we're also single
+                                if config_suffix == "single":
+                                    try:
+                                        num = int(remaining)
+                                        max_game_num = max(max_game_num, num)
+                                    except ValueError:
+                                        pass
+        
+        # Start from the next available number
+        start_game_num = max_game_num + 1
+        
         for game_num in range(args.games_per_matchup):
             white_player = player1 if game_num % 2 == 0 else player2
             black_player = player2 if game_num % 2 == 0 else player1
             
-            print(f"\n--- Game {game_num + 1}/{args.games_per_matchup} ---")
+            # Use the actual player names for the game_id (not the sanitized base)
+            white_safe_current = white_player.name.replace('/', '_').replace('\\', '_')
+            black_safe_current = black_player.name.replace('/', '_').replace('\\', '_')
+            current_game_num = start_game_num + game_num
+            
+            print(f"\n--- Game {game_num + 1}/{args.games_per_matchup} (Game ID: {current_game_num}, Config: {config_suffix}) ---")
             game = ModelVsModelGame(
                 white_player=white_player,
                 black_player=black_player,
@@ -308,11 +386,13 @@ Examples:
             
             result = game.play_game()
             
-            # Save game (sanitize names for file paths)
-            white_safe = white_player.name.replace('/', '_').replace('\\', '_')
-            black_safe = black_player.name.replace('/', '_').replace('\\', '_')
-            game_id = f"{white_safe}_vs_{black_safe}_{game_num + 1}"
+            # Save game with unique game number and configuration
+            if config_suffix != "single":
+                game_id = f"{white_safe_current}_vs_{black_safe_current}_{config_suffix}_{current_game_num}"
+            else:
+                game_id = f"{white_safe_current}_vs_{black_safe_current}_{current_game_num}"
             result['game_id'] = game_id
+            result['configuration'] = config_suffix  # Store config in result
             
             json_file = os.path.join(output_dir, f"{game_id}.json")
             with open(json_file, 'w') as f:

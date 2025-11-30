@@ -61,19 +61,51 @@ def reconstruct_ratings_from_directory(tournament_dir: str) -> Tuple[BradleyTerr
             white_score = game_data.get('white_score', 0.0)
             black_score = game_data.get('black_score', 0.0)
             game_id = game_data.get('game_id', os.path.basename(game_file).replace('.json', ''))
+            configuration = game_data.get('configuration', 'single')  # Default to 'single' for old games
+            
+            # Extract configuration from filename if not in JSON (for backward compatibility)
+            if configuration == 'single':
+                filename = os.path.basename(game_file)
+                # Check for longer patterns first (SC_plan3 contains both SC and plan3)
+                if '_SC_plan3_' in filename:
+                    configuration = 'SC_plan3'
+                elif '_SC_plan3_' in game_id:
+                    configuration = 'SC_plan3'
+                elif '_plan3_' in filename:
+                    configuration = 'plan3'
+                elif '_plan3_' in game_id:
+                    configuration = 'plan3'
+                elif '_SC_' in filename:
+                    configuration = 'SC'
+                elif '_SC_' in game_id:
+                    configuration = 'SC'
+            
+            # Add configuration suffix to player names for GPT-3.5
+            def add_config_to_player(player_name: str, config: str) -> str:
+                """Add configuration suffix to GPT-3.5 player name"""
+                if player_name == 'gpt-3.5-turbo-instruct':
+                    if config == 'single':
+                        return player_name  # Keep as-is for single model
+                    else:
+                        return f"{player_name}_{config}"
+                return player_name
+            
+            white_player_with_config = add_config_to_player(white_player, configuration)
+            black_player_with_config = add_config_to_player(black_player, configuration)
             
             if white_player and black_player:
                 # Add to games list for Bradley-Terry
                 # Format: (player1, player2, score1, score2)
-                games.append((white_player, black_player, white_score, black_score))
+                games.append((white_player_with_config, black_player_with_config, white_score, black_score))
                 
-                # Record game history
+                # Record game history (with configuration-aware player names)
                 game_history.append({
                     "game_id": game_id,
-                    "white_player": white_player,
-                    "black_player": black_player,
+                    "white_player": white_player_with_config,
+                    "black_player": black_player_with_config,
                     "white_score": white_score,
                     "black_score": black_score,
+                    "configuration": configuration,  # Store original config for reference
                 })
                 print(f"✓ Processed: {game_id}")
             else:

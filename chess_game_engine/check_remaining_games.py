@@ -16,8 +16,28 @@ def check_remaining_games(tournament_dir: str):
         print(f"Error: {tournament_dir} is not a directory")
         sys.exit(1)
     
-    all_files = os.listdir(tournament_dir)
-    json_files = [f for f in all_files if f.endswith('.json') and f not in ['ratings.json', 'tournament_summary.json']]
+    # Check if organized directory exists, use it if available
+    organized_dir = os.path.join(tournament_dir, "organized")
+    json_files = []
+    
+    if os.path.isdir(organized_dir):
+        # Collect all JSON files from organized subdirectories
+        for root, dirs, files in os.walk(organized_dir):
+            for f in files:
+                if f.endswith('.json'):
+                    json_files.append(os.path.join(root, f))
+    
+    # Also check original directory for any games not yet organized (for robustness)
+    # This helps catch games that were created after organization
+    original_files = [f for f in os.listdir(tournament_dir) 
+                     if f.endswith('.json') and f not in ['ratings.json', 'tournament_summary.json']]
+    for f in original_files:
+        filepath = os.path.join(tournament_dir, f)
+        # Only add if not already in organized (check by filename)
+        filename = os.path.basename(f)
+        already_organized = any(os.path.basename(jf) == filename for jf in json_files)
+        if not already_organized:
+            json_files.append(filepath)
     
     expected_opponents = [
         'Stockfish',
@@ -30,44 +50,84 @@ def check_remaining_games(tournament_dir: str):
     # Count GPT vs Other Models
     actual_games = defaultdict(int)
     
-    for filename in json_files:
+    for filepath in json_files:
+        filename = os.path.basename(filepath)
         if 'gpt-3.5-turbo-instruct' not in filename:
             continue
         
-        # Skip GPT vs GPT games for this count
-        has_other_opponent = any(
-            opp.replace('/', '_') in filename or opp in filename 
-            for opp in expected_opponents
-        )
-        if not has_other_opponent:
-            continue
-        
-        # Extract config
-        config = 'single'
-        if '_SC_plan3_' in filename:
-            config = 'SC_plan3'
-        elif '_plan3_' in filename and '_SC_' not in filename:
-            config = 'plan3'
-        elif '_SC_' in filename and '_plan3_' not in filename:
-            config = 'SC'
-        
-        # Extract opponent
-        for opp in expected_opponents:
-            opp_safe = opp.replace('/', '_')
-            if opp_safe in filename or opp in filename:
-                key = f'{config}_vs_{opp}'
-                actual_games[key] += 1
-                break
+        try:
+            with open(filepath, 'r') as f:
+                data = json.load(f)
+            
+            white_player = data.get('white_player', '')
+            black_player = data.get('black_player', '')
+            
+            # Skip GPT vs GPT games for this count
+            both_gpt = (white_player and white_player.startswith('gpt-3.5-turbo-instruct') and
+                       black_player and black_player.startswith('gpt-3.5-turbo-instruct'))
+            if both_gpt:
+                continue
+            
+            # Extract config from player name, JSON configuration field, or filename
+            def get_config(player_name: str, json_config: str, filename: str) -> str:
+                # First check if player name has config suffix (for GPT vs GPT games)
+                if player_name == 'gpt-3.5-turbo-instruct_SC_plan3':
+                    return 'SC_plan3'
+                elif player_name == 'gpt-3.5-turbo-instruct_plan3':
+                    return 'plan3'
+                elif player_name == 'gpt-3.5-turbo-instruct_SC':
+                    return 'SC'
+                elif player_name == 'gpt-3.5-turbo-instruct':
+                    # For base name, check JSON configuration field or filename
+                    if json_config and json_config != 'single':
+                        return json_config
+                    # Check filename for config suffix
+                    if '_SC_plan3' in filename:
+                        return 'SC_plan3'
+                    elif '_plan3' in filename and '_SC_' not in filename:
+                        return 'plan3'
+                    elif '_SC' in filename and '_plan3' not in filename:
+                        return 'SC'
+                    return 'single'
+                return 'single'
+            
+            # Get configuration from JSON if available
+            json_config = data.get('configuration', 'single')
+            
+            # Determine which player is GPT-3.5
+            if white_player.startswith('gpt-3.5-turbo-instruct'):
+                config = get_config(white_player, json_config, filename)
+                opponent = black_player
+            elif black_player.startswith('gpt-3.5-turbo-instruct'):
+                config = get_config(black_player, json_config, filename)
+                opponent = white_player
+            else:
+                continue
+            
+            # Match opponent to expected list
+            for opp in expected_opponents:
+                if opponent == opp or opponent.replace('/', '_') == opp.replace('/', '_'):
+                    key = f'{config}_vs_{opp}'
+                    actual_games[key] += 1
+                    break
+        except Exception as e:
+            # Skip files that can't be read
+            pass
     
     # Count GPT vs GPT games by matchup (read JSON to get actual player names)
     # Note: Keys are sorted tuples, so ('single', 'SC') and ('SC', 'single') both become ('SC', 'single')
+    # When sorting alphabetically: 'SC' < 'plan3' < 'SC_plan3' < 'single'
+    # So sorted(['SC', 'plan3']) = ['SC', 'plan3']
+    # And sorted(['plan3', 'SC_plan3']) = ['plan3', 'SC_plan3'] (because 'p' < 'S' is False, so 'plan3' < 'SC_plan3' is False)
+    # Wait, let me check: 'S' (83) < 'p' (112), so 'SC_plan3' < 'plan3' is True
+    # So sorted(['plan3', 'SC_plan3']) = ['SC_plan3', 'plan3']
     gpt_vs_gpt_matchups = {
-        ('SC', 'single'): 0,  # Fixed: sorted order
-        ('plan3', 'single'): 0,
-        ('SC_plan3', 'single'): 0,
-        ('plan3', 'SC'): 0,
-        ('SC_plan3', 'SC'): 0,
-        ('plan3', 'SC_plan3'): 0,
+        ('SC', 'single'): 0,  # sorted(['SC', 'single']) = ['SC', 'single']
+        ('plan3', 'single'): 0,  # sorted(['plan3', 'single']) = ['plan3', 'single']
+        ('SC_plan3', 'single'): 0,  # sorted(['SC_plan3', 'single']) = ['SC_plan3', 'single']
+        ('SC', 'plan3'): 0,  # sorted(['SC', 'plan3']) = ['SC', 'plan3']
+        ('SC', 'SC_plan3'): 0,  # sorted(['SC', 'SC_plan3']) = ['SC', 'SC_plan3']
+        ('SC_plan3', 'plan3'): 0,  # sorted(['plan3', 'SC_plan3']) = ['SC_plan3', 'plan3'] (S < p)
     }
     
     def extract_config_from_player_name(player_name: str) -> str:
@@ -83,12 +143,13 @@ def check_remaining_games(tournament_dir: str):
         else:
             return 'single'  # Default fallback
     
-    for filename in json_files:
+    for filepath in json_files:
+        filename = os.path.basename(filepath)
         if 'gpt-3.5-turbo-instruct' not in filename:
             continue
         
         try:
-            with open(os.path.join(tournament_dir, filename), 'r') as f:
+            with open(filepath, 'r') as f:
                 data = json.load(f)
             
             white = data.get('white_player', '')
@@ -153,9 +214,9 @@ def check_remaining_games(tournament_dir: str):
         (('SC', 'single'), 'single', 'SC'),
         (('plan3', 'single'), 'single', 'plan3'),
         (('SC_plan3', 'single'), 'single', 'SC_plan3'),
-        (('plan3', 'SC'), 'SC', 'plan3'),
-        (('SC_plan3', 'SC'), 'SC', 'SC_plan3'),
-        (('plan3', 'SC_plan3'), 'plan3', 'SC_plan3'),
+        (('SC', 'plan3'), 'SC', 'plan3'),
+        (('SC', 'SC_plan3'), 'SC', 'SC_plan3'),
+        (('SC_plan3', 'plan3'), 'plan3', 'SC_plan3'),  # Note: key is ('SC_plan3', 'plan3') but display as plan3 vs SC_plan3
     ]
     for key, display1, display2 in display_order:
         count = gpt_vs_gpt_matchups.get(key, 0)
@@ -201,7 +262,15 @@ def check_remaining_games(tournament_dir: str):
         print()
         print("Missing Games Summary - GPT vs GPT:")
         print("-" * 90)
-        for config1, config2, missing in sorted(gpt_vs_gpt_missing_list):
+        # Sort for display (single first, then alphabetical)
+        display_missing = []
+        for config1, config2, missing in gpt_vs_gpt_missing_list:
+            # Convert key to display format
+            if config1 == 'SC_plan3' and config2 == 'plan3':
+                display_missing.append(('plan3', 'SC_plan3', missing))
+            else:
+                display_missing.append((config1, config2, missing))
+        for config1, config2, missing in sorted(display_missing):
             print(f"  {config1:12} vs {config2:12} missing {missing:2} games")
     
     return grand_total_missing

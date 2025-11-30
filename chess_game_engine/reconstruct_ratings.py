@@ -31,14 +31,24 @@ def reconstruct_ratings_from_directory(tournament_dir: str) -> Tuple[BradleyTerr
     Reconstruct ratings from all game JSON files in a tournament directory using Bradley-Terry model
     
     Args:
-        tournament_dir: Directory containing game JSON files
+        tournament_dir: Directory containing game JSON files (or organized subdirectory)
         
     Returns:
         Tuple of (BradleyTerry model, game_history)
     """
-    # Find all JSON files (excluding ratings.json and tournament_summary.json)
-    json_files = glob.glob(os.path.join(tournament_dir, "*.json"))
-    game_files = [f for f in json_files if not os.path.basename(f) in ['ratings.json', 'tournament_summary.json']]
+    # Check if organized directory exists, use it if available
+    organized_dir = os.path.join(tournament_dir, "organized")
+    if os.path.isdir(organized_dir):
+        # Collect all JSON files from organized subdirectories
+        game_files = []
+        for root, dirs, files in os.walk(organized_dir):
+            for f in files:
+                if f.endswith('.json'):
+                    game_files.append(os.path.join(root, f))
+    else:
+        # Fall back to original directory structure
+        json_files = glob.glob(os.path.join(tournament_dir, "*.json"))
+        game_files = [f for f in json_files if not os.path.basename(f) in ['ratings.json', 'tournament_summary.json']]
     
     # Sort by filename to ensure consistent ordering
     game_files.sort()
@@ -63,35 +73,45 @@ def reconstruct_ratings_from_directory(tournament_dir: str) -> Tuple[BradleyTerr
             game_id = game_data.get('game_id', os.path.basename(game_file).replace('.json', ''))
             configuration = game_data.get('configuration', 'single')  # Default to 'single' for old games
             
-            # Extract configuration from filename if not in JSON (for backward compatibility)
-            if configuration == 'single':
-                filename = os.path.basename(game_file)
-                # Check for longer patterns first (SC_plan3 contains both SC and plan3)
-                if '_SC_plan3_' in filename:
-                    configuration = 'SC_plan3'
-                elif '_SC_plan3_' in game_id:
-                    configuration = 'SC_plan3'
-                elif '_plan3_' in filename:
-                    configuration = 'plan3'
-                elif '_plan3_' in game_id:
-                    configuration = 'plan3'
-                elif '_SC_' in filename:
-                    configuration = 'SC'
-                elif '_SC_' in game_id:
-                    configuration = 'SC'
+            # Check if both players are GPT-3.5 (GPT vs GPT game)
+            both_gpt = (white_player and white_player.startswith('gpt-3.5-turbo-instruct') and
+                       black_player and black_player.startswith('gpt-3.5-turbo-instruct'))
             
-            # Add configuration suffix to player names for GPT-3.5
-            def add_config_to_player(player_name: str, config: str) -> str:
-                """Add configuration suffix to GPT-3.5 player name"""
-                if player_name == 'gpt-3.5-turbo-instruct':
-                    if config == 'single':
-                        return player_name  # Keep as-is for single model
-                    else:
-                        return f"{player_name}_{config}"
-                return player_name
-            
-            white_player_with_config = add_config_to_player(white_player, configuration)
-            black_player_with_config = add_config_to_player(black_player, configuration)
+            if both_gpt:
+                # For GPT vs GPT games, player names already have configuration suffixes
+                # Use them directly (e.g., 'gpt-3.5-turbo-instruct_SC' vs 'gpt-3.5-turbo-instruct_plan3')
+                white_player_with_config = white_player
+                black_player_with_config = black_player
+            else:
+                # For GPT vs Other games, extract configuration from filename/game_id if not in JSON
+                if configuration == 'single':
+                    filename = os.path.basename(game_file)
+                    # Check for longer patterns first (SC_plan3 contains both SC and plan3)
+                    if '_SC_plan3_' in filename:
+                        configuration = 'SC_plan3'
+                    elif '_SC_plan3_' in game_id:
+                        configuration = 'SC_plan3'
+                    elif '_plan3_' in filename:
+                        configuration = 'plan3'
+                    elif '_plan3_' in game_id:
+                        configuration = 'plan3'
+                    elif '_SC_' in filename:
+                        configuration = 'SC'
+                    elif '_SC_' in game_id:
+                        configuration = 'SC'
+                
+                # Add configuration suffix to GPT-3.5 player name (if it's the base name)
+                def add_config_to_player(player_name: str, config: str) -> str:
+                    """Add configuration suffix to GPT-3.5 player name"""
+                    if player_name == 'gpt-3.5-turbo-instruct':
+                        if config == 'single':
+                            return player_name  # Keep as-is for single model
+                        else:
+                            return f"{player_name}_{config}"
+                    return player_name  # Already has suffix or not GPT-3.5
+                
+                white_player_with_config = add_config_to_player(white_player, configuration)
+                black_player_with_config = add_config_to_player(black_player, configuration)
             
             if white_player and black_player:
                 # Add to games list for Bradley-Terry

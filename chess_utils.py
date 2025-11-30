@@ -294,14 +294,8 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
         print(f"<debug> :   found labelled prediction: {repr(result)}")
         return result
 
-    # --- 2) SAN followed by a result token (likely a final predicted move) ---
-    san_with_result = re.search(r'(' + SAN_SUB_PATTERN + r')\s+(?:0-1|1-0|1/2-1/2)\b', text, flags=re.I)
-    if san_with_result:
-        result = san_with_result.group(1).strip()
-        print(f"<debug> :   found SAN with result: {repr(result)}")
-        return result
-
     # --- 2a) Sequential parsing with move numbers to determine exact ply ---
+    # This should happen BEFORE rule #2 to avoid matching moves from hallucinated game endings
     sequential_pattern = re.compile(r'(\d+\.\.\.)|(\d+\.)|(' + SAN_SUB_PATTERN + r')', flags=re.I)
     sequential_moves: list[tuple[str, Optional[int], Optional[bool]]] = []
     current_marker: Optional[int] = None
@@ -335,6 +329,11 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
             if marker == desired_turn and side is not None and side == desired_side:
                 print(f"<debug> :   sequential match for turn {desired_turn} ({'white' if desired_side else 'black'}): {san_token}")
                 return san_token
+
+    # --- 2) SAN followed by a result token (likely a final predicted move) ---
+    # Only match if sequential parsing didn't find a match for the current turn
+    # This prevents matching moves from hallucinated game endings when we have proper move numbering
+    # We'll check this after rule 3 (explicit numbered moves) to be safe
 
     # --- 2b) Handle trailing non-numbered lines (models often append future moves without move numbers) ---
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
@@ -415,6 +414,16 @@ def extract_predicted_move(response_text: str, current_turn_number: Optional[int
                 return valid[0][0]
             else:
                 return valid[-1][0]
+
+    # --- 2) SAN followed by a result token (fallback - only if other rules didn't match) ---
+    # This is a fallback for when models don't use proper move numbering
+    # Only use if we have a turn number and sequential parsing didn't find a match
+    if current_turn_number is None or not sequential_moves:
+        san_with_result = re.search(r'(' + SAN_SUB_PATTERN + r')\s+(?:0-1|1-0|1/2-1/2)\b', text, flags=re.I)
+        if san_with_result:
+            result = san_with_result.group(1).strip()
+            print(f"<debug> :   found SAN with result (fallback): {repr(result)}")
+            return result
 
     # --- 5) ellipsis-based explicit black moves anywhere in text ---
     black_pattern = re.compile(r'\b\d+\.\.\.\s*(' + SAN_SUB_PATTERN + r')', flags=re.I)

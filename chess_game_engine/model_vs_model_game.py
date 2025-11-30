@@ -62,6 +62,7 @@ class Player:
         model_name: Optional[str] = None,
         use_self_consistency: bool = False,
         use_debate: bool = False,
+        plan_plies: int = 0,
         stockfish_path: Optional[str] = None,
         stockfish_time: float = 1.0,
         stockfish_skill: int = 5,
@@ -92,7 +93,34 @@ class Player:
         self.model_name = model_name
         self.use_self_consistency = use_self_consistency
         self.use_debate = use_debate
-        self.stockfish_path = stockfish_path or 'stockfish'
+        
+        # Set Stockfish path - try to find it if not provided or if default doesn't work
+        if player_type == PlayerType.STOCKFISH:
+            if stockfish_path and stockfish_path != 'stockfish' and os.path.exists(stockfish_path):
+                self.stockfish_path = stockfish_path
+            else:
+                # Try to find Stockfish in PATH or common locations
+                import shutil
+                possible_paths = [
+                    shutil.which('stockfish'),
+                    shutil.which('Stockfish'),
+                    '/usr/local/bin/stockfish',
+                    '/opt/homebrew/bin/stockfish',
+                    '/usr/bin/stockfish',
+                ]
+                found_path = None
+                for path in possible_paths:
+                    if path and os.path.exists(path):
+                        found_path = path
+                        break
+                
+                if found_path:
+                    self.stockfish_path = found_path
+                else:
+                    self.stockfish_path = stockfish_path or 'stockfish'
+        else:
+            self.stockfish_path = stockfish_path or 'stockfish'
+        
         self.stockfish_time = stockfish_time
         self.stockfish_skill = stockfish_skill
         self.stockfish_depth = stockfish_depth
@@ -123,7 +151,7 @@ class Player:
                     base_url=base_url,
                     max_rounds=2,
                     sleep_time=0.1,
-                    plan_plies=0
+                    plan_plies=plan_plies
                 )
             elif use_debate:
                 self.debate_v2 = ChessDebateV2(
@@ -133,7 +161,7 @@ class Player:
                     base_url=base_url,
                     max_rounds=3,
                     sleep_time=0.1,
-                    plan_plies=0
+                    plan_plies=plan_plies
                 )
         
         # Token tracking and response tracking
@@ -212,15 +240,53 @@ class Player:
         current_game = chess.pgn.Game.from_board(board)
         user_prompt = current_game.accept(exporter)
         
-        system_prompt = (
-            "You are a chess grandmaster.\n"
-            "You will be given a partially completed game.\n"
-            "After seeing it, you should repeat the ENTIRE GAME and then give the next THREE moves.\n"
-            "After repeating the game, immediately continue by listing those moves in order on a single line, separated by spaces, starting with the side to move now.\n"
-            "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
-            "ALWAYS repeat the entire representation of the game so far.\n"
-            "NEVER explain your choice.\n"
-        )
+        # Check if this is the starting position (empty game) or first move
+        is_starting_position = len(board.move_stack) == 0 or user_prompt.strip() in ['*', '']
+        is_first_move = len(board.move_stack) <= 1
+        
+        # Check if this is a confused model that needs special handling
+        # GPT-3.5 works fine with the original prompt, so keep it unchanged
+        confused_models = [
+            'meta-llama/llama-3.3-70b-instruct',
+            'mistralai/mistral-small-24b-instruct-2501',
+            'deepseek-ai/deepseek-v3',
+        ]
+        is_confused_model = self.model_name in confused_models if self.model_name else False
+        
+        # Adjust prompt for starting position vs in-progress game
+        # Only use simplified prompts for confused models, keep original for GPT-3.5
+        if is_starting_position and is_confused_model:
+            color = "White" if board.turn == chess.WHITE else "Black"
+            system_prompt = (
+                f"You are a chess grandmaster.\n"
+                f"You are playing {color} in a new chess game starting from the initial position.\n"
+                f"Provide your first move in standard algebraic notation (e.g., \"e4\", \"d4\", \"Nf3\").\n"
+                f"Output only the move, nothing else.\n"
+            )
+            # For starting position, use empty user prompt
+            simplified_user_prompt = ""
+        elif is_first_move and board.turn == chess.BLACK and is_confused_model:
+            # Black's first move after White has moved - simplified for confused models
+            system_prompt = (
+                "You are a chess grandmaster playing Black.\n"
+                "White has just played their first move.\n"
+                "Provide your response move in standard algebraic notation (e.g., \"e5\", \"c5\", \"Nf6\").\n"
+                "Output only your move, nothing else.\n"
+            )
+            # Extract just the move notation, not the full PGN
+            simplified_user_prompt = user_prompt.replace('*', '').strip()
+        else:
+            # Original prompt (works well for GPT-3.5 and in-progress games)
+            system_prompt = (
+                "You are a chess grandmaster.\n"
+                "You will be given a partially completed game.\n"
+                "After seeing it, you should repeat the ENTIRE GAME and then give ONE new move.\n"
+                "After repeating the game, immediately continue by listing that move on a single line, starting with the side to move now.\n"
+                "Use standard algebraic notation, e.g. \"e4\" or \"Rdf8\" or \"R1a3\".\n"
+                "ALWAYS repeat the entire representation of the game so far.\n"
+                "NEVER explain your choice.\n"
+            )
+            simplified_user_prompt = user_prompt
         
         # Try up to 3 times
         for attempt in range(3):
@@ -236,18 +302,35 @@ class Player:
                         board=board
                     )
                     
+                    # Save full debate history (individual agent responses, plans, tokens)
+                    if debate_history:
+                        self.response_log.append({
+                            "turn": len(board.move_stack) + 1,
+                            "attempt": attempt + 1,
+                            "debate_history": debate_history,
+                            "board_fen": board.fen(),
+                        })
+                    
                     if predicted_uci:
                         move = chess.Move.from_uci(predicted_uci)
                         if move in board.legal_moves:
                             if verbose:
                                 print(f"✅ {self.name}: {board.san(move)} ({predicted_uci})")
-                            # Track tokens
-                            token_totals = (debate_history or {}).get("total_tokens", {}) if isinstance(debate_history, dict) else {}
-                            self.token_log.append({
-                                "turn": len(board.move_stack) + 1,
-                                "attempt": attempt + 1,
-                                "tokens": token_totals
-                            })
+                            # Track tokens (both individual and total)
+                            if debate_history and isinstance(debate_history, dict):
+                                token_totals = debate_history.get("total_tokens", {})
+                                # Also save individual agent tokens
+                                individual_tokens = {
+                                    "aggressive": debate_history.get("query1", {}).get("aggressive_tokens", {}),
+                                    "positional": debate_history.get("query2", {}).get("positional_tokens", {}),
+                                    "neutral": debate_history.get("query3", {}).get("neutral_tokens", {}),
+                                }
+                                self.token_log.append({
+                                    "turn": len(board.move_stack) + 1,
+                                    "attempt": attempt + 1,
+                                    "tokens": token_totals,
+                                    "individual_agent_tokens": individual_tokens
+                                })
                             return predicted_uci
                 
                 elif self.use_debate:
@@ -256,6 +339,15 @@ class Player:
                         played_plies=len(board.move_stack),
                         board_fen=board.fen()
                     )
+                    
+                    # Save full debate history
+                    if debate_history:
+                        self.response_log.append({
+                            "turn": len(board.move_stack) + 1,
+                            "attempt": attempt + 1,
+                            "debate_history": debate_history,
+                            "board_fen": board.fen(),
+                        })
                     
                     if predicted_uci:
                         move = chess.Move.from_uci(predicted_uci)
@@ -268,7 +360,7 @@ class Player:
                     # Single model
                     raw_response, predicted_san, token_info = self.model_interface.get_move_with_extraction(
                         system_prompt,
-                        user_prompt,
+                        simplified_user_prompt,
                         current_turn_number=len(board.move_stack) // 2 + 1,
                         is_white_to_move=board.turn,
                         max_tokens=self.model_interface.max_completion_tokens,
@@ -276,14 +368,25 @@ class Player:
                         retry_attempts=self.model_interface.retry_attempts,
                     )
                     
-                    # Track response
-                    self.response_log.append({
+                    # Extract planning information if plan_plies > 0
+                    plan_full = []
+                    plan_execute = []
+                    if self.plan_plies > 0 and raw_response and predicted_san:
+                        plan_full = extract_plan_sans(raw_response, primary_san=predicted_san)
+                        plan_execute = plan_full[:self.plan_plies] if plan_full else []
+                    
+                    # Track response with planning information
+                    response_entry = {
                         "turn": len(board.move_stack) + 1,
                         "attempt": attempt + 1,
                         "raw_response": raw_response,
                         "predicted_san": predicted_san,
                         "board_fen": board.fen(),
-                    })
+                    }
+                    if self.plan_plies > 0:
+                        response_entry["plan_full"] = plan_full
+                        response_entry["plan_execute"] = plan_execute
+                    self.response_log.append(response_entry)
                     
                     if predicted_san:
                         predicted_uci = san_to_uci(board.fen(), predicted_san)
@@ -492,12 +595,21 @@ class ModelVsModelGame:
         
         # Calculate game outcome for rating purposes
         if "wins" in result:
-            if self.white_player.name in result:
+            # Extract winner name from result string (format: "PlayerName wins by...")
+            winner_name = result.split(" wins")[0].strip()
+            if winner_name == self.white_player.name:
                 white_score = 1.0
                 black_score = 0.0
-            else:
+            elif winner_name == self.black_player.name:
                 white_score = 0.0
                 black_score = 1.0
+            else:
+                # Fallback: if winner name doesn't match exactly, log warning and use old logic
+                # This shouldn't happen, but handle edge cases
+                if self.verbose:
+                    print(f"⚠️ Warning: Could not determine winner from result: {result}")
+                white_score = 1.0 if self.white_player.name in result.split(" wins")[0] else 0.0
+                black_score = 1.0 if self.black_player.name in result.split(" wins")[0] else 0.0
         else:
             white_score = 0.5
             black_score = 0.5

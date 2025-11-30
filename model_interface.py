@@ -412,7 +412,9 @@ class ChessModelInterface:
                     return response_text, extracted_san, token_info
 
             attempt += 1
-            temperature = max(0.0, temperature - 0.05)
+            # Increase temperature on retries to get more diverse responses
+            # This helps avoid repeating the same incorrect move
+            temperature = min(0.8, temperature + 0.15)
 
         # No move could be extracted - return None instead of default fallback
         # Only use force_fallback_move if explicitly provided

@@ -200,6 +200,8 @@ Examples:
                        help="Number of games per matchup (default: 2)")
     parser.add_argument("--use-self-consistency", action="store_true",
                        help="Use self-consistency approach for all LLM players")
+    parser.add_argument("--plan-plies", type=int, default=0,
+                       help="Number of future plies to plan (for self-consistency and single model)")
     parser.add_argument("--use-openings", action="store_true",
                        help="Use opening variations")
     parser.add_argument("--opening", type=str,
@@ -306,8 +308,10 @@ Examples:
             
             result = game.play_game()
             
-            # Save game
-            game_id = f"{white_player.name}_vs_{black_player.name}_{game_num + 1}"
+            # Save game (sanitize names for file paths)
+            white_safe = white_player.name.replace('/', '_').replace('\\', '_')
+            black_safe = black_player.name.replace('/', '_').replace('\\', '_')
+            game_id = f"{white_safe}_vs_{black_safe}_{game_num + 1}"
             result['game_id'] = game_id
             
             json_file = os.path.join(output_dir, f"{game_id}.json")
@@ -339,6 +343,7 @@ Examples:
                 player_type=PlayerType.LLM,
                 model_name=model_id,
                 use_self_consistency=args.use_self_consistency,
+                plan_plies=args.plan_plies,
                 api_key=api_key,
                 base_url=base_url,
             )

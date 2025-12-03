@@ -158,9 +158,6 @@ data/latex_tables.tex
 data/paradigm_token_table.tex
 data/gpt_rating_bin_table.tex
 
-# Generated CSV results (keep input data)
-data/results/*.csv
-data/test_results/**/*.csv
 
 # Generated text outputs
 data/text_outputs/*.txt

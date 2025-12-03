@@ -32,27 +32,18 @@ import pandas as pd
 # ]
 
 # Budget OpenAI models (via OpenAI API)
-# Only include models that work (tested via smoke test)
+# Running debate and self-consistency for these models
 BUDGET_OPENAI_MODELS = [
-    # "gpt-4o-mini",           # $0.15/$0.60 per 1M tokens - Already tested, skip
-    # "gpt-4.1-mini",          # $0.40/$1.60 per 1M tokens - ✅ Working
+    "gpt-4o-mini",           # $0.15/$0.60 per 1M tokens - Run SC and debate
+    "gpt-4.1-mini",          # $0.40/$1.60 per 1M tokens - Run SC and debate
     # "gpt-5-mini",          # $0.25/$2.00 per 1M tokens - Reasoning model (not tested)
     # "gpt-5-nano",            # $0.05/$0.40 per 1M tokens - ❌ Empty responses
 ]
 
-# Anannas models (oss120b and deepseek-ai only)
-# Only include non-reasoning models that work reliably (tested via smoke test)
-# Excluding reasoning models (r1-*) for now - they output reasoning text that may not extract moves correctly
+# Anannas models - EXCLUDED for this run
 ANANNAS_MODELS = [
-    # "openai/gpt-oss-120b-turbo",     # via deepinfra - ✅ Working
-    "deepseek-ai/deepseek-v3",              # via deepinfra, deepseek-ai - ✅ Working
-    # Reasoning models excluded - may not extract moves correctly from reasoning text
-    # "deepseek-ai/deepseek-r1-0528-turbo",  # via deepinfra, deepseek-ai - ✅ Working but reasoning model
-    # "deepseek-ai/deepseek-r1-turbo",       # via deepinfra, deepseek-ai - ✅ Working but reasoning model
-    # "deepseek-ai/deepseek-r1",              # via deepinfra, fireworks - ✅ Working but reasoning model
-    # "deepseek-ai/deepseek-r1-0528",         # via deepinfra, fireworks - ✅ Working but reasoning model
-    # "deepseek-ai/deepseek",                 # via fireworks - ❌ Empty responses
-    # "deepseek-ai/deepseek-prover",          # via fireworks - ❌ Empty responses
+    # "openai/gpt-oss-120b-turbo",     # via deepinfra - ✅ Working (not running)
+    # "deepseek-ai/deepseek-v3",              # via deepinfra, deepseek-ai - ✅ Working (EXCLUDED per user request)
 ]
 
 # Combined list for testing

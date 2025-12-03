@@ -37,17 +37,32 @@ brew install stockfish
 
 ## Usage
 
-### Basic Usage
+### Quick Tests
+
+```bash
+# Test 1 puzzle and 1 game (from parent directory)
+cd ..
+python test_minimal.py
+cd chess_game_engine
+```
+
+### Single Game Tests
 
 ```bash
 # Play with single model as white (Stockfish skill level 5/20)
-python chess_game.py
+python chess_game.py --save-pgn
 
 # Play with self-consistency as black (easier Stockfish)
-python chess_game.py --self-consistency --model-color black --skill 3
+python chess_game.py --self-consistency --model-color black --skill 3 --save-pgn
 
 # Use GPT-4 with custom Stockfish time and skill level
-python chess_game.py --model gpt-4-turbo --time 2.0 --skill 8
+python chess_game.py --model gpt-4-turbo --time 2.0 --skill 8 --save-pgn
+
+# Play with planning (3 plies ahead)
+python chess_game.py --plan-plies 3 --save-pgn
+
+# Play with open-source model via Anannas API
+python chess_game.py --model deepseek-ai/deepseek-v3 --use-anannas --save-pgn
 
 # Play against random legal moves instead of Stockfish
 python chess_game.py --random-opponent --save-pgn
@@ -56,18 +71,59 @@ python chess_game.py --random-opponent --save-pgn
 python chess_game.py --self-consistency --random-opponent --save-pgn
 ```
 
-### Command Line Options
+### Tournament Tests
 
-- `--model`: OpenAI model to use (default: gpt-3.5-turbo-instruct)
-- `--stockfish`: Path to Stockfish executable (default: stockfish)
+```bash
+# Run a single matchup between two models (1 game)
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 1
+
+# Run a matchup with self-consistency
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 1 --use-self-consistency
+
+# Run a matchup with planning (3 plies)
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 1 --plan-plies 3
+
+# Run a matchup with self-consistency + planning
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 1 --use-self-consistency --plan-plies 3
+
+# Include Stockfish in a matchup
+python run_tournament.py --pair gpt-3.5-turbo-instruct Stockfish --games-per-matchup 1 --include-stockfish
+
+# Human vs LLM (interactive)
+python run_tournament.py --human-vs-llm --model gpt-3.5-turbo-instruct
+```
+
+### Command Line Options for `chess_game.py`
+
+- `--model`: Model to use (default: gpt-3.5-turbo-instruct)
+- `--stockfish`: Path to Stockfish executable (default: stockfish, auto-detected)
 - `--time`: Time limit for Stockfish moves in seconds (default: 1.0)
 - `--skill`: Stockfish skill level 0-20 (default: 5, where 20 is maximum strength)
-- `--self-consistency`: Use self-consistency approach instead of single model
+- `--stockfish-depth`: Optional fixed search depth for Stockfish (overrides time)
+- `--self-consistency`: Use self-consistency approach (3 agents, majority vote)
+- `--debate`: Use multi-agent debate approach (2 agents + moderator)
+- `--plan-plies`: Number of future plies to plan (default: 0, disabled)
 - `--random-opponent`: Use random legal moves instead of Stockfish
 - `--model-color`: Color for the model (white/black, default: white)
 - `--save-json`: Save game result as JSON file
 - `--save-pgn`: Save game as PGN file
 - `--no-save`: Don't save any files
+- `--use-anannas`: Use Anannas API for open-source models
+
+### Command Line Options for `run_tournament.py`
+
+- `--pair MODEL1 MODEL2`: Run a single matchup between two models
+- `--games-per-matchup`: Number of games per matchup (default: 2)
+- `--use-self-consistency`: Use self-consistency for all LLM players
+- `--plan-plies`: Number of future plies to plan (default: 0)
+- `--include-stockfish`: Include Stockfish as baseline
+- `--stockfish-skill`: Stockfish skill level 0-20 (default: 5)
+- `--stockfish-path`: Path to Stockfish executable
+- `--human-vs-llm`: Play interactively against an LLM
+- `--model`: Model to use (for --human-vs-llm)
+- `--output-dir`: Output directory for results (default: data/tournaments)
+- `--use-openings`: Use opening variations
+- `--opening`: Specific opening key (e.g., 'e4_e5')
 
 ### Stockfish Skill Levels
 
@@ -79,7 +135,7 @@ python chess_game.py --self-consistency --random-opponent --save-pgn
 
 **Default**: Skill level 5 (intermediate) - provides a good challenge for LLMs without being overwhelming.
 
-### Examples
+### More Examples
 
 ```bash
 # Quick game with single model
@@ -89,7 +145,18 @@ python chess_game.py --save-pgn
 python chess_game.py --self-consistency --time 3.0 --save-json --save-pgn
 
 # Model plays black with GPT-4
-python chess_game.py --model gpt-4-turbo --model-color black --self-consistency
+python chess_game.py --model gpt-4-turbo --model-color black --self-consistency --save-pgn
+
+# Tournament: Run 10 games between GPT-3.5 and DeepSeek
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 10 --output-dir data/tournaments/test_tournament
+
+# Tournament: GPT-3.5 with self-consistency vs Stockfish
+python run_tournament.py --pair gpt-3.5-turbo-instruct Stockfish --games-per-matchup 5 --use-self-consistency --include-stockfish
+
+# Tournament: GPT-3.5 with planning vs all other models
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 5 --plan-plies 3
+python run_tournament.py --pair gpt-3.5-turbo-instruct mistralai/mistral-small-24b-instruct-2501 --games-per-matchup 5 --plan-plies 3
+python run_tournament.py --pair gpt-3.5-turbo-instruct meta-llama/llama-3.3-70b-instruct --games-per-matchup 5 --plan-plies 3
 ```
 
 ## Game Output
@@ -116,16 +183,20 @@ Standard chess notation format that can be imported into chess software.
 
 ## Environment Setup
 
-Make sure to set your OpenAI API key:
+Create a `.env` file in the `chess_puzzles` directory with your API keys:
 
-```bash
-export OPENAI_API_KEY="your-api-key-here"
+```env
+# For OpenAI models (GPT-3.5, GPT-4, etc.)
+OPENAI_API_KEY=your-openai-key-here
+
+# For open-source models via Anannas API
+ANANNAS_API_KEY=your-anannas-key-here
+ANANNAS_API_URL=https://api.anannas.ai/v1
 ```
 
-Or create a `.env` file in the parent directory with:
-```
-OPENAI_API_KEY=your-api-key-here
-```
+The system automatically selects the correct API key based on the model name:
+- Models with "gpt" in the name → OpenAI API
+- Other models → Anannas API
 
 ## Troubleshooting
 
@@ -141,16 +212,34 @@ OPENAI_API_KEY=your-api-key-here
 ### Move Generation Issues
 - The model may generate invalid moves occasionally
 - Self-consistency approach is more robust but uses more tokens
-- **Fallback System**: When the AI fails to generate a valid move, the engine automatically uses a random legal move
-- Fallback moves are clearly marked in the output and game history
-- Check the console output for error messages and fallback notifications
+- **Disqualification**: Models that fail to produce a legal move within 3 retries are disqualified (no random fallback)
+- Temperature increases on retries to encourage different moves
+- Check the console output for error messages and retry attempts
 
 ## Performance Notes
 
 - **Single Model**: Faster, uses fewer tokens, but may be less accurate
-- **Self-Consistency**: More robust, uses 3x tokens, better move quality
+- **Self-Consistency**: More robust, uses 3x tokens, better move quality (3 agents vote)
+- **Planning**: Requests future moves, can improve strategic play
 - **Stockfish Time**: Longer time = stronger play but slower games
 - **Model Choice**: GPT-4 is stronger but more expensive than GPT-3.5
+
+## Tournament Management
+
+After running tournaments, you can:
+
+```bash
+# Organize game files by matchup
+python organize_games.py data/tournaments/round_robin_single_10games
+
+# Check remaining games
+python check_remaining_games.py data/tournaments/round_robin_single_10games
+
+# Reconstruct ratings from saved games
+python reconstruct_ratings.py data/tournaments/round_robin_single_10games
+```
+
+See `TOURNAMENT_README.md` for detailed tournament documentation.
 
 ## Game Analysis
 

@@ -22,14 +22,11 @@ A Python project for evaluating chess puzzles using multiple LLM paradigms (sing
    ```bash
    # Test 1 puzzle and 1 game
    python test_minimal.py
-   
-   # Test minimal tournament
-   python chess_game_engine/test_minimal_tournament.py
    ```
 
 ## Usage
 
-### Basic Commands
+### Testing Puzzles
 
 ```bash
 # Quick test (1 puzzle, 1 game)
@@ -38,17 +35,58 @@ python test_minimal.py
 # Show help
 python main.py --help
 
-# Evaluate 1 puzzle (minimal test)
+# Evaluate 1 puzzle (minimal test) - Single Model
 python main.py --evaluate --max-puzzles 1
 
-# Evaluate 10 puzzles with GPT-3.5
+# Evaluate 10 puzzles with GPT-3.5 - Single Model
 python main.py --evaluate --max-puzzles 10
+
+# Evaluate with self-consistency (3 agents, majority vote)
+python main.py --evaluate --max-puzzles 10 --self-consistency
+
+# Evaluate with debate (2 agents + moderator)
+python main.py --evaluate --max-puzzles 10 --debate
+
+# Evaluate with planning (request 3 future plies)
+python main.py --evaluate --max-puzzles 10 --plan-plies 3
+
+# Evaluate with open-source model via Anannas API
+python main.py --evaluate --max-puzzles 10 --model deepseek-ai/deepseek-v3 --use-anannas
 
 # Evaluate with GPT-4
 python main.py --evaluate --max-puzzles 5 --model gpt-4-turbo
 
 # Calculate Glicko-2 rating (after evaluation)
 python main.py --rating
+```
+
+### Testing Games
+
+```bash
+# Play a single game against Stockfish (LLM as white)
+cd chess_game_engine
+python chess_game.py --save-pgn
+
+# Play with self-consistency
+python chess_game.py --self-consistency --save-pgn
+
+# Play with planning (3 plies ahead)
+python chess_game.py --plan-plies 3 --save-pgn
+
+# Play as black
+python chess_game.py --model-color black --save-pgn
+
+# Play against Stockfish with custom skill level
+python chess_game.py --skill 10 --save-pgn
+
+# Play with open-source model
+python chess_game.py --model deepseek-ai/deepseek-v3 --use-anannas --save-pgn
+
+# Run a tournament matchup (2 models, 1 game each)
+python run_tournament.py --pair gpt-3.5-turbo-instruct deepseek-ai/deepseek-v3 --games-per-matchup 1
+
+# Run human vs LLM
+python run_tournament.py --human-vs-llm --model gpt-3.5-turbo-instruct
 ```
 
 ### Programmatic Usage

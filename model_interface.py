@@ -171,30 +171,57 @@ class ChessModelInterface:
                 prompt_preview = f"System: {messages[0]['content'][:100]}... User: {messages[1]['content'][:100]}"
             print(f"<debug> : Prompt preview: {prompt_preview}...")
             
+            # Newer OpenAI models (gpt-5-*, o-series) require max_completion_tokens instead of max_tokens
+            normalized_name = (self.model_name or "").lower()
+            is_newer_model = any(x in normalized_name for x in ["gpt-5", "o1", "o3", "o4"])
+            
+            # Some models (like gpt-5-nano) only support default temperature (1.0)
+            # Detect if this is a model that doesn't support custom temperature
+            is_temperature_restricted = "gpt-5-nano" in normalized_name
+            
+            # Build API kwargs
+            api_kwargs = {
+                "model": self.model_name,
+                "messages": messages,
+            }
+            
+            # Only add temperature if the model supports it
+            if not is_temperature_restricted:
+                api_kwargs["temperature"] = temperature
+                api_kwargs["top_p"] = top_p
+            
+            # Some models like gpt-5-nano might need more tokens or different handling
+            # Increase max_completion_tokens for nano models as they might need more space
+            if "nano" in normalized_name:
+                adjusted_max_tokens = max(max_tokens, 128)  # Ensure at least 128 tokens
+            else:
+                adjusted_max_tokens = max_tokens
+            
+            if is_newer_model:
+                api_kwargs["max_completion_tokens"] = adjusted_max_tokens
+            else:
+                api_kwargs["max_tokens"] = adjusted_max_tokens
+            
             # Try the request, fallback to combined if system message fails
             try:
-                response = self.client.chat.completions.create(
-                    model=self.model_name,
-                    messages=messages,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    top_p=top_p,
-                )
+                response = self.client.chat.completions.create(**api_kwargs)
             except Exception as e:
                 # If system message failed and we haven't tried combined yet, retry
                 error_str = str(e)
-                if ("400" in error_str or "Provider returned error" in error_str) and not model_needs_combined and is_anannas:
+                error_str_lower = error_str.lower()
+                # Check if it's a temperature error - retry without temperature/top_p
+                if "temperature" in error_str_lower and "unsupported" in error_str_lower:
+                    print(f"<debug> : Temperature not supported, retrying with default parameters")
+                    api_kwargs.pop("temperature", None)
+                    api_kwargs.pop("top_p", None)
+                    response = self.client.chat.completions.create(**api_kwargs)
+                elif ("400" in error_str or "Provider returned error" in error_str) and not model_needs_combined and is_anannas:
                     # Fallback: combine system and user prompts
                     print(f"<debug> : System message failed, falling back to combined prompt")
                     combined_user_prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
                     messages = [{"role": "user", "content": combined_user_prompt}]
-                    response = self.client.chat.completions.create(
-                        model=self.model_name,
-                        messages=messages,
-                        max_tokens=max_tokens,
-                        temperature=temperature,
-                        top_p=top_p,
-                    )
+                    api_kwargs["messages"] = messages
+                    response = self.client.chat.completions.create(**api_kwargs)
                 else:
                     raise
             text_output = ""
@@ -205,15 +232,24 @@ class ChessModelInterface:
                 text_output = (message.content if message else "") or ""
                 finish_reason = getattr(first_choice, "finish_reason", None)
                 
-                # If content is empty but reasoning exists, use reasoning text
-                # This handles reasoning models like Qwen that put output in reasoning field
+                # Debug: log finish reason and content length
+                if finish_reason:
+                    print(f"<debug> : Finish reason: {finish_reason}")
                 if not text_output or text_output.strip() == "":
+                    print(f"<debug> : Empty response from model. Finish reason: {finish_reason}")
+                    # Check for reasoning field (for reasoning models)
                     reasoning = getattr(message, 'reasoning', None)
                     if reasoning:
                         reasoning_text = reasoning if isinstance(reasoning, str) else str(reasoning)
                         # Use reasoning text as the response - extract functions will parse it
                         text_output = reasoning_text
                         print(f"<debug> : Using reasoning text as response (content was empty)")
+                    elif finish_reason == "length":
+                        print(f"<debug> : Response truncated (length limit). Consider increasing max_completion_tokens.")
+                    elif finish_reason == "content_filter":
+                        print(f"<debug> : Response filtered by content policy.")
+                    else:
+                        print(f"<debug> : Warning: Model returned empty content with finish_reason={finish_reason}")
             text_output = text_output.strip()
 
             prompt_text = ""
@@ -401,6 +437,16 @@ class ChessModelInterface:
                 top_p=top_p,
                 api_delay=api_delay,
             )
+            
+            # If we got an empty response, don't retry immediately - it might be a model issue
+            if not response_text or response_text.strip() == "":
+                print(f"<debug> : Empty response on attempt {attempt + 1}/{retries + 1}. Skipping extraction.")
+                if attempt < retries:
+                    print(f"<debug> : Will retry with modified prompt...")
+                else:
+                    print(f"<debug> : All retries exhausted. Returning None.")
+                attempt += 1
+                continue
 
             if response_text:
                 extracted_san = extract_predicted_move(

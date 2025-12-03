@@ -19,17 +19,44 @@ from main import load_environment, evaluate_puzzles, read_chess_puzzles_csv
 from model_interface import ChessModelInterface
 import pandas as pd
 
-# Working free models from smoke test
-WORKING_FREE_MODELS = [
-    "google/gemma-3-12b-it:free",
-    "google/gemma-3-27b-it:free",
-    "google/gemma-3-4b-it:free",
-    "meta-llama/llama-3.3-8b-instruct:free",
-    "mistralai/mistral-small-3.2-24b-instruct:free",
-    "qwen/qwen-2.5-coder-32b-instruct:free",
-    "qwen/qwen2.5-vl-32b-instruct:free",
-    "qwen/qwen3-4b:free",  # Reasoning model
+# # Working free models from smoke test
+# WORKING_FREE_MODELS = [
+#     "google/gemma-3-12b-it:free",
+#     "google/gemma-3-27b-it:free",
+#     "google/gemma-3-4b-it:free",
+#     "meta-llama/llama-3.3-8b-instruct:free",
+#     "mistralai/mistral-small-3.2-24b-instruct:free",
+#     "qwen/qwen-2.5-coder-32b-instruct:free",
+#     "qwen/qwen2.5-vl-32b-instruct:free",
+#     "qwen/qwen3-4b:free",  # Reasoning model
+# ]
+
+# Budget OpenAI models (via OpenAI API)
+# Only include models that work (tested via smoke test)
+BUDGET_OPENAI_MODELS = [
+    # "gpt-4o-mini",           # $0.15/$0.60 per 1M tokens - Already tested, skip
+    # "gpt-4.1-mini",          # $0.40/$1.60 per 1M tokens - ✅ Working
+    # "gpt-5-mini",          # $0.25/$2.00 per 1M tokens - Reasoning model (not tested)
+    # "gpt-5-nano",            # $0.05/$0.40 per 1M tokens - ❌ Empty responses
 ]
+
+# Anannas models (oss120b and deepseek-ai only)
+# Only include non-reasoning models that work reliably (tested via smoke test)
+# Excluding reasoning models (r1-*) for now - they output reasoning text that may not extract moves correctly
+ANANNAS_MODELS = [
+    # "openai/gpt-oss-120b-turbo",     # via deepinfra - ✅ Working
+    "deepseek-ai/deepseek-v3",              # via deepinfra, deepseek-ai - ✅ Working
+    # Reasoning models excluded - may not extract moves correctly from reasoning text
+    # "deepseek-ai/deepseek-r1-0528-turbo",  # via deepinfra, deepseek-ai - ✅ Working but reasoning model
+    # "deepseek-ai/deepseek-r1-turbo",       # via deepinfra, deepseek-ai - ✅ Working but reasoning model
+    # "deepseek-ai/deepseek-r1",              # via deepinfra, fireworks - ✅ Working but reasoning model
+    # "deepseek-ai/deepseek-r1-0528",         # via deepinfra, fireworks - ✅ Working but reasoning model
+    # "deepseek-ai/deepseek",                 # via fireworks - ❌ Empty responses
+    # "deepseek-ai/deepseek-prover",          # via fireworks - ❌ Empty responses
+]
+
+# Combined list for testing
+WORKING_FREE_MODELS = BUDGET_OPENAI_MODELS + ANANNAS_MODELS
 
 
 CONFIG_MODES = ["single", "self_consistency", "debate"]
@@ -54,11 +81,14 @@ def _create_model_interface(model_name: str, base_url: Optional[str], api_key: s
         provider_base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
         api_key = os.getenv("OPENAI_API_KEY") or api_key
 
+    # Reasoning models excluded for now, so we don't need special token handling
+    max_tokens = 640
+
     return ChessModelInterface(
         api_key=api_key,
         model_name=model_name,
         base_url=provider_base_url,
-        max_completion_tokens=640,
+        max_completion_tokens=max_tokens,
         default_temperature=0.1,
         retry_attempts=2,
     )
@@ -322,6 +352,12 @@ def main():
         help="Number of puzzles to test per model (default: 50)"
     )
     parser.add_argument(
+        "--modes",
+        type=str,
+        default="single",
+        help="Comma-separated list of modes to run (single,self_consistency,debate). Default: single"
+    )
+    parser.add_argument(
         "--delay",
         type=float,
         default=3.0,
@@ -351,12 +387,6 @@ def main():
         help="Use OpenAI API instead of Anannas"
     )
     parser.add_argument(
-        "--modes",
-        type=str,
-        default="single,self_consistency,debate",
-        help="Comma-separated list of modes to run (single,self_consistency,debate)"
-    )
-    parser.add_argument(
         "--single-only",
         action="store_true",
         help="Only run single-model mode"
@@ -379,8 +409,6 @@ def main():
         modes = ["single"]
 
     print(f"\nTesting {len(models_to_test)} model(s) on {args.num_puzzles} puzzle(s) each")
-    provider_label = "OpenAI" if args.openai else "Anannas"
-    print(f"Using {provider_label} API")
     print(f"Modes: {', '.join(modes)}")
     print(f"Delay between models: {args.delay}s, Delay between API calls: {args.api_delay}s\n")
 
@@ -393,13 +421,23 @@ def main():
             print(f"\nWaiting {args.delay} seconds before next model...")
             time.sleep(args.delay)
         
+        # Auto-detect API provider based on model name
+        # OpenAI models: gpt-4o-mini, gpt-5-mini, gpt-5-nano, gpt-4.1-mini
+        # Anannas models: everything else (openai/gpt-oss-*, deepseek-ai/*)
+        use_openai_for_model = model in BUDGET_OPENAI_MODELS
+        if args.openai:
+            use_openai_for_model = True  # Override with flag
+        
+        provider_label = "OpenAI" if use_openai_for_model else "Anannas"
+        print(f"\n[{i+1}/{len(models_to_test)}] Using {provider_label} API for {model}")
+        
         result = test_model(
             model,
             num_puzzles=args.num_puzzles,
             csv_file=args.csv_file or os.path.join(parent_dir, "data", "input", "lichess_puzzles_with_pgn_1000.csv"),
             base_url=args.anannas_base_url,
             api_delay=args.api_delay,
-            use_openai=args.openai,
+            use_openai=use_openai_for_model,
             modes=modes,
             single_model_only=args.single_only,
         )
